@@ -1,0 +1,1443 @@
+/* Jonge Libertariërs — huisstijl: zwart, felgeel, wit, stencil / industrial */
+@import url("https://fonts.googleapis.com/css2?family=Anton&family=Bebas+Neue&family=DM+Sans:ital,wght@0,400;0,600;0,700;1,400&family=Oswald:wght@500;600;700&family=Stardos+Stencil:wght@400;700&display=swap");
+
+:root {
+  --jl-black: #000000;
+  --jl-black-soft: #0a0a0a;
+  --jl-gray: #141414;
+  --jl-panel: #111111;
+  --jl-yellow: #f5e600;
+  --jl-yellow-hot: #fff44f;
+  --jl-yellow-dim: #c4bb00;
+  --jl-white: #ffffff;
+  --jl-off-white: #ececec;
+
+  /* Aliassen (bestaande classnamen) */
+  --jl-navy: var(--jl-black);
+  --jl-navy-mid: var(--jl-gray);
+  --jl-gold: var(--jl-yellow);
+  --jl-gold-hover: var(--jl-yellow-hot);
+  --jl-cream: var(--jl-off-white);
+  --jl-text: #0a0a0a;
+  --jl-text-muted: #4a4a4a;
+  --jl-border: #2a2a2a;
+  --jl-font: "DM Sans", "Segoe UI", system-ui, sans-serif;
+  --jl-font-ui: "Oswald", "Arial Narrow", sans-serif;
+  --jl-font-display: "Bebas Neue", "Impact", sans-serif;
+  --jl-font-hero: "Anton", "Bebas Neue", "Impact", sans-serif;
+  --jl-font-stencil: "Stardos Stencil", "Courier New", serif;
+  --jl-max: 72rem;
+  --jl-header-h: 4.5rem;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font-family: var(--jl-font);
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  color: var(--jl-text);
+  background: var(--jl-white);
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+a {
+  color: var(--jl-text);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.15em;
+}
+
+a:hover {
+  color: var(--jl-yellow-dim);
+}
+
+/* ——— Top bar ——— */
+.jl-topbar {
+  background: var(--jl-black);
+  color: var(--jl-yellow);
+  font-size: 0.8125rem;
+  font-family: var(--jl-font-ui);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  border-bottom: 1px solid var(--jl-border);
+}
+
+.jl-topbar-inner {
+  max-width: var(--jl-max);
+  margin: 0 auto;
+  padding: 0.45rem 1.25rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.5rem;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.jl-topbar a {
+  color: var(--jl-yellow);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.jl-topbar a:hover {
+  color: var(--jl-white);
+}
+
+/* ——— Header ——— */
+.jl-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--jl-black);
+  border-bottom: 3px solid var(--jl-yellow);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.45);
+}
+
+.jl-header-inner {
+  position: relative;
+  max-width: var(--jl-max);
+  margin: 0 auto;
+  padding: 0 1.25rem;
+  min-height: var(--jl-header-h);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.jl-header-nav-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.5rem 1rem;
+  flex: 1;
+}
+
+@media (max-width: 960px) {
+  .jl-header-nav-wrap {
+    display: none;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 100%;
+    flex-direction: column;
+    align-items: stretch;
+    padding: 0.75rem 1.25rem 1.25rem;
+    background: var(--jl-black);
+    border-bottom: 3px solid var(--jl-yellow);
+    box-shadow: 0 16px 32px rgba(0, 0, 0, 0.5);
+  }
+
+  .jl-header-nav-wrap.is-open {
+    display: flex;
+  }
+}
+
+/* Logo (assets/images/JL-Nieuwe-Logo-scaled.png) */
+.jl-logo {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+.jl-logo:hover .jl-logo-img {
+  opacity: 0.9;
+  filter: brightness(1.08);
+}
+
+.jl-logo-img {
+  height: clamp(2.35rem, 7vw, 3.2rem);
+  width: auto;
+  max-width: min(11rem, 50vw);
+  object-fit: contain;
+  display: block;
+}
+
+/* Nav toggle */
+.jl-nav-toggle {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 2.75rem;
+  height: 2.75rem;
+  padding: 0;
+  border: 2px solid var(--jl-yellow);
+  border-radius: 0.25rem;
+  background: var(--jl-panel);
+  cursor: pointer;
+}
+
+.jl-nav-toggle span {
+  display: block;
+  height: 2px;
+  width: 1.25rem;
+  margin: 0 auto;
+  background: var(--jl-yellow);
+}
+
+@media (max-width: 960px) {
+  .jl-nav-toggle {
+    display: flex;
+  }
+}
+
+/* Nav */
+.jl-nav {
+  display: flex;
+  align-items: center;
+  gap: 0.15rem 0.35rem;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+@media (max-width: 960px) {
+  .jl-nav {
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+  }
+}
+
+.jl-nav > a,
+.jl-nav-item {
+  position: relative;
+}
+
+.jl-nav > a,
+.jl-nav-item > button {
+  display: inline-block;
+  padding: 0.5rem 0.6rem;
+  font-size: 0.875rem;
+  font-weight: 700;
+  font-family: var(--jl-font-ui);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--jl-yellow);
+  text-decoration: none;
+  border: none;
+  background: none;
+  cursor: pointer;
+  border-radius: 0.15rem;
+}
+
+.jl-nav > a:hover,
+.jl-nav-item > button:hover {
+  color: var(--jl-white);
+  background: rgba(245, 230, 0, 0.08);
+}
+
+.jl-nav-item > button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.jl-nav-item > button::after {
+  content: "";
+  border: 4px solid transparent;
+  border-top-color: currentColor;
+  margin-top: 0.2rem;
+}
+
+@media (max-width: 960px) {
+  .jl-nav-item > button::after {
+    margin-left: auto;
+  }
+}
+
+.jl-dropdown {
+  display: none;
+  position: absolute;
+  left: 0;
+  top: 100%;
+  min-width: 14rem;
+  padding: 0.35rem 0;
+  background: var(--jl-panel);
+  border: 1px solid var(--jl-border);
+  border-radius: 0.25rem;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.55);
+}
+
+.jl-nav-item:hover .jl-dropdown,
+.jl-nav-item:focus-within .jl-dropdown {
+  display: block;
+}
+
+@media (max-width: 960px) {
+  .jl-nav-item:hover .jl-dropdown,
+  .jl-nav-item:focus-within .jl-dropdown {
+    display: none;
+  }
+
+  .jl-nav-item.is-open .jl-dropdown {
+    display: block;
+  }
+}
+
+.jl-dropdown a {
+  display: block;
+  padding: 0.5rem 1rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  font-family: var(--jl-font-ui);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--jl-yellow);
+  text-decoration: none;
+}
+
+.jl-dropdown a:hover {
+  background: rgba(245, 230, 0, 0.1);
+  color: var(--jl-white);
+}
+
+@media (max-width: 960px) {
+  .jl-dropdown {
+    position: static;
+    border: none;
+    box-shadow: none;
+    padding-left: 0.75rem;
+    margin-bottom: 0.25rem;
+  }
+}
+
+/* Header CTA — Word lid */
+.jl-header-cta {
+  flex-shrink: 0;
+  margin-left: 0.35rem;
+}
+
+@media (max-width: 960px) {
+  .jl-header-cta {
+    margin-left: 0;
+    margin-top: 0.75rem;
+    text-align: center;
+  }
+}
+
+.jl-btn-header-cta {
+  padding: 0.5rem 1.1rem;
+  font-size: 0.8125rem;
+  font-family: var(--jl-font-ui);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  background: var(--jl-yellow);
+  color: var(--jl-black) !important;
+  border: none;
+  text-decoration: none;
+  border-radius: 0.2rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.jl-btn-header-cta:hover {
+  background: var(--jl-yellow-hot);
+  color: var(--jl-black) !important;
+}
+
+/* ——— Buttons ——— */
+.jl-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.65rem 1.25rem;
+  font-family: var(--jl-font-ui);
+  font-size: 0.875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  text-decoration: none;
+  border-radius: 0.25rem;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, border-color 0.15s, filter 0.15s;
+}
+
+.jl-btn-icon {
+  flex-shrink: 0;
+}
+
+.jl-btn-primary {
+  background: var(--jl-yellow);
+  color: var(--jl-black);
+  border-color: var(--jl-yellow);
+}
+
+.jl-btn-primary:hover {
+  background: var(--jl-yellow-hot);
+  border-color: var(--jl-yellow-hot);
+  color: var(--jl-black);
+}
+
+.jl-btn-outline {
+  background: transparent;
+  color: var(--jl-white);
+  border-color: var(--jl-white);
+}
+
+.jl-btn-outline:hover {
+  background: var(--jl-white);
+  color: var(--jl-black);
+}
+
+.jl-btn-dark {
+  background: var(--jl-black);
+  color: var(--jl-yellow);
+  border-color: var(--jl-black);
+}
+
+.jl-btn-dark:hover {
+  background: var(--jl-gray);
+  border-color: var(--jl-gray);
+  color: var(--jl-yellow-hot);
+}
+
+/* “Spuitbus”-rand */
+.jl-btn--spray {
+  position: relative;
+  padding: 0.85rem 1.35rem 0.95rem;
+  font-size: 0.9375rem;
+  border: none;
+  border-radius: 0;
+  filter: drop-shadow(3px 4px 0 rgba(0, 0, 0, 0.35));
+  clip-path: polygon(
+    2% 12%,
+    10% 2%,
+    88% 0%,
+    98% 10%,
+    100% 35%,
+    96% 55%,
+    100% 78%,
+    94% 96%,
+    70% 100%,
+    25% 98%,
+    5% 88%,
+    0% 65%,
+    4% 38%
+  );
+}
+
+.jl-btn--spray.jl-btn--spray-b {
+  clip-path: polygon(
+    0% 8%,
+    12% 0%,
+    92% 4%,
+    100% 18%,
+    97% 48%,
+    100% 82%,
+    88% 100%,
+    18% 97%,
+    2% 85%,
+    0% 50%
+  );
+}
+
+/* ——— Hero (home) ——— */
+.jl-hero {
+  position: relative;
+  color: var(--jl-white);
+  padding: 0;
+  overflow: hidden;
+}
+
+.jl-hero--home {
+  /* Iets hoger zodat vlam + toorts onder de headerlijn volledig in beeld vallen */
+  min-height: clamp(24rem, 68vh, 44rem);
+  background-color: var(--jl-black-soft);
+  /* Links iets donkerder (tekst), rechts lichter; boven iets lichter zodat de vlam niet “verdwijnt” */
+  background-image:
+    linear-gradient(100deg, rgba(0, 0, 0, 0.62) 0%, rgba(0, 0, 0, 0.38) 42%, rgba(0, 0, 0, 0.22) 58%, rgba(0, 0, 0, 0.45) 100%),
+    linear-gradient(180deg, rgba(0, 0, 0, 0.08) 0%, transparent 28%, rgba(0, 0, 0, 0.5) 100%),
+    url("../assets/images/Hero-achtergrond.png");
+  background-size: cover;
+  /* Rechts + naar boven ankeren: bij vertical center werd de top van de illustratie (vlam) vaak afgesneden */
+  background-position: 72% 18%;
+  background-repeat: no-repeat;
+}
+
+@media (min-width: 720px) {
+  .jl-hero--home {
+    background-position: 90% 20%;
+  }
+}
+
+@media (min-width: 1100px) {
+  .jl-hero--home {
+    background-position: right 22%;
+  }
+}
+
+.jl-hero-top {
+  position: relative;
+  z-index: 1;
+  max-width: var(--jl-max);
+  margin: 0 auto;
+  padding: 1.25rem 1.25rem 0;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.jl-hero-social {
+  display: flex;
+  gap: 0.85rem;
+  align-items: center;
+}
+
+.jl-hero-social a {
+  color: var(--jl-yellow);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  text-decoration: none;
+  opacity: 0.95;
+}
+
+.jl-hero-social a:hover {
+  color: var(--jl-yellow-hot);
+  opacity: 1;
+}
+
+.jl-hero-social svg {
+  width: 1.35rem;
+  height: 1.35rem;
+  fill: currentColor;
+}
+
+.jl-hero-main {
+  position: relative;
+  z-index: 1;
+  max-width: var(--jl-max);
+  margin: 0 auto;
+  padding: clamp(1.5rem, 5vw, 3rem) 1.25rem clamp(3rem, 8vw, 5rem);
+  text-align: center;
+}
+
+.jl-hero--home .jl-hero-main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(1.35rem, 3.5vw, 2.35rem);
+}
+
+.jl-hero-headline {
+  margin: 0 0 1.25rem;
+  font-family: var(--jl-font-display);
+  font-weight: 400;
+  font-size: clamp(2.75rem, 9vw, 5.75rem);
+  line-height: 0.98;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.jl-hero-headline .jl-h1-line {
+  display: block;
+}
+
+.jl-hero--home .jl-hero-headline {
+  margin-bottom: 0;
+}
+
+.jl-hero--home .jl-hero-headline .jl-h1-line {
+  padding: clamp(0.5rem, 1.8vw, 1.05rem) 0;
+}
+
+.jl-hero-headline .jl-h1-yellow {
+  color: var(--jl-yellow);
+}
+
+.jl-hero-headline .jl-h1-white {
+  color: var(--jl-white);
+}
+
+.jl-hero-lead {
+  margin: 0 auto 2rem;
+  font-size: 1.0625rem;
+  line-height: 1.5;
+  max-width: 26rem;
+  color: rgba(255, 255, 255, 0.92);
+  font-weight: 600;
+}
+
+.jl-hero-lead--home {
+  font-family: var(--jl-font);
+  font-weight: 600;
+}
+
+/* Home hero: Anton */
+.jl-hero--home .jl-hero-headline {
+  font-family: var(--jl-font-hero);
+  letter-spacing: 0.03em;
+}
+
+/* Alleen jl-stone-weathered op de kop (+ steengradients op de spans) */
+.jl-hero-headline--stone {
+  filter: url(#jl-stone-weathered);
+  -webkit-filter: url(#jl-stone-weathered);
+}
+
+.jl-defs {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .jl-hero-headline--stone {
+    filter: drop-shadow(0.06em 0.1em 0.04em rgba(0, 0, 0, 0.5));
+    -webkit-filter: drop-shadow(0.06em 0.1em 0.04em rgba(0, 0, 0, 0.5));
+  }
+
+  .jl-hero--home .jl-hero-headline--stone .jl-h1-yellow,
+  .jl-hero--home .jl-hero-headline--stone .jl-h1-white {
+    background: none;
+    -webkit-background-clip: border-box;
+    background-clip: border-box;
+    -webkit-text-fill-color: currentColor;
+  }
+
+  .jl-hero--home .jl-hero-headline--stone .jl-h1-yellow {
+    color: var(--jl-yellow);
+  }
+
+  .jl-hero--home .jl-hero-headline--stone .jl-h1-white {
+    color: var(--jl-white);
+  }
+}
+
+/* Steenkleurige marmoring in de Anton-kop (home hero) */
+.jl-hero--home .jl-hero-headline--stone .jl-h1-yellow {
+  color: transparent;
+  background: linear-gradient(
+    148deg,
+    #f0e45a 0%,
+    #c4b01a 18%,
+    #8f8210 38%,
+    #ddd048 52%,
+    #6b6010 68%,
+    #e8dc50 82%,
+    #a69418 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.jl-hero--home .jl-hero-headline--stone .jl-h1-white {
+  color: transparent;
+  background: linear-gradient(
+    162deg,
+    #f2eee6 0%,
+    #a8a49c 24%,
+    #6e6a66 42%,
+    #d4d0c8 58%,
+    #4e4a46 76%,
+    #e0dcd4 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.jl-hero--home .jl-hero-lead--home {
+  font-family: var(--jl-font-hero);
+  font-weight: 400;
+  font-size: clamp(0.5625rem, 2.8vw + 0.42rem, 1.0625rem);
+  letter-spacing: 0.02em;
+  line-height: 1.35;
+  white-space: nowrap;
+  max-width: none;
+  margin: 0;
+  padding: clamp(0.4rem, 1.2vw, 0.75rem) 0;
+}
+
+.jl-hero--home .jl-hero-ctas .jl-btn {
+  font-family: var(--jl-font-hero);
+  letter-spacing: 0.06em;
+}
+
+/* Home: grotere type, ruimere gele vlakken, ruwere “steen”-rand + lichte vervorming */
+.jl-hero--home .jl-hero-ctas .jl-btn--spray {
+  font-size: 1.0625rem;
+  padding: 1.05rem 1.65rem 1.15rem;
+  filter: url(#jl-cta-chipped) drop-shadow(3px 5px 0 rgba(0, 0, 0, 0.38)) drop-shadow(0 1px 0 rgba(0, 0, 0, 0.2));
+  -webkit-filter: url(#jl-cta-chipped) drop-shadow(3px 5px 0 rgba(0, 0, 0, 0.38)) drop-shadow(0 1px 0 rgba(0, 0, 0, 0.2));
+  clip-path: polygon(
+    0% 22%,
+    4% 8%,
+    14% 0%,
+    38% 4%,
+    58% 0%,
+    78% 5%,
+    96% 2%,
+    100% 18%,
+    97% 32%,
+    100% 46%,
+    96% 58%,
+    100% 74%,
+    98% 88%,
+    88% 100%,
+    64% 97%,
+    42% 100%,
+    18% 96%,
+    4% 88%,
+    0% 70%,
+    3% 52%,
+    0% 36%
+  );
+}
+
+.jl-hero--home .jl-hero-ctas .jl-btn--spray.jl-btn--spray-b {
+  clip-path: polygon(
+    5% 14%,
+    20% 0%,
+    48% 5%,
+    72% 0%,
+    94% 10%,
+    100% 28%,
+    96% 44%,
+    100% 60%,
+    97% 76%,
+    100% 90%,
+    82% 100%,
+    54% 96%,
+    28% 100%,
+    6% 92%,
+    0% 72%,
+    4% 54%,
+    0% 36%,
+    3% 22%
+  );
+}
+
+.jl-hero--home .jl-hero-ctas .jl-btn-icon {
+  width: 1.15em;
+  height: 1.15em;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .jl-hero--home .jl-hero-ctas .jl-btn--spray {
+    filter: drop-shadow(3px 5px 0 rgba(0, 0, 0, 0.38));
+    -webkit-filter: drop-shadow(3px 5px 0 rgba(0, 0, 0, 0.38));
+  }
+}
+
+.jl-hero-ctas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Generieke hero (subpagina’s / oud grid) */
+.jl-hero-inner {
+  max-width: var(--jl-max);
+  margin: 0 auto;
+  display: grid;
+  gap: 2rem;
+  align-items: center;
+  grid-template-columns: 1fr;
+  padding: clamp(3rem, 8vw, 5.5rem) 1.25rem;
+}
+
+@media (min-width: 900px) {
+  .jl-hero-inner {
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+  }
+}
+
+.jl-hero:not(.jl-hero--home) {
+  background: linear-gradient(165deg, var(--jl-black-soft) 0%, var(--jl-gray) 100%);
+}
+
+.jl-hero:not(.jl-hero--home) h1 {
+  margin: 0 0 1rem;
+  font-family: var(--jl-font-display);
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--jl-yellow);
+}
+
+.jl-hero-visual {
+  border-radius: 0.5rem;
+  min-height: 220px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px dashed rgba(245, 230, 0, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.45);
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-align: center;
+  padding: 1.5rem;
+}
+
+/* ——— Principes (zwarte kaarten, gele gloed) ——— */
+.jl-section-principles {
+  background: var(--jl-white);
+  padding: clamp(2.75rem, 6vw, 4.5rem) 1.25rem;
+}
+
+.jl-title-stencil {
+  margin: 0 0 2rem;
+  font-family: var(--jl-font-stencil);
+  font-size: clamp(2rem, 5.5vw, 3.25rem);
+  font-weight: 700;
+  text-align: center;
+  text-transform: uppercase;
+  color: var(--jl-black);
+  letter-spacing: 0.02em;
+}
+
+.jl-principles-grid {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: 1fr;
+  max-width: 68rem;
+  margin: 0 auto;
+}
+
+@media (min-width: 700px) {
+  .jl-principles-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.jl-principle-card {
+  background: var(--jl-black);
+  border-radius: 0.65rem;
+  padding: 1.75rem 1.35rem;
+  text-align: center;
+  border: 1px solid rgba(245, 230, 0, 0.25);
+  box-shadow:
+    0 0 0 1px rgba(245, 230, 0, 0.15),
+    0 0 32px rgba(245, 230, 0, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.jl-principle-icon {
+  font-size: 2.25rem;
+  line-height: 1;
+  margin-bottom: 0.85rem;
+  filter: grayscale(0.2);
+}
+
+.jl-principle-icon--svg {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  filter: none;
+  color: var(--jl-yellow);
+}
+
+.jl-principle-icon--svg svg {
+  display: block;
+  width: 2.65rem;
+  height: auto;
+}
+
+.jl-principle-card h3 {
+  margin: 0;
+  font-family: var(--jl-font-ui);
+  font-size: 1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  line-height: 1.35;
+  color: var(--jl-white);
+}
+
+.jl-principles-more {
+  text-align: center;
+  margin-top: 2rem;
+}
+
+/* ——— Sections ——— */
+.jl-section {
+  padding: clamp(2.5rem, 5vw, 4rem) 1.25rem;
+}
+
+.jl-section-alt {
+  background: var(--jl-off-white);
+}
+
+.jl-section-inner {
+  max-width: var(--jl-max);
+  margin: 0 auto;
+}
+
+.jl-section h2 {
+  margin: 0 0 1rem;
+  font-family: var(--jl-font-ui);
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--jl-black);
+}
+
+.jl-kicker {
+  margin: 0 0 0.35rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  font-family: var(--jl-font-ui);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--jl-yellow-dim);
+}
+
+.jl-prose {
+  max-width: 48rem;
+}
+
+.jl-prose a {
+  color: var(--jl-black);
+  font-weight: 600;
+}
+
+.jl-prose a:hover {
+  color: var(--jl-yellow-dim);
+}
+
+.jl-prose p {
+  margin: 0 0 1rem;
+}
+
+/* ——— Cards / grid ——— */
+.jl-grid-3 {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 640px) {
+  .jl-grid-3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.jl-card {
+  background: var(--jl-white);
+  border: 1px solid #d0d0d0;
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+}
+
+.jl-section-alt .jl-card {
+  background: var(--jl-white);
+}
+
+.jl-card h3,
+.jl-card h4 {
+  margin: 0 0 0.75rem;
+  font-size: 1.125rem;
+  font-family: var(--jl-font-ui);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--jl-black);
+}
+
+.jl-card p {
+  margin: 0;
+  font-size: 0.9375rem;
+  color: var(--jl-text-muted);
+}
+
+/* ——— Agenda ——— */
+.jl-event {
+  display: grid;
+  gap: 1rem;
+  padding: 1.5rem;
+  background: var(--jl-white);
+  border: 1px solid #ccc;
+  border-radius: 0.5rem;
+  border-left: 4px solid var(--jl-yellow);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+}
+
+@media (min-width: 700px) {
+  .jl-event {
+    grid-template-columns: auto 1fr;
+    align-items: start;
+  }
+}
+
+.jl-event-date {
+  font-weight: 800;
+  font-family: var(--jl-font-ui);
+  font-size: 1.25rem;
+  color: var(--jl-black);
+  line-height: 1.2;
+}
+
+.jl-event-meta {
+  margin: 0.5rem 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.9375rem;
+  color: var(--jl-text-muted);
+}
+
+.jl-event-meta li {
+  margin-bottom: 0.25rem;
+}
+
+/* ——— CTA band ——— */
+.jl-cta-band {
+  background: var(--jl-black);
+  color: var(--jl-white);
+  padding: clamp(2.5rem, 5vw, 3.5rem) 1.25rem;
+  text-align: center;
+  border-top: 3px solid var(--jl-yellow);
+}
+
+.jl-cta-band h2 {
+  color: var(--jl-yellow);
+  font-family: var(--jl-font-ui);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 0.75rem;
+}
+
+.jl-cta-band p {
+  margin: 0 auto 1.25rem;
+  max-width: 36rem;
+  opacity: 0.9;
+}
+
+/* ——— Footer ——— */
+.jl-footer {
+  background: var(--jl-black);
+  color: rgba(255, 255, 255, 0.82);
+  padding: 3rem 1.25rem 1.5rem;
+  font-size: 0.9375rem;
+  border-top: 3px solid var(--jl-yellow);
+}
+
+.jl-footer-inner {
+  max-width: var(--jl-max);
+  margin: 0 auto;
+  display: grid;
+  gap: 2rem;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 768px) {
+  .jl-footer-inner {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .jl-footer-inner {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.jl-footer h3 {
+  margin: 0 0 1rem;
+  font-size: 0.75rem;
+  font-family: var(--jl-font-ui);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--jl-yellow);
+}
+
+.jl-footer ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.jl-footer li {
+  margin-bottom: 0.5rem;
+}
+
+.jl-footer a {
+  color: rgba(255, 255, 255, 0.88);
+  text-decoration: none;
+}
+
+.jl-footer a:hover {
+  color: var(--jl-yellow-hot);
+}
+
+.jl-footer-contact p {
+  margin: 0 0 0.5rem;
+}
+
+.jl-footer-bottom {
+  max-width: var(--jl-max);
+  margin: 2rem auto 0;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--jl-border);
+  font-size: 0.8125rem;
+  font-family: var(--jl-font-ui);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.5);
+  text-align: center;
+}
+
+.jl-social {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.jl-social a {
+  font-weight: 600;
+  font-family: var(--jl-font-ui);
+  text-transform: uppercase;
+  font-size: 0.8125rem;
+}
+
+/* ——— Page shell ——— */
+.jl-page-header {
+  background: var(--jl-black);
+  padding: 2.25rem 1.25rem;
+  border-bottom: 3px solid var(--jl-yellow);
+}
+
+.jl-page-header-inner {
+  max-width: var(--jl-max);
+  margin: 0 auto;
+}
+
+.jl-page-header h1 {
+  margin: 0;
+  font-family: var(--jl-font-ui);
+  font-size: clamp(1.75rem, 3.5vw, 2.5rem);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--jl-yellow);
+}
+
+.jl-page-main {
+  padding: 2.5rem 1.25rem 4rem;
+}
+
+.jl-page-main .jl-section-inner {
+  max-width: 48rem;
+}
+
+.jl-placeholder-note {
+  padding: 1rem 1.25rem;
+  background: rgba(245, 230, 0, 0.12);
+  border-radius: 0.35rem;
+  border-left: 4px solid var(--jl-yellow);
+  font-size: 0.9375rem;
+  color: var(--jl-text);
+}
+
+/* ——— Cookie banner ——— */
+.jl-cookie {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 200;
+  padding: 1rem 1.25rem;
+  background: var(--jl-panel);
+  border-top: 2px solid var(--jl-yellow);
+  box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.4);
+  display: none;
+}
+
+.jl-cookie.is-visible {
+  display: block;
+}
+
+.jl-cookie-inner {
+  max-width: var(--jl-max);
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.jl-cookie p {
+  margin: 0;
+  flex: 1 1 18rem;
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.jl-cookie-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.jl-cookie .jl-btn {
+  padding: 0.5rem 1rem;
+  font-size: 0.8125rem;
+}
+
+.jl-cookie-deny {
+  background: transparent;
+  color: var(--jl-yellow);
+  border-color: var(--jl-yellow);
+}
+
+.jl-cookie-deny:hover {
+  background: rgba(245, 230, 0, 0.12);
+  color: var(--jl-yellow-hot);
+}
+
+/* Topbar: link naar alternatieve homepage (alleen op index-pagina’s die de modifier zetten) */
+.jl-topbar-inner--with-alt {
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem 1rem;
+}
+
+.jl-topbar-end {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.5rem;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.jl-topbar-layout-switch {
+  font-weight: 700;
+  color: rgba(245, 230, 0, 0.92) !important;
+  text-decoration: none;
+}
+
+.jl-topbar-layout-switch:hover {
+  color: var(--jl-white) !important;
+}
+
+/* ——— Alternatieve homepage (index-alt.html) ——— */
+.jl-home-alt-hero {
+  position: relative;
+  color: var(--jl-white);
+  background-color: var(--jl-black-soft);
+  background-image:
+    linear-gradient(100deg, rgba(0, 0, 0, 0.72) 0%, rgba(0, 0, 0, 0.42) 42%, rgba(0, 0, 0, 0.28) 58%, rgba(0, 0, 0, 0.48) 100%),
+    linear-gradient(180deg, rgba(0, 0, 0, 0.12) 0%, transparent 30%, rgba(0, 0, 0, 0.45) 100%),
+    url("../assets/images/Hero-achtergrond.png");
+  background-size: cover;
+  background-position: 72% 18%;
+  background-repeat: no-repeat;
+  border-bottom: 3px solid var(--jl-yellow);
+}
+
+@media (min-width: 720px) {
+  .jl-home-alt-hero {
+    background-position: 90% 20%;
+  }
+}
+
+@media (min-width: 1100px) {
+  .jl-home-alt-hero {
+    background-position: right 22%;
+  }
+}
+
+.jl-home-alt-hero__inner {
+  position: relative;
+  z-index: 1;
+  max-width: var(--jl-max);
+  margin: 0 auto;
+  min-height: clamp(26rem, 68svh, 44rem);
+  padding: clamp(2.5rem, 6vw, 4rem) clamp(1.25rem, 4vw, 3rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  gap: clamp(1.15rem, 2.8vw, 2rem);
+}
+
+.jl-home-alt-hero__kicker {
+  margin: 0;
+  padding: clamp(0.35rem, 1vw, 0.65rem) 0;
+  font-family: var(--jl-font-stencil);
+  font-size: 0.9375rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--jl-yellow);
+}
+
+.jl-home-alt-hero__title {
+  margin: 0;
+  font-family: var(--jl-font-display);
+  font-weight: 400;
+  font-size: clamp(2.35rem, 6.5vw, 4rem);
+  line-height: 1;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.jl-home-alt-hero__title--question {
+  color: var(--jl-yellow);
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.05;
+  max-width: min(100%, 36rem);
+  padding: clamp(0.45rem, 1.4vw, 0.9rem) 0;
+}
+
+.jl-home-alt-hero__ballots {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem 1.5rem;
+  margin: 0;
+  padding: clamp(0.4rem, 1.2vw, 0.75rem) 0;
+  font-family: var(--jl-font-ui);
+  font-size: clamp(0.75rem, 1.8vw + 0.55rem, 1rem);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--jl-white);
+}
+
+.jl-ballot {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.jl-ballot__box {
+  display: block;
+  width: 2.125rem;
+  height: 2.125rem;
+  flex-shrink: 0;
+}
+
+.jl-ballot__box svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.jl-ballot__label {
+  line-height: 1.2;
+  text-align: left;
+}
+
+.jl-home-alt-hero__lead {
+  margin: 0 auto;
+  max-width: 32rem;
+  font-size: 1.0625rem;
+  font-weight: 600;
+  line-height: 1.45;
+  color: rgba(255, 255, 255, 0.92);
+  padding: clamp(0.4rem, 1.2vw, 0.75rem) 0;
+}
+
+.jl-home-alt-hero__ctas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1rem;
+  align-items: center;
+  justify-content: center;
+}
+
+.jl-home-alt-pillars {
+  background: var(--jl-black);
+  padding: clamp(2.5rem, 5vw, 3.75rem) 1.25rem;
+  border-top: 1px solid var(--jl-border);
+}
+
+.jl-home-alt-pillars-inner {
+  max-width: var(--jl-max);
+  margin: 0 auto;
+}
+
+.jl-home-alt-section-title {
+  margin: 0 0 1.75rem;
+  text-align: center;
+  font-family: var(--jl-font-stencil);
+  font-weight: 700;
+  font-size: clamp(1.5rem, 3.5vw, 2rem);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--jl-yellow);
+}
+
+.jl-home-alt-pillars-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 640px) {
+  .jl-home-alt-pillars-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.jl-home-alt-pillar {
+  margin: 0;
+  padding: 1.35rem 1.15rem;
+  border: 2px solid rgba(245, 230, 0, 0.55);
+  border-radius: 0.25rem;
+  background: rgba(255, 255, 255, 0.03);
+  text-align: center;
+  color: var(--jl-white);
+}
+
+.jl-home-alt-pillar-icon {
+  font-size: 1.75rem;
+  line-height: 1;
+  margin-bottom: 0.65rem;
+}
+
+.jl-home-alt-pillar h3 {
+  margin: 0;
+  font-family: var(--jl-font-ui);
+  font-size: 1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  line-height: 1.25;
+  color: var(--jl-white);
+}
+
+.jl-home-alt-pillar .jl-principle-icon--svg {
+  margin-bottom: 0.65rem;
+}
+
+.jl-home-alt-pillar .jl-principle-icon--svg svg {
+  width: 2.25rem;
+}

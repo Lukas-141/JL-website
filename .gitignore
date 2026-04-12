@@ -1,0 +1,21 @@
+# Besturingssystemen
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# Editors / IDE
+.idea/
+.vscode/
+*.swp
+*~
+
+# Omgeving / secrets
+.env
+.env.*
+*.log
+
+# Optioneel (als je later een build toevoegt)
+node_modules/
+dist/
+.cache/
+_site/
