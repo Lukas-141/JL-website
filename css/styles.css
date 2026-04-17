@@ -1716,6 +1716,105 @@ a:hover {
 
 /* ——— Modern Image Card Grid Design ——— */
 
+/* Welkom Blok met Social Media */
+.jl-standpunten-welcome {
+  background: linear-gradient(135deg, #ffffff 0%, #f9f9f9 100%);
+  padding: 3.5rem 1.25rem;
+  border-bottom: 2px solid #f0f0f0;
+}
+
+.jl-standpunten-welcome__inner {
+  max-width: var(--jl-max);
+  margin: 0 auto;
+}
+
+.jl-standpunten-welcome__title {
+  font-family: var(--jl-font-hero);
+  font-size: 2rem;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  margin: 0 0 1rem;
+  color: var(--jl-black);
+}
+
+.jl-standpunten-welcome__intro {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--jl-text-muted);
+  margin: 0 0 2rem;
+  max-width: 700px;
+  font-weight: 400;
+}
+
+.jl-standpunten-social {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.jl-standpunten-social__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  background: var(--jl-white);
+  border: 2px solid #e0e0e0;
+  border-radius: 0.5rem;
+  color: var(--jl-black);
+  text-decoration: none;
+  font-size: 0.875rem;
+  font-weight: 600;
+  font-family: var(--jl-font-ui);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: pointer;
+}
+
+.jl-standpunten-social__link img {
+  width: 18px;
+  height: 18px;
+  filter: brightness(0) saturate(100%);
+}
+
+.jl-standpunten-social__link:hover {
+  background: var(--jl-black);
+  border-color: var(--jl-yellow);
+  color: var(--jl-yellow);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.jl-standpunten-social__link:hover img {
+  filter: brightness(1) saturate(100%);
+}
+
+@media (max-width: 640px) {
+  .jl-standpunten-welcome {
+    padding: 2.5rem 1.25rem;
+  }
+
+  .jl-standpunten-welcome__title {
+    font-size: 1.5rem;
+  }
+
+  .jl-standpunten-welcome__intro {
+    font-size: 0.9375rem;
+  }
+
+  .jl-standpunten-social {
+    gap: 0.75rem;
+  }
+
+  .jl-standpunten-social__link {
+    flex: 1;
+    min-width: 100px;
+    justify-content: center;
+  }
+}
+
 /* Top 3 Standpunten Section */
 .jl-standpunten-hero-section {
   background: linear-gradient(135deg, #f5f5f5 0%, #ffffff 100%);
