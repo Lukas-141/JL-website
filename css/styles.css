@@ -1714,199 +1714,107 @@ a:hover {
   line-height: 1.6;
 }
 
-/* ——— Premium Welcome Hero Section ——— */
-.jl-welcome-hero {
-  position: relative;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  min-height: 480px;
-  background: var(--jl-black);
-  overflow: hidden;
+/* ——— Welkom Hero - Minimalist Authority Design ——— */
+.jl-welkom-hero {
+  background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+  padding: 5rem 1.25rem;
 }
 
-@media (max-width: 1024px) {
-  .jl-welcome-hero {
-    grid-template-columns: 1fr;
-    min-height: auto;
-  }
-}
-
-/* Background Image Container */
-.jl-welcome-hero__background {
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 60%;
-  height: 100%;
-  overflow: hidden;
-}
-
-@media (max-width: 1024px) {
-  .jl-welcome-hero__background {
-    position: relative;
-    width: 100%;
-    height: 350px;
-    grid-column: 1 / 2;
-    grid-row: 1 / 2;
-  }
-}
-
-.jl-welcome-hero__image {
+.jl-welkom-hero__inner {
+  max-width: var(--jl-max);
+  margin: 0 auto;
   width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center;
-  display: block;
-}
-
-/* Gradient Overlay - Dark left to transparent right */
-.jl-welcome-hero__overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(
-    90deg,
-    rgba(0, 0, 0, 0.85) 0%,
-    rgba(0, 0, 0, 0.7) 40%,
-    rgba(0, 0, 0, 0.3) 70%,
-    rgba(0, 0, 0, 0.05) 100%
-  );
-  z-index: 2;
-  pointer-events: none;
-}
-
-@media (max-width: 1024px) {
-  .jl-welcome-hero__overlay {
-    background: linear-gradient(
-      180deg,
-      rgba(0, 0, 0, 0.4) 0%,
-      rgba(0, 0, 0, 0.7) 100%
-    );
-  }
-}
-
-/* Content - Left side, 40-50% width */
-.jl-welcome-hero__content {
-  grid-column: 1 / 2;
-  grid-row: 1 / 2;
-  padding: 4rem 3.5rem;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  z-index: 3;
-  position: relative;
+  justify-content: flex-start;
 }
 
-@media (max-width: 1024px) {
-  .jl-welcome-hero__content {
-    grid-column: 1 / 2;
-    grid-row: 2 / 3;
-    padding: 3rem 1.5rem;
-  }
-}
-
-@media (max-width: 640px) {
-  .jl-welcome-hero__content {
-    padding: 2rem 1.25rem;
-  }
-}
-
-.jl-welcome-hero__kicker {
+.jl-welkom-hero__kicker {
   font-family: var(--jl-font-ui);
   font-size: 0.8rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.12em;
-  color: #FF5400;
-  margin: 0 0 1rem;
+  color: var(--jl-yellow);
+  margin: 0 0 1.5rem;
 }
 
-.jl-welcome-hero__title {
+.jl-welkom-hero__title {
   font-family: var(--jl-font-hero);
-  font-size: 2.75rem;
+  font-size: 3.5rem;
   font-weight: 900;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.03em;
   text-transform: uppercase;
-  margin: 0 0 1.5rem;
+  margin: 0 0 1.75rem;
   color: var(--jl-white);
   line-height: 1.1;
-  max-width: 500px;
+  max-width: 600px;
 }
 
 @media (max-width: 1024px) {
-  .jl-welcome-hero__title {
-    font-size: 2.25rem;
+  .jl-welkom-hero__title {
+    font-size: 2.75rem;
   }
 }
 
 @media (max-width: 640px) {
-  .jl-welcome-hero__title {
-    font-size: 1.75rem;
+  .jl-welkom-hero__title {
+    font-size: 2rem;
   }
 }
 
-.jl-welcome-hero__text {
-  font-size: 1rem;
-  line-height: 1.7;
-  color: rgba(255, 255, 255, 0.92);
-  margin: 0 0 2rem;
-  max-width: 480px;
+.jl-welkom-hero__text {
+  font-size: 1.0625rem;
+  line-height: 1.75;
+  color: rgba(255, 255, 255, 0.88);
+  margin: 0 0 2.5rem;
+  max-width: 580px;
   font-weight: 400;
 }
 
 @media (max-width: 640px) {
-  .jl-welcome-hero__text {
-    font-size: 0.9375rem;
-    margin: 0 0 1.5rem;
+  .jl-welkom-hero__text {
+    font-size: 1rem;
+    margin: 0 0 2rem;
   }
 }
 
-/* Premium Social Buttons */
-.jl-welcome-hero__social-buttons {
+.jl-welkom-hero__social {
   display: flex;
   gap: 1rem;
-  flex-wrap: wrap;
   align-items: center;
 }
 
-.jl-welcome-hero__social-btn {
-  display: inline-flex;
+.jl-welkom-hero__social-btn {
+  display: flex;
   align-items: center;
-  gap: 0.6rem;
-  padding: 0.85rem 1.25rem;
-  background: rgba(255, 255, 255, 0.08);
-  border: 2px solid rgba(255, 255, 255, 0.2);
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid rgba(255, 255, 255, 0.15);
   border-radius: 6px;
   color: var(--jl-white);
   text-decoration: none;
-  font-size: 0.875rem;
-  font-weight: 600;
-  font-family: var(--jl-font-ui);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
   cursor: pointer;
-  backdrop-filter: blur(10px);
 }
 
-.jl-welcome-hero__social-btn img {
-  width: 18px;
-  height: 18px;
+.jl-welkom-hero__social-btn img {
+  width: 22px;
+  height: 22px;
   filter: brightness(1) invert(1);
-  transition: filter 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: filter 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.jl-welcome-hero__social-btn:hover {
-  background: linear-gradient(135deg, #FF5400 0%, #f9f610 100%);
-  border-color: transparent;
-  color: var(--jl-black);
+.jl-welkom-hero__social-btn:hover {
+  background: var(--jl-yellow);
+  border-color: var(--jl-yellow);
   transform: translateY(-4px);
-  box-shadow: 0 12px 32px rgba(255, 84, 0, 0.35);
+  box-shadow: 0 12px 32px rgba(249, 246, 16, 0.25);
 }
 
-.jl-welcome-hero__social-btn:hover img {
+.jl-welkom-hero__social-btn:hover img {
   filter: brightness(1) invert(0);
 }
 
