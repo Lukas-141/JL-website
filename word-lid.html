@@ -3,11 +3,213 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Lid worden — Jonge Libertariërs</title>
-  <meta name="description" content="Word lid van de Jonge Libertariërs.">
+  <title>Word lid — Jonge Libertariërs</title>
+  <meta name="description" content="Word lid van de Jonge Libertariërs en sluit je aan bij de beweging.">
   <link rel="icon" href="assets/images/JL-Nieuwe-Logo-scaled.png" type="image/png">
   <link rel="apple-touch-icon" href="assets/images/JL-Nieuwe-Logo-scaled.png">
   <link rel="stylesheet" href="css/styles.css">
+  <style>
+    .jl-membership-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr));
+      gap: 2rem;
+      margin: 3rem 0;
+    }
+
+    .jl-membership-card {
+      background: var(--jl-white);
+      border: 2px solid var(--jl-black);
+      border-radius: 0.5rem;
+      padding: 2.5rem 2rem;
+      display: flex;
+      flex-direction: column;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+    }
+
+    .jl-membership-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.15);
+      border-color: #f9f610;
+    }
+
+    .jl-membership-card__badge {
+      font-family: var(--jl-font-ui);
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--jl-black);
+      margin-bottom: 1rem;
+      display: inline-block;
+      padding: 0.35rem 0.75rem;
+      background: rgba(249, 246, 16, 0.15);
+      border-radius: 0.25rem;
+      width: fit-content;
+    }
+
+    .jl-membership-card__title {
+      margin: 0 0 0.5rem;
+      font-family: var(--jl-font-hero);
+      font-size: 1.5rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: -0.01em;
+      color: var(--jl-black);
+    }
+
+    .jl-membership-card__description {
+      margin: 0 0 1.5rem;
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: var(--jl-text-muted);
+      flex-grow: 1;
+    }
+
+    .jl-membership-card__price {
+      margin: 1.5rem 0;
+      display: flex;
+      align-items: baseline;
+      gap: 0.5rem;
+    }
+
+    .jl-membership-card__amount {
+      font-family: var(--jl-font-hero);
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--jl-black);
+    }
+
+    .jl-membership-card__period {
+      font-family: var(--jl-font-ui);
+      font-size: 0.875rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--jl-text-muted);
+    }
+
+    .jl-membership-card__cta {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-top: 2rem;
+      padding: 1rem 2rem;
+      background: #f9f610;
+      color: var(--jl-black);
+      border: none;
+      border-radius: 0.3rem;
+      font-family: var(--jl-font-ui);
+      font-size: 0.9rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .jl-membership-card__cta:hover {
+      background: #fff844;
+      transform: scale(1.02);
+      box-shadow: 0 8px 20px rgba(249, 246, 16, 0.4);
+    }
+
+    .jl-membership-card__terms {
+      margin-top: 1.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid #e0e0e0;
+      font-size: 0.8rem;
+      text-align: center;
+    }
+
+    .jl-membership-card__terms a {
+      color: var(--jl-black);
+      font-weight: 600;
+      text-decoration: underline;
+    }
+
+    .jl-membership-card__terms a:hover {
+      color: var(--jl-yellow-dim);
+    }
+
+    .jl-intro-section {
+      max-width: 56rem;
+      margin: 0 0 3rem;
+    }
+
+    .jl-intro-section h2 {
+      margin: 0 0 1rem;
+      font-family: var(--jl-font-hero);
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      text-transform: uppercase;
+      color: var(--jl-black);
+    }
+
+    .jl-intro-section p {
+      margin: 0 0 1rem;
+      font-size: 1.0625rem;
+      line-height: 1.7;
+      color: var(--jl-text-muted);
+    }
+
+    .jl-intro-section p:last-child {
+      margin-bottom: 0;
+    }
+
+    .jl-info-banner {
+      background: linear-gradient(135deg, rgba(249, 246, 16, 0.1) 0%, rgba(0, 0, 0, 0.02) 100%);
+      border-left: 4px solid #f9f610;
+      border-radius: 0.5rem;
+      padding: 1.5rem;
+      margin: 3rem 0;
+    }
+
+    .jl-info-banner h3 {
+      margin: 0 0 0.5rem;
+      font-family: var(--jl-font-ui);
+      font-size: 0.95rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--jl-black);
+    }
+
+    .jl-info-banner p {
+      margin: 0;
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: var(--jl-text-muted);
+    }
+
+    @media (max-width: 768px) {
+      .jl-membership-cards {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+      }
+
+      .jl-membership-card {
+        padding: 2rem 1.5rem;
+      }
+
+      .jl-membership-card__title {
+        font-size: 1.25rem;
+      }
+
+      .jl-membership-card__amount {
+        font-size: 2rem;
+      }
+
+      .jl-membership-card__cta {
+        min-height: 44px;
+      }
+    }
+  </style>
 </head>
 <body>
   <header class="jl-header">
@@ -22,17 +224,17 @@
         <nav class="jl-nav" aria-label="Hoofdmenu">
           <a href="index.html">Home</a>
           <a href="standpunten.html">Standpunten</a>
-          <a href="agenda.html">Actie</a>
+          <a href="evenementen.html">Evenementen</a>
           <div class="jl-nav-item">
             <button type="button">Organisatie</button>
             <div class="jl-dropdown">
+              <a href="over-ons.html">Dit is de JL</a>
               <a href="commissies.html">Commissies</a>
               <a href="bestuur.html">Bestuur</a>
               <a href="statuten-en-hr.html">Statuten en HR</a>
               <a href="steun-onze-missie.html">Steun onze missie</a>
             </div>
           </div>
-          <a href="nieuws.html">Nieuws</a>
           <a href="contact.html">Contact</a>
         </nav>
         <a class="jl-header-cta jl-btn-header-cta" href="steun-onze-missie.html">Steun onze missie</a>
@@ -43,21 +245,91 @@
 
   <div class="jl-page-header">
     <div class="jl-page-header-inner">
-      <h1>Lid worden</h1>
+      <h1>Word lid</h1>
+      <p class="jl-page-header__subtitle">Sluit je aan bij de beweging van libertaire jongeren</p>
     </div>
   </div>
 
   <main class="jl-page-main">
-    <div class="jl-section-inner jl-prose">
-      <p class="jl-placeholder-note">
-        Vervang dit door het lidmaatschapsproces van de live site (formulier, iDeal, of link naar externe inschrijving).
-      </p>
-      <p style="margin-top:1.5rem;">
-        Sluit je aan bij het netwerk van libertaire jongeren. Vragen? <a href="contact.html">Neem contact op</a>.
-      </p>
-      <p style="margin-top:1.5rem;">
-        <a class="jl-btn jl-btn-primary" href="mailto:bestuur@jongelibertariers.nl?subject=Lidmaatschap%20JL">Mail het bestuur</a>
-      </p>
+    <div class="jl-section-inner">
+      <div class="jl-intro-section">
+        <h2>Kies jouw vrijheid</h2>
+        <p>
+          De Jonge Libertariërs is meer dan een organisatie — het is een beweging voor volledige persoonlijke en economische vrijheid. Als lid krijg je toegang tot evenementen, commissies, en een netwerk van gelijkgestemde jongeren die echt durven dromen van verandering.
+        </p>
+        <p>
+          <strong>Sinds januari 2025 werken we met automatische incasso.</strong> Dit zorgt voor eenvoudige en veilige lidmaatschapsbetaling.
+        </p>
+      </div>
+
+      <div class="jl-info-banner">
+        <h3>Hoe werkt het?</h3>
+        <p>Kies je lidmaatschapscategorie, voltooi de betaling via Stripe, en je bent direct lid. Je ontvangt een bevestiging per e-mail en krijgt toegang tot alle ledenvoordelen.</p>
+      </div>
+
+      <div class="jl-membership-cards">
+        <!-- Kaart 1: Jongeren -->
+        <div class="jl-membership-card">
+          <span class="jl-membership-card__badge">14 t/m 27 jaar</span>
+          <h3 class="jl-membership-card__title">Jongeren</h3>
+          <p class="jl-membership-card__description">
+            Focus op studenten en scholieren die willen strijden voor hun toekomst. Jouw leeftijd bepaalt je vrijheid — maak er wat van.
+          </p>
+          <div class="jl-membership-card__price">
+            <span class="jl-membership-card__amount">€12</span>
+            <span class="jl-membership-card__period">per jaar (€1/maand)</span>
+          </div>
+          <a href="https://buy.stripe.com/14AbJ05UH6tWfO74uB8Ra00" class="jl-membership-card__cta">
+            Word lid
+          </a>
+          <div class="jl-membership-card__terms">
+            <a href="assets/Huishoudelijk-Reglement-Jonge-Libertariers-2025.pdf" target="_blank">Bekijk voorwaarden</a>
+          </div>
+        </div>
+
+        <!-- Kaart 2: Young Professionals -->
+        <div class="jl-membership-card">
+          <span class="jl-membership-card__badge">28 en 29 jaar</span>
+          <h3 class="jl-membership-card__title">Young Professionals</h3>
+          <p class="jl-membership-card__description">
+            Voor degenen die al aan hun carrière bouwen en libertaire waarden willen steunen. Bouw jouw toekomst op libertaire grondslag.
+          </p>
+          <div class="jl-membership-card__price">
+            <span class="jl-membership-card__amount">€24</span>
+            <span class="jl-membership-card__period">per jaar (€2/maand)</span>
+          </div>
+          <a href="https://buy.stripe.com/fZubJ082Pf0s8lF0el8Ra03" class="jl-membership-card__cta">
+            Word lid
+          </a>
+          <div class="jl-membership-card__terms">
+            <a href="assets/Huishoudelijk-Reglement-Jonge-Libertariers-2025.pdf" target="_blank">Bekijk voorwaarden</a>
+          </div>
+        </div>
+
+        <!-- Kaart 3: Senioren -->
+        <div class="jl-membership-card">
+          <span class="jl-membership-card__badge">30 jaar en ouder</span>
+          <h3 class="jl-membership-card__title">Senioren</h3>
+          <p class="jl-membership-card__description">
+            Voor de laatstejaars binnen de jongerenorganisatie. Steun de volgende generatie in hun strijd voor vrijheid.
+          </p>
+          <div class="jl-membership-card__price">
+            <span class="jl-membership-card__amount">€24</span>
+            <span class="jl-membership-card__period">per jaar (€2/maand)</span>
+          </div>
+          <a href="https://buy.stripe.com/28EfZg0Ang4wfO7f9f8Ra05" class="jl-membership-card__cta">
+            Word lid
+          </a>
+          <div class="jl-membership-card__terms">
+            <a href="assets/Huishoudelijk-Reglement-Jonge-Libertariers-2025.pdf" target="_blank">Bekijk voorwaarden</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="jl-info-banner" style="margin-top: 4rem;">
+        <h3>Vragen over lidmaatschap?</h3>
+        <p>Neem contact op met ons bestuur: <a href="mailto:bestuur@jongelibertariers.nl" style="color: var(--jl-black); font-weight: 600;">bestuur@jongelibertariers.nl</a></p>
+      </div>
     </div>
   </main>
 
@@ -66,6 +338,7 @@
       <div>
         <h3>Organisatie</h3>
         <ul>
+          <li><a href="over-ons.html">Dit is de JL</a></li>
           <li><a href="bestuur.html">Bestuur</a></li>
           <li><a href="commissies.html">Commissies</a></li>
           <li><a href="statuten-en-hr.html">Statuten &amp; HR</a></li>
@@ -103,7 +376,7 @@
   <div class="jl-cookie" role="dialog" aria-label="Cookie melding">
     <div class="jl-cookie-inner">
       <p>
-        Om de website optimaal te laten functioneren, gebruiken we cookies. Door op “Accepteren” te klikken, stem je in met het gebruik
+        Om de website optimaal te laten functioneren, gebruiken we cookies. Door op "Accepteren" te klikken, stem je in met het gebruik
         van cookies zoals beschreven in ons privacybeleid. Je kunt ook weigeren; sommige functies werken dan mogelijk beperkt.
       </p>
       <div class="jl-cookie-actions">

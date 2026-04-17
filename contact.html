@@ -8,6 +8,274 @@
   <link rel="icon" href="assets/images/JL-Nieuwe-Logo-scaled.png" type="image/png">
   <link rel="apple-touch-icon" href="assets/images/JL-Nieuwe-Logo-scaled.png">
   <link rel="stylesheet" href="css/styles.css">
+  <style>
+    .jl-contact-wrapper {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: start;
+    }
+
+    @media (max-width: 1024px) {
+      .jl-contact-wrapper {
+        grid-template-columns: 1fr;
+        gap: 3rem;
+      }
+    }
+
+    /* Contact Info Section */
+    .jl-contact-info {
+      display: flex;
+      flex-direction: column;
+      gap: 2.5rem;
+    }
+
+    .jl-contact-info h2 {
+      margin: 0 0 1rem;
+      font-family: var(--jl-font-hero);
+      font-size: clamp(1.75rem, 4vw, 2.5rem);
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      text-transform: uppercase;
+      color: var(--jl-black);
+    }
+
+    .jl-contact-item {
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+    }
+
+    .jl-contact-item__icon {
+      flex-shrink: 0;
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #f9f610;
+      margin-top: 0.25rem;
+    }
+
+    .jl-contact-item__content {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .jl-contact-item__label {
+      font-family: var(--jl-font-ui);
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--jl-text-muted);
+    }
+
+    .jl-contact-item__value {
+      font-size: 1rem;
+      line-height: 1.5;
+      color: var(--jl-black);
+    }
+
+    .jl-contact-item__value a {
+      color: var(--jl-black);
+      text-decoration: none;
+      font-weight: 600;
+      border-bottom: 2px solid transparent;
+      transition: border-color 0.2s;
+    }
+
+    .jl-contact-item__value a:hover {
+      border-bottom-color: #f9f610;
+    }
+
+    .jl-divider {
+      height: 1px;
+      background: #e0e0e0;
+      margin: 1rem 0;
+    }
+
+    /* Form Styling */
+    .jl-contact-form {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    .jl-form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .jl-form-group label {
+      font-family: var(--jl-font-ui);
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--jl-black);
+    }
+
+    .jl-form-group input,
+    .jl-form-group textarea {
+      font-family: var(--jl-font);
+      font-size: 1rem;
+      padding: 1rem 1.25rem;
+      border: 2px solid var(--jl-black);
+      border-radius: 0.3rem;
+      background: var(--jl-white);
+      color: var(--jl-black);
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      outline: none;
+    }
+
+    .jl-form-group input::placeholder,
+    .jl-form-group textarea::placeholder {
+      color: var(--jl-text-muted);
+    }
+
+    .jl-form-group input:focus,
+    .jl-form-group textarea:focus {
+      border-color: #f9f610;
+      box-shadow: 0 0 0 3px rgba(249, 246, 16, 0.15);
+    }
+
+    .jl-form-group textarea {
+      resize: vertical;
+      min-height: 150px;
+      font-family: var(--jl-font);
+    }
+
+    .jl-form-submit {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 1.25rem 2.5rem;
+      background: #f9f610;
+      color: var(--jl-black);
+      border: none;
+      border-radius: 0.3rem;
+      font-family: var(--jl-font-ui);
+      font-size: 0.95rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      width: 100%;
+    }
+
+    .jl-form-submit:hover {
+      background: #fff844;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(249, 246, 16, 0.4);
+    }
+
+    .jl-form-submit:active {
+      transform: translateY(0);
+    }
+
+    /* Newsletter Section */
+    .jl-newsletter {
+      background: linear-gradient(135deg, var(--jl-black-soft) 0%, var(--jl-gray) 100%);
+      border: 2px solid #f9f610;
+      border-radius: 0.5rem;
+      padding: 3rem 2.5rem;
+      margin-top: 4rem;
+      text-align: center;
+    }
+
+    .jl-newsletter h2 {
+      margin: 0 0 1rem;
+      font-family: var(--jl-font-hero);
+      font-size: clamp(1.75rem, 4vw, 2.25rem);
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      text-transform: uppercase;
+      color: #f9f610;
+    }
+
+    .jl-newsletter p {
+      margin: 0 0 2rem;
+      font-size: 1.0625rem;
+      line-height: 1.6;
+      color: rgba(255, 255, 255, 0.9);
+      max-width: 44rem;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .jl-newsletter-form {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .jl-newsletter-form input {
+      flex: 1;
+      min-width: 250px;
+      padding: 1rem 1.25rem;
+      font-family: var(--jl-font);
+      font-size: 1rem;
+      border: 2px solid #f9f610;
+      border-radius: 0.3rem;
+      background: rgba(255, 255, 255, 0.95);
+      color: var(--jl-black);
+      outline: none;
+      transition: all 0.2s;
+    }
+
+    .jl-newsletter-form input::placeholder {
+      color: var(--jl-text-muted);
+    }
+
+    .jl-newsletter-form input:focus {
+      background: var(--jl-white);
+      box-shadow: 0 0 0 3px rgba(249, 246, 16, 0.2);
+    }
+
+    .jl-newsletter-form button {
+      padding: 1rem 2rem;
+      background: #f9f610;
+      color: var(--jl-black);
+      border: none;
+      border-radius: 0.3rem;
+      font-family: var(--jl-font-ui);
+      font-size: 0.9rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      white-space: nowrap;
+    }
+
+    .jl-newsletter-form button:hover {
+      background: #fff844;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(249, 246, 16, 0.4);
+    }
+
+    @media (max-width: 640px) {
+      .jl-newsletter {
+        padding: 2rem 1.5rem;
+      }
+
+      .jl-newsletter-form {
+        flex-direction: column;
+      }
+
+      .jl-newsletter-form input,
+      .jl-newsletter-form button {
+        width: 100%;
+        min-height: 44px;
+      }
+    }
+  </style>
 </head>
 <body>
   <header class="jl-header">
@@ -22,17 +290,17 @@
         <nav class="jl-nav" aria-label="Hoofdmenu">
           <a href="index.html">Home</a>
           <a href="standpunten.html">Standpunten</a>
-          <a href="agenda.html">Actie</a>
+          <a href="evenementen.html">Evenementen</a>
           <div class="jl-nav-item">
             <button type="button">Organisatie</button>
             <div class="jl-dropdown">
+              <a href="over-ons.html">Dit is de JL</a>
               <a href="commissies.html">Commissies</a>
               <a href="bestuur.html">Bestuur</a>
               <a href="statuten-en-hr.html">Statuten en HR</a>
               <a href="steun-onze-missie.html">Steun onze missie</a>
             </div>
           </div>
-          <a href="nieuws.html">Nieuws</a>
           <a href="contact.html" class="is-active">Contact</a>
         </nav>
         <a class="jl-header-cta jl-btn-header-cta" href="steun-onze-missie.html">Steun onze missie</a>
@@ -44,32 +312,112 @@
   <div class="jl-page-header">
     <div class="jl-page-header-inner">
       <h1>Contact</h1>
+      <p class="jl-page-header__subtitle">Neem contact met ons op of sluit je aan bij onze nieuwsbrief</p>
     </div>
   </div>
 
   <main class="jl-page-main">
-    <div class="jl-section-inner jl-prose">
-      <p class="jl-placeholder-note" style="margin-bottom:1.5rem;">
-        Dit is een statische basis. Vervang dit blok later door het echte contactformulier (bijvoorbeeld gekoppeld aan e-mail of een dienst).
-      </p>
-      <p><a class="jl-btn jl-btn-primary" href="mailto:bestuur@jongelibertariers.nl">Neem contact op</a></p>
+    <div class="jl-section-inner">
+      <div class="jl-contact-wrapper">
+        <!-- Contact Information -->
+        <div class="jl-contact-info">
+          <h2>Bereik ons</h2>
 
-      <h2 style="margin-top:2.5rem;">Nieuwsbrief</h2>
-      <p>
-        <a href="https://forms.gle/HAdKgYm9L7igxdUw6" rel="noopener noreferrer" target="_blank">Klik hier om je aan te melden voor de nieuwsbrief</a>
-      </p>
+          <div class="jl-contact-item">
+            <div class="jl-contact-item__icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+              </svg>
+            </div>
+            <div class="jl-contact-item__content">
+              <span class="jl-contact-item__label">E-mail</span>
+              <span class="jl-contact-item__value">
+                <a href="mailto:bestuur@jongelibertariers.nl">bestuur@jongelibertariers.nl</a>
+              </span>
+            </div>
+          </div>
 
-      <h2 style="margin-top:2.5rem;">Onze kernwaarden</h2>
-      <ul style="padding-left:1.25rem;">
-        <li><strong>Vrijheid</strong></li>
-        <li><strong>Verantwoordelijkheid</strong></li>
-        <li><strong>Vrije markt</strong></li>
-      </ul>
+          <div class="jl-contact-item">
+            <div class="jl-contact-item__icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"></path>
+              </svg>
+            </div>
+            <div class="jl-contact-item__content">
+              <span class="jl-contact-item__label">Telefoon</span>
+              <span class="jl-contact-item__value">
+                <a href="tel:+31613990120">+31 6 13990120</a>
+              </span>
+            </div>
+          </div>
 
-      <h2 style="margin-top:2.5rem;">Contactgegevens</h2>
-      <p><a href="tel:+31613990120">+31 6 13990120</a></p>
-      <p><a href="mailto:bestuur@jongelibertariers.nl">bestuur@jongelibertariers.nl</a></p>
-      <p>Heinelaan 24<br>3931 WZ Woudenberg</p>
+          <div class="jl-contact-item">
+            <div class="jl-contact-item__icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"></path>
+                <circle cx="12" cy="10" r="3"></circle>
+              </svg>
+            </div>
+            <div class="jl-contact-item__content">
+              <span class="jl-contact-item__label">Adres</span>
+              <span class="jl-contact-item__value">
+                Heinelaan 24<br>
+                3931 WZ Woudenberg
+              </span>
+            </div>
+          </div>
+
+          <div class="jl-divider"></div>
+
+          <div>
+            <h3 style="margin: 0 0 1rem; font-family: var(--jl-font-ui); font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--jl-text-muted);">Volg ons</h3>
+            <div class="jl-social" style="gap: 1.25rem;">
+              <a href="https://www.instagram.com/jongelibertariers_jl/" target="_blank" rel="noopener noreferrer" style="color: var(--jl-black); font-weight: 600; text-decoration: none; border-bottom: 2px solid transparent; transition: border-color 0.2s;" onmouseover="this.style.borderColor='#f9f610'" onmouseout="this.style.borderColor='transparent'">Instagram</a>
+              <a href="https://www.facebook.com/jongelibertariers" target="_blank" rel="noopener noreferrer" style="color: var(--jl-black); font-weight: 600; text-decoration: none; border-bottom: 2px solid transparent; transition: border-color 0.2s;" onmouseover="this.style.borderColor='#f9f610'" onmouseout="this.style.borderColor='transparent'">Facebook</a>
+              <a href="https://x.com/JL_NL_" target="_blank" rel="noopener noreferrer" style="color: var(--jl-black); font-weight: 600; text-decoration: none; border-bottom: 2px solid transparent; transition: border-color 0.2s;" onmouseover="this.style.borderColor='#f9f610'" onmouseout="this.style.borderColor='transparent'">X</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Contact Form -->
+        <div>
+          <h2 style="margin: 0 0 2rem; font-family: var(--jl-font-hero); font-size: clamp(1.75rem, 4vw, 2.5rem); font-weight: 700; letter-spacing: -0.01em; text-transform: uppercase; color: var(--jl-black);">Stuur ons een bericht</h2>
+
+          <form class="jl-contact-form" action="https://formspree.io/f/mnqeqqpd" method="POST">
+            <div class="jl-form-group">
+              <label for="name">Naam</label>
+              <input type="text" id="name" name="name" placeholder="Je volledige naam" required>
+            </div>
+
+            <div class="jl-form-group">
+              <label for="email">E-mailadres</label>
+              <input type="email" id="email" name="email" placeholder="jij@voorbeeld.com" required>
+            </div>
+
+            <div class="jl-form-group">
+              <label for="subject">Onderwerp</label>
+              <input type="text" id="subject" name="subject" placeholder="Waar gaat je bericht over?" required>
+            </div>
+
+            <div class="jl-form-group">
+              <label for="message">Bericht</label>
+              <textarea id="message" name="message" placeholder="Jouw bericht..." required></textarea>
+            </div>
+
+            <button type="submit" class="jl-form-submit">Verstuur bericht</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Newsletter Section -->
+      <div class="jl-newsletter">
+        <h2>Blijf op de hoogte</h2>
+        <p>Abonneer je op onze nieuwsbrief en volg de strijd voor vrijheid. Laat je inspireren door onze acties, standpunten en evenementen.</p>
+
+        <div class="jl-newsletter-form">
+          <a href="https://forms.gle/HAdKgYm9L7igxdUw6" target="_blank" rel="noopener noreferrer" style="padding: 1rem 2rem; background: #f9f610; color: var(--jl-black); border: none; border-radius: 0.3rem; font-family: var(--jl-font-ui); font-size: 0.9rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); white-space: nowrap;" onmouseover="this.style.background='#fff844'; this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 20px rgba(249, 246, 16, 0.4)'" onmouseout="this.style.background='#f9f610'; this.style.transform='translateY(0)'; this.style.boxShadow='none'">Inschrijven</a>
+        </div>
+      </div>
     </div>
   </main>
 
@@ -78,6 +426,7 @@
       <div>
         <h3>Organisatie</h3>
         <ul>
+          <li><a href="over-ons.html">Dit is de JL</a></li>
           <li><a href="bestuur.html">Bestuur</a></li>
           <li><a href="commissies.html">Commissies</a></li>
           <li><a href="statuten-en-hr.html">Statuten &amp; HR</a></li>
@@ -98,8 +447,8 @@
         </ul>
         <h3 style="margin-top:1.5rem;">Social media</h3>
         <div class="jl-social">
-          <a href="#" aria-label="Social (link volgt)">Volgen</a>
-          <a href="#" aria-label="Social (link volgt)">Volgen</a>
+          <a href="https://www.instagram.com/jongelibertariers_jl/" target="_blank" rel="noopener noreferrer">Instagram</a>
+          <a href="https://www.facebook.com/jongelibertariers" target="_blank" rel="noopener noreferrer">Facebook</a>
         </div>
       </div>
       <div class="jl-footer-contact">
@@ -115,7 +464,7 @@
   <div class="jl-cookie" role="dialog" aria-label="Cookie melding">
     <div class="jl-cookie-inner">
       <p>
-        Om de website optimaal te laten functioneren, gebruiken we cookies. Door op “Accepteren” te klikken, stem je in met het gebruik
+        Om de website optimaal te laten functioneren, gebruiken we cookies. Door op "Accepteren" te klikken, stem je in met het gebruik
         van cookies zoals beschreven in ons privacybeleid. Je kunt ook weigeren; sommige functies werken dan mogelijk beperkt.
       </p>
       <div class="jl-cookie-actions">

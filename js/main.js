@@ -12,6 +12,15 @@
     });
   }
 
+  // Active state for dropdown buttons
+  var currentPage = window.location.pathname.split('/').pop() || 'index.html';
+  var organizationPages = ['over-ons.html', 'commissies.html', 'bestuur.html', 'statuten-en-hr.html', 'steun-onze-missie.html'];
+
+  if (organizationPages.includes(currentPage)) {
+    var orgButton = document.querySelector('.jl-nav-item button');
+    if (orgButton) orgButton.classList.add('is-active');
+  }
+
   dropdownParents.forEach(function (item) {
     var btn = item.querySelector("button");
     if (!btn) return;
@@ -51,4 +60,57 @@
   if (deny) deny.addEventListener("click", function () { hideCookie("denied"); });
 
   showCookie();
+
+  // Load next event
+  async function loadNextEvent() {
+    const container = document.querySelector('[data-next-event]');
+    if (!container) return;
+
+    try {
+      let events = JSON.parse(localStorage.getItem('jl-events') || '[]');
+
+      if (events.length === 0) {
+        const response = await fetch('events.json');
+        events = await response.json();
+      }
+
+      if (!events || events.length === 0) {
+        container.innerHTML = '<p style="color:var(--jl-text-muted);">Geen evenementen gepland.</p>';
+        return;
+      }
+
+      const now = new Date();
+      const futureEvents = events.filter(e => new Date(e.date) >= now).sort((a, b) => new Date(a.date) - new Date(b.date));
+
+      if (futureEvents.length === 0) {
+        container.innerHTML = '<p style="color:var(--jl-text-muted);">Momenteel geen komende evenementen.</p>';
+        return;
+      }
+
+      const event = futureEvents[0];
+      const dateStr = new Date(event.date).toLocaleDateString('nl-NL', {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'});
+
+      container.innerHTML = `
+        <div class="jl-next-event-card">
+          <div>
+            <h3 style="margin: 0 0 1rem; color: var(--jl-black);">${event.title}</h3>
+            <p style="color: var(--jl-text-muted); font-size: 0.95rem; margin: 0.5rem 0;">📅 ${dateStr}</p>
+            <p style="color: var(--jl-text-muted); font-size: 0.95rem; margin: 0.5rem 0;">🕐 ${event.time}${event.endTime ? ' - ' + event.endTime : ''}</p>
+            <p style="color: var(--jl-text-muted); font-size: 0.95rem; margin: 0.5rem 0;">📍 ${event.location}</p>
+            ${event.organizer ? `<p style="color: var(--jl-text-muted); font-size: 0.95rem; margin: 0.5rem 0;">👥 ${event.organizer}</p>` : ''}
+            ${event.description ? `<p style="color: var(--jl-text-muted); font-size: 0.95rem; margin: 1rem 0 0;">${event.description}</p>` : ''}
+          </div>
+          ${event.image ? `<img src="assets/images/${event.image}" alt="${event.title}">` : ''}
+        </div>
+      `;
+    } catch (error) {
+      console.error('Error loading next event:', error);
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', loadNextEvent);
+  } else {
+    loadNextEvent();
+  }
 })();

@@ -22,17 +22,17 @@
         <nav class="jl-nav" aria-label="Hoofdmenu">
           <a href="index.html">Home</a>
           <a href="standpunten.html">Standpunten</a>
-          <a href="agenda.html">Actie</a>
+          <a href="evenementen.html">Evenementen</a>
           <div class="jl-nav-item">
             <button type="button">Organisatie</button>
             <div class="jl-dropdown">
+              <a href="over-ons.html">Dit is de JL</a>
               <a href="commissies.html">Commissies</a>
               <a href="bestuur.html">Bestuur</a>
               <a href="statuten-en-hr.html">Statuten en HR</a>
               <a href="steun-onze-missie.html">Steun onze missie</a>
             </div>
           </div>
-          <a href="nieuws.html">Nieuws</a>
           <a href="contact.html">Contact</a>
         </nav>
         <a class="jl-header-cta jl-btn-header-cta" href="steun-onze-missie.html">Steun onze missie</a>
@@ -44,22 +44,115 @@
   <div class="jl-page-header">
     <div class="jl-page-header-inner">
       <h1>Bestuur</h1>
+      <p class="jl-page-header__subtitle">De mensen achter de JL</p>
     </div>
   </div>
 
-  <main class="jl-page-main">
-    <div class="jl-section-inner jl-prose">
-      <p class="jl-placeholder-note">
-        Vul deze pagina met bestuursleden, functies en foto’s (placeholders staan klaar in de layout — voeg later <code style="font-size:0.9em;">&lt;img&gt;</code>-tags toe in <code style="font-size:0.9em;">assets/images/</code>).
+  <!-- Bestuursleden kaarten -->
+  <section style="padding: 4rem 1.25rem; background: linear-gradient(135deg, #f5f5f5 0%, #ffffff 100%);">
+    <div style="max-width: var(--jl-max); margin: 0 auto;">
+      <h2 style="font-family: var(--jl-font-display); font-size: 2.5rem; font-weight: 900; letter-spacing: -0.02em; text-transform: uppercase; margin: 0 0 3.5rem; color: var(--jl-black); text-align: center;">Het Team</h2>
+
+      <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; max-width: 1400px; margin: 0 auto;">
+
+        <!-- Lukas -->
+        <div style="background: var(--jl-white); border-radius: 0.75rem; padding: 2rem 1.5rem; text-align: center; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08); transition: transform 0.3s, box-shadow 0.3s;">
+          <img src="assets/images/JL-Lukas-rond.png" alt="Lukas Brokke" style="width: 220px; height: 220px; border-radius: 50%; object-fit: cover; box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15); display: block; margin: 0 auto 1.5rem;">
+          <h3 style="font-family: var(--jl-font-ui); font-size: 1.15rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em; margin: 0 0 0.3rem; color: var(--jl-black);">Lukas Brokke</h3>
+          <p style="font-family: var(--jl-font-ui); font-size: 0.9rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--jl-yellow); margin: 0 0 1.25rem;">Voorzitter</p>
+          <p style="font-size: 0.95rem; color: var(--jl-text-muted); line-height: 1.6; margin: 0 0 1.5rem;">
+            Leidt vergaderingen, vertegenwoordigt de JL naar buiten en coördineert het bestuur. Verantwoordelijk voor overkoepelende strategie.
+          </p>
+          <div style="display: flex; flex-direction: column; gap: 0.5rem; font-size: 0.85rem;">
+            <a href="mailto:voorzitter@jongelibertariers.nl" style="color: var(--jl-yellow); text-decoration: none; font-weight: 600;">voorzitter@jongelibertariers.nl</a>
+            <a href="mailto:bestuur@jongelibertariers.nl" style="color: var(--jl-text-muted); text-decoration: none; font-size: 0.8rem;">(bestuur@jongelibertariers.nl)</a>
+          </div>
+        </div>
+
+        <!-- Niek -->
+        <div style="background: var(--jl-white); border-radius: 0.75rem; padding: 2rem 1.5rem; text-align: center; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08); transition: transform 0.3s, box-shadow 0.3s;">
+          <img src="assets/images/JL-Niek-rond.png" alt="Niek Warnas" style="width: 220px; height: 220px; border-radius: 50%; object-fit: cover; box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15); display: block; margin: 0 auto 1.5rem;">
+          <h3 style="font-family: var(--jl-font-ui); font-size: 1.15rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em; margin: 0 0 0.3rem; color: var(--jl-black);">Niek Warnas</h3>
+          <p style="font-family: var(--jl-font-ui); font-size: 0.9rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--jl-yellow); margin: 0 0 1.25rem;">Secretaris</p>
+          <p style="font-size: 0.95rem; color: var(--jl-text-muted); line-height: 1.6; margin: 0 0 1.5rem;">
+            Beheert notulen, coördineert interne communicatie en administratie. Zorgt voor goede organisatie en documentatie.
+          </p>
+          <div style="display: flex; flex-direction: column; gap: 0.5rem; font-size: 0.85rem;">
+            <a href="mailto:secretaris@jongelibertariers.nl" style="color: var(--jl-yellow); text-decoration: none; font-weight: 600;">secretaris@jongelibertariers.nl</a>
+            <a href="mailto:bestuur@jongelibertariers.nl" style="color: var(--jl-text-muted); text-decoration: none; font-size: 0.8rem;">(bestuur@jongelibertariers.nl)</a>
+          </div>
+        </div>
+
+        <!-- Mathijs -->
+        <div style="background: var(--jl-white); border-radius: 0.75rem; padding: 2rem 1.5rem; text-align: center; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08); transition: transform 0.3s, box-shadow 0.3s;">
+          <img src="assets/images/JL-Mathijs-rond.png" alt="Mathijs Heineman" style="width: 220px; height: 220px; border-radius: 50%; object-fit: cover; box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15); display: block; margin: 0 auto 1.5rem;">
+          <h3 style="font-family: var(--jl-font-ui); font-size: 1.15rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em; margin: 0 0 0.3rem; color: var(--jl-black);">Mathijs Heineman</h3>
+          <p style="font-family: var(--jl-font-ui); font-size: 0.9rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--jl-yellow); margin: 0 0 1.25rem;">Penningmeester</p>
+          <p style="font-size: 0.95rem; color: var(--jl-text-muted); line-height: 1.6; margin: 0 0 1.5rem;">
+            Beheert de financiën, zorgt voor transparantie en rapporteert aan leden. Verantwoordelijk voor budgettering en fondsenwerving.
+          </p>
+          <div style="display: flex; flex-direction: column; gap: 0.5rem; font-size: 0.85rem;">
+            <a href="mailto:penningmeester@jongelibertariers.nl" style="color: var(--jl-yellow); text-decoration: none; font-weight: 600;">penningmeester@jongelibertariers.nl</a>
+            <a href="mailto:bestuur@jongelibertariers.nl" style="color: var(--jl-text-muted); text-decoration: none; font-size: 0.8rem;">(bestuur@jongelibertariers.nl)</a>
+          </div>
+        </div>
+
+        <!-- Aaron -->
+        <div style="background: var(--jl-white); border-radius: 0.75rem; padding: 2rem 1.5rem; text-align: center; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08); transition: transform 0.3s, box-shadow 0.3s;">
+          <img src="assets/images/JL-Aaron-rond.png" alt="Aaron Winters" style="width: 220px; height: 220px; border-radius: 50%; object-fit: cover; box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15); display: block; margin: 0 auto 1.5rem;">
+          <h3 style="font-family: var(--jl-font-ui); font-size: 1.15rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em; margin: 0 0 0.3rem; color: var(--jl-black);">Aaron Winters</h3>
+          <p style="font-family: var(--jl-font-ui); font-size: 0.9rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--jl-yellow); margin: 0 0 1.25rem;">Bestuurslid Media</p>
+          <p style="font-size: 0.95rem; color: var(--jl-text-muted); line-height: 1.6; margin: 0 0 1.5rem;">
+            Verantwoordelijk voor social media, content en digitale communicatie. Zorgt ervoor dat de JL-boodschap aankomt bij jongeren.
+          </p>
+          <div style="display: flex; flex-direction: column; gap: 0.5rem; font-size: 0.85rem;">
+            <a href="mailto:media@jongelibertariers.nl" style="color: var(--jl-yellow); text-decoration: none; font-weight: 600;">media@jongelibertariers.nl</a>
+            <a href="mailto:bestuur@jongelibertariers.nl" style="color: var(--jl-text-muted); text-decoration: none; font-size: 0.8rem;">(bestuur@jongelibertariers.nl)</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Geschiedenis -->
+  <section class="jl-section">
+    <div class="jl-section-inner jl-prose jl-prose--wide">
+      <h2>Een stukje geschiedenis</h2>
+      <p>
+        Roos, Tom en Martijn zijn de oprichters van de Jonge Libertariërs. Sinds de campagne voor de Tweede Kamerverkiezingen van maart 2021
+        zijn zij bezig geweest met het vormen van een actieve jongeren vereniging. Het huidige bestuur (Lukas, Niek, Mathijs en Aaron) zet dit werk voort
+        met vernieuwing en groei.
       </p>
     </div>
-  </main>
+  </section>
+
+  <!-- Hoe kom je in het bestuur -->
+  <section class="jl-section">
+    <div class="jl-section-inner jl-prose jl-prose--wide">
+      <h2>Hoe kom je in het bestuur?</h2>
+      <p>
+        Ieder jaar houden we verkiezingen. Bestuursleden kunnen zichzelf verkiesbaar stellen en worden gekozen door leden.
+        Meer informatie over hoe dit werkt vind je in onze <a href="statuten-en-hr.html">statuten en huishoudelijk reglement</a>.
+      </p>
+    </div>
+  </section>
+
+  <section class="jl-cta-band">
+    <h2>Vragen voor het bestuur?</h2>
+    <p>Neem contact met ons op via e-mail of het contactformulier.</p>
+    <a class="jl-btn jl-btn-primary jl-btn--spray" href="contact.html">
+      <svg class="jl-btn-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+      Contacteer ons
+    </a>
+  </section>
 
   <footer class="jl-footer">
     <div class="jl-footer-inner">
       <div>
         <h3>Organisatie</h3>
         <ul>
+          <li><a href="over-ons.html">Dit is de JL</a></li>
           <li><a href="bestuur.html">Bestuur</a></li>
           <li><a href="commissies.html">Commissies</a></li>
           <li><a href="statuten-en-hr.html">Statuten &amp; HR</a></li>

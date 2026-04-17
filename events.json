@@ -1,0 +1,13 @@
+[
+  {
+    "id": 1,
+    "title": "JL Borrel Mei",
+    "date": "2026-05-15",
+    "time": "19:00",
+    "endTime": "22:00",
+    "location": "Utrecht",
+    "organizer": "Activiteitencommissie",
+    "description": "Gezellige borrel voor alle JL leden",
+    "image": "Terras.jpeg"
+  }
+]

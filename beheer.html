@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bestuur Beheer — Jonge Libertariërs</title>
+  <link rel="icon" href="assets/images/JL-Nieuwe-Logo-scaled.png" type="image/png">
+  <link rel="stylesheet" href="css/styles.css">
+  <style>
+    body {
+      background: #f5f5f5;
+    }
+
+    .beheer-login {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 1.25rem;
+    }
+
+    .beheer-login-box {
+      background: var(--jl-white);
+      border-radius: 0.75rem;
+      padding: 3rem;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      max-width: 420px;
+      width: 100%;
+      text-align: center;
+    }
+
+    .beheer-login-box img {
+      height: 80px;
+      margin-bottom: 1rem;
+    }
+
+    .beheer-login-box h1 {
+      margin: 0 0 0.5rem;
+      font-size: 1.75rem;
+      color: var(--jl-black);
+    }
+
+    .beheer-login-box p {
+      margin: 0 0 2rem;
+      color: var(--jl-text-muted);
+    }
+
+    .beheer-form-group {
+      margin-bottom: 1.5rem;
+      text-align: left;
+    }
+
+    .beheer-form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+      color: var(--jl-black);
+    }
+
+    .beheer-form-group input {
+      width: 100%;
+      padding: 0.85rem;
+      border: 2px solid #ddd;
+      border-radius: 0.35rem;
+      font-size: 1rem;
+      font-family: var(--jl-font);
+      box-sizing: border-box;
+    }
+
+    .beheer-form-group input:focus {
+      outline: none;
+      border-color: var(--jl-yellow);
+      background: rgba(245, 230, 0, 0.05);
+    }
+
+    .beheer-error {
+      background: #fee;
+      border: 1px solid #f99;
+      color: #c00;
+      padding: 0.75rem;
+      border-radius: 0.25rem;
+      margin-bottom: 1.5rem;
+      font-size: 0.95rem;
+      display: none;
+    }
+
+    .beheer-btn-login {
+      width: 100%;
+      padding: 0.9rem;
+      background: var(--jl-yellow);
+      color: var(--jl-black);
+      border: none;
+      border-radius: 0.35rem;
+      font-weight: 700;
+      font-size: 1rem;
+      font-family: var(--jl-font-ui);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .beheer-btn-login:hover {
+      background: var(--jl-yellow-hot);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(245, 230, 0, 0.3);
+    }
+
+    /* DASHBOARD */
+    .beheer-dashboard {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      min-height: 100vh;
+    }
+
+    .beheer-sidebar {
+      background: var(--jl-black);
+      padding: 1.5rem 0;
+      border-right: 3px solid var(--jl-yellow);
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+    }
+
+    .beheer-sidebar-logo {
+      padding: 1.5rem;
+      text-align: center;
+      border-bottom: 1px solid rgba(245, 230, 0, 0.2);
+      margin-bottom: 1.5rem;
+    }
+
+    .beheer-sidebar-logo img {
+      height: 50px;
+      margin-bottom: 0.5rem;
+    }
+
+    .beheer-sidebar-logo p {
+      margin: 0;
+      font-size: 0.75rem;
+      color: var(--jl-yellow);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .beheer-nav {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .beheer-nav li a {
+      display: block;
+      padding: 1rem 1.5rem;
+      color: rgba(255, 255, 255, 0.7);
+      text-decoration: none;
+      border-left: 3px solid transparent;
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+
+    .beheer-nav li a:hover {
+      color: var(--jl-yellow);
+      background: rgba(245, 230, 0, 0.05);
+      border-left-color: var(--jl-yellow);
+    }
+
+    .beheer-nav li a.active {
+      color: var(--jl-yellow);
+      background: rgba(245, 230, 0, 0.1);
+      border-left-color: var(--jl-yellow);
+    }
+
+    .beheer-logout {
+      display: block;
+      width: calc(100% - 3rem);
+      margin: 2rem 1.5rem 0;
+      padding: 0.75rem;
+      background: #f44;
+      color: white;
+      border: none;
+      border-radius: 0.25rem;
+      cursor: pointer;
+      font-weight: 600;
+      text-align: center;
+    }
+
+    .beheer-logout:hover {
+      background: #c00;
+    }
+
+    .beheer-main {
+      padding: 2rem;
+      overflow-y: auto;
+    }
+
+    .beheer-header {
+      background: var(--jl-white);
+      padding: 1.5rem 2rem;
+      border-radius: 0.5rem;
+      margin-bottom: 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    }
+
+    .beheer-header h1 {
+      margin: 0;
+      font-size: 1.75rem;
+      color: var(--jl-black);
+    }
+
+    .beheer-user {
+      text-align: right;
+      font-size: 0.9rem;
+    }
+
+    .beheer-user strong {
+      color: var(--jl-black);
+    }
+
+    .beheer-user small {
+      display: block;
+      color: var(--jl-text-muted);
+    }
+
+    .beheer-panel {
+      background: var(--jl-white);
+      border-radius: 0.5rem;
+      padding: 2rem;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+      display: none;
+    }
+
+    .beheer-panel.active {
+      display: block;
+    }
+
+    .beheer-panel h2 {
+      margin-top: 0;
+      color: var(--jl-black);
+    }
+
+    .beheer-section {
+      margin-bottom: 2.5rem;
+      padding-bottom: 2.5rem;
+      border-bottom: 1px solid #eee;
+    }
+
+    .beheer-section:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .beheer-section h3 {
+      margin-top: 0;
+      color: var(--jl-black);
+      font-size: 1.1rem;
+    }
+
+    .beheer-form-group {
+      margin-bottom: 1rem;
+    }
+
+    .beheer-form-group label {
+      display: block;
+      margin-bottom: 0.35rem;
+      font-weight: 600;
+      color: var(--jl-black);
+      font-size: 0.95rem;
+    }
+
+    .beheer-form-group input,
+    .beheer-form-group textarea,
+    .beheer-form-group select {
+      width: 100%;
+      padding: 0.65rem;
+      border: 1px solid #ddd;
+      border-radius: 0.25rem;
+      font-family: var(--jl-font);
+      font-size: 0.95rem;
+      box-sizing: border-box;
+    }
+
+    .beheer-form-group textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    .beheer-form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .beheer-btn {
+      display: inline-flex;
+      gap: 0.5rem;
+      align-items: center;
+      padding: 0.65rem 1.25rem;
+      background: var(--jl-yellow);
+      color: var(--jl-black);
+      border: none;
+      border-radius: 0.25rem;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+
+    .beheer-btn:hover {
+      background: var(--jl-yellow-hot);
+      transform: translateY(-2px);
+    }
+
+    .beheer-btn-delete {
+      background: #f44;
+      color: white;
+    }
+
+    .beheer-btn-delete:hover {
+      background: #c00;
+    }
+
+    .beheer-list {
+      margin-top: 1.5rem;
+    }
+
+    .beheer-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem;
+      border: 1px solid #eee;
+      border-radius: 0.25rem;
+      margin-bottom: 0.75rem;
+      background: #f9f9f9;
+    }
+
+    .beheer-item-info h4 {
+      margin: 0 0 0.25rem;
+      color: var(--jl-black);
+      font-size: 1rem;
+    }
+
+    .beheer-item-info p {
+      margin: 0.25rem 0 0;
+      font-size: 0.85rem;
+      color: var(--jl-text-muted);
+    }
+
+    .beheer-item-actions {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .beheer-item-actions button {
+      padding: 0.5rem 1rem;
+      font-size: 0.85rem;
+    }
+
+    .info-box {
+      background: rgba(245, 230, 0, 0.1);
+      border-left: 4px solid var(--jl-yellow);
+      padding: 1rem;
+      border-radius: 0.25rem;
+      margin-bottom: 1.5rem;
+      color: var(--jl-black);
+      font-size: 0.95rem;
+    }
+
+    @media (max-width: 768px) {
+      .beheer-dashboard {
+        grid-template-columns: 1fr;
+      }
+
+      .beheer-sidebar {
+        border-right: none;
+        border-bottom: 3px solid var(--jl-yellow);
+        height: auto;
+        position: relative;
+      }
+
+      .beheer-main {
+        padding: 1.25rem;
+      }
+
+      .beheer-header {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+      }
+
+      .beheer-form-row {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- LOGIN SCHERM -->
+  <div id="loginScreen" class="beheer-login">
+    <div class="beheer-login-box">
+      <img src="assets/images/JL-Nieuwe-Logo-scaled.png" alt="JL">
+      <h1>Bestuur</h1>
+      <p>Beheer Portal</p>
+
+      <div id="loginError" class="beheer-error"></div>
+
+      <form id="loginForm">
+        <div class="beheer-form-group">
+          <label for="username">Gebruikersnaam</label>
+          <input type="text" id="username" required autofocus>
+        </div>
+        <div class="beheer-form-group">
+          <label for="password">Wachtwoord</label>
+          <input type="password" id="password" required>
+        </div>
+        <button type="submit" class="beheer-btn-login">Inloggen</button>
+      </form>
+
+      <p style="margin-top:2rem;font-size:0.85rem;color:var(--jl-text-muted);">
+        Demo credentials:<br>
+        <strong>bestuur</strong> / <strong>JL2026!Vrijheid</strong>
+      </p>
+    </div>
+  </div>
+
+  <!-- DASHBOARD -->
+  <div id="dashboard" class="beheer-dashboard" style="display:none;">
+    <!-- SIDEBAR -->
+    <div class="beheer-sidebar">
+      <div class="beheer-sidebar-logo">
+        <img src="assets/images/JL-Nieuwe-Logo-scaled.png" alt="JL">
+        <p>Beheer</p>
+      </div>
+
+      <ul class="beheer-nav">
+        <li><a class="nav-link active" data-tab="evenementen">📅 Evenementen</a></li>
+        <li><a class="nav-link" data-tab="content">📝 Content</a></li>
+        <li><a class="nav-link" data-tab="team">👥 Team</a></li>
+      </ul>
+
+      <button id="logoutBtn" class="beheer-logout">🚪 Uitloggen</button>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="beheer-main">
+      <div class="beheer-header">
+        <h1>Dashboard</h1>
+        <div class="beheer-user">
+          <strong id="userDisplay">Bestuur</strong>
+          <small>Ingelogd</small>
+        </div>
+      </div>
+
+      <!-- TAB: EVENEMENTEN -->
+      <div id="tab-evenementen" class="beheer-panel active">
+        <h2>📅 Evenementen</h2>
+
+        <div class="beheer-section">
+          <h3>Nieuw evenement</h3>
+          <form id="eventForm">
+            <div class="beheer-form-group">
+              <label for="eventTitle">Titel *</label>
+              <input type="text" id="eventTitle" required>
+            </div>
+
+            <div class="beheer-form-row">
+              <div class="beheer-form-group">
+                <label for="eventDate">Datum *</label>
+                <input type="date" id="eventDate" required>
+              </div>
+              <div class="beheer-form-group">
+                <label for="eventTime">Tijd *</label>
+                <input type="time" id="eventTime" required>
+              </div>
+            </div>
+
+            <div class="beheer-form-row">
+              <div class="beheer-form-group">
+                <label for="eventEndTime">Eindtijd</label>
+                <input type="time" id="eventEndTime">
+              </div>
+              <div class="beheer-form-group">
+                <label for="eventLocation">Locatie *</label>
+                <input type="text" id="eventLocation" required>
+              </div>
+            </div>
+
+            <div class="beheer-form-group">
+              <label for="eventOrganizer">Organisator</label>
+              <input type="text" id="eventOrganizer" placeholder="bijv. Bestuur JL">
+            </div>
+
+            <div class="beheer-form-group">
+              <label for="eventDescription">Beschrijving</label>
+              <textarea id="eventDescription"></textarea>
+            </div>
+
+            <div class="beheer-form-group">
+              <label for="eventImage">Afbeelding</label>
+              <input type="text" id="eventImage" placeholder="bijv. Terras.jpeg">
+              <small style="color:var(--jl-text-muted);display:block;margin-top:0.35rem;">Bestandsnaam van afbeelding in assets/images/</small>
+            </div>
+
+            <button type="submit" class="beheer-btn">➕ Evenement toevoegen</button>
+          </form>
+        </div>
+
+        <div class="beheer-section">
+          <h3>Alle evenementen</h3>
+          <div id="eventsList" class="beheer-list"></div>
+        </div>
+      </div>
+
+      <!-- TAB: CONTENT -->
+      <div id="tab-content" class="beheer-panel">
+        <h2>📝 Website Content</h2>
+        <div class="info-box">
+          Coming soon: Content beheer voor homepage, standpunten, en pagina's
+        </div>
+      </div>
+
+      <!-- TAB: TEAM -->
+      <div id="tab-team" class="beheer-panel">
+        <h2>👥 Team</h2>
+        <div class="info-box">
+          Coming soon: Bestuur en commissie leden beheren
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/beheer.js"></script>
+</body>
+</html>

@@ -38,6 +38,7 @@
 
 html {
   scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 
 body {
@@ -47,6 +48,7 @@ body {
   line-height: 1.6;
   color: var(--jl-text);
   background: var(--jl-white);
+  overflow-x: hidden;
 }
 
 img {
@@ -251,6 +253,10 @@ a:hover {
   color: var(--jl-yellow);
 }
 
+.jl-nav-item > button.is-active {
+  color: var(--jl-yellow);
+}
+
 .jl-nav-item > button {
   display: inline-flex;
   align-items: center;
@@ -333,6 +339,7 @@ a:hover {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  gap: 0;
   padding: 0.65rem 1.35rem;
   font-size: 0.9rem;
   font-weight: 700;
@@ -345,13 +352,37 @@ a:hover {
   text-decoration: none;
   border-radius: 0.3rem;
   white-space: nowrap;
-  transition: background 0.2s, color 0.2s;
+  transition: all 0.3s ease;
   cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.jl-header-cta::before {
+  content: '';
+  position: absolute;
+  left: -1.5rem;
+  width: 1.2rem;
+  height: 1.2rem;
+  background: url('data:image/svg+xml;utf8,<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg"><polyline points="9 18 15 12 9 6"></polyline></svg>');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  opacity: 0;
+  transition: all 0.3s ease;
+  color: var(--jl-black);
+  filter: invert(0%);
 }
 
 .jl-header-cta:hover {
   background: var(--jl-white);
   color: var(--jl-black);
+  padding-left: 2.5rem;
+}
+
+.jl-header-cta:hover::before {
+  left: 0.75rem;
+  opacity: 1;
 }
 
 @media (max-width: 960px) {
@@ -359,6 +390,10 @@ a:hover {
     margin-left: 0;
     margin-top: 0.75rem;
     text-align: center;
+    width: 100%;
+    min-height: 44px;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.85rem;
   }
 }
 
@@ -377,12 +412,66 @@ a:hover {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  transition: background 0.2s, color 0.2s;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  gap: 0;
+}
+
+.jl-btn-header-cta::before {
+  content: '';
+  position: absolute;
+  left: -1.2rem;
+  width: 1rem;
+  height: 1rem;
+  background: url('data:image/svg+xml;utf8,<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg"><polyline points="9 18 15 12 9 6"></polyline></svg>');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  opacity: 0;
+  transition: all 0.3s ease;
+  filter: invert(0%);
 }
 
 .jl-btn-header-cta:hover {
   background: var(--jl-white) !important;
   color: var(--jl-black) !important;
+  padding-left: 2rem;
+}
+
+.jl-btn-header-cta:hover::before {
+  left: 0.6rem;
+  opacity: 1;
+}
+
+@media (min-width: 768px) and (max-width: 960px) {
+  .jl-nav > a,
+  .jl-nav-item > button {
+    padding: 0.35rem 0.35rem;
+    font-size: 0.75rem;
+  }
+
+  .jl-nav-item > button::after {
+    border-width: 3px;
+  }
+
+  .jl-btn-header-cta {
+    padding: 0.4rem 0.6rem;
+    font-size: 0.65rem;
+  }
+}
+
+@media (min-width: 961px) and (max-width: 1100px) {
+  .jl-nav > a,
+  .jl-nav-item > button {
+    padding: 0.45rem 0.45rem;
+    font-size: 0.82rem;
+  }
+
+  .jl-btn-header-cta {
+    padding: 0.45rem 0.75rem;
+    font-size: 0.72rem;
+  }
 }
 
 /* ——— Buttons ——— */
@@ -412,12 +501,39 @@ a:hover {
   background: var(--jl-yellow);
   color: var(--jl-black);
   border-color: var(--jl-yellow);
+  position: relative;
+  overflow: hidden;
+}
+
+.jl-btn-primary::before {
+  content: '';
+  position: absolute;
+  left: -1.5rem;
+  width: 1.2rem;
+  height: 1.2rem;
+  background: url('data:image/svg+xml;utf8,<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg"><polyline points="9 18 15 12 9 6"></polyline></svg>');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  opacity: 0;
+  transition: all 0.3s ease;
+  filter: invert(0%);
+}
+
+.jl-btn--spray::before {
+  display: none;
 }
 
 .jl-btn-primary:hover {
-  background: var(--jl-yellow-hot);
-  border-color: var(--jl-yellow-hot);
+  background: var(--jl-white);
   color: var(--jl-black);
+  border: 2px solid var(--jl-black);
+  padding-left: 2.5rem;
+}
+
+.jl-btn-primary:hover::before {
+  left: 0.75rem;
+  opacity: 1;
 }
 
 .jl-btn-outline {
@@ -563,15 +679,19 @@ a:hover {
   z-index: 1;
   max-width: var(--jl-max);
   margin: 0 auto;
-  padding: clamp(1.5rem, 5vw, 3rem) 1.25rem clamp(3rem, 8vw, 5rem);
+  padding: clamp(1.5rem, 5vw, 3rem) clamp(0.75rem, 3vw, 1.25rem) clamp(3rem, 8vw, 5rem);
   text-align: center;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .jl-hero--home .jl-hero-main {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   gap: clamp(1.35rem, 3.5vw, 2.35rem);
+  min-height: clamp(32rem, 80vh, 56rem);
 }
 
 .jl-hero-headline {
@@ -582,6 +702,8 @@ a:hover {
   line-height: 0.98;
   letter-spacing: 0.04em;
   text-transform: uppercase;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .jl-hero-headline .jl-h1-line {
@@ -608,11 +730,16 @@ a:hover {
 
 .jl-hero-lead {
   margin: 0 auto 2rem;
-  font-size: 1.0625rem;
+  font-size: clamp(0.95rem, 2.5vw, 1.0625rem);
   line-height: 1.5;
-  max-width: 26rem;
+  max-width: 100%;
+  width: 100%;
   color: rgba(255, 255, 255, 0.92);
   font-weight: 600;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  box-sizing: border-box;
+  padding: 0 0.5rem;
 }
 
 .jl-hero-lead--home {
@@ -704,12 +831,12 @@ a:hover {
 /* Home: gele knoppen zoals header, wit bij hover, Anton font */
 .jl-hero--home .jl-hero-ctas .jl-btn--spray {
   font-family: "Anton", var(--jl-font-hero);
-  font-size: 2rem;
+  font-size: clamp(1.25rem, 5vw, 2rem);
   font-weight: 400;
-  padding: 1.25rem 2.5rem;
+  padding: clamp(0.75rem, 2vw, 1.25rem) clamp(1.5rem, 4vw, 2.5rem);
   background: var(--jl-yellow);
   color: var(--jl-black);
-  border: none;
+  border: 2px solid transparent;
   border-radius: 0.3rem;
   clip-path: none;
   filter: none;
@@ -726,19 +853,21 @@ a:hover {
 .jl-hero--home .jl-hero-ctas .jl-btn--spray:hover {
   background: var(--jl-white);
   color: var(--jl-black);
-  padding-left: 4rem;
+  border-color: var(--jl-black);
+  padding-left: clamp(2rem, 6vw, 4rem);
 }
 
 .jl-hero--home .jl-hero-ctas .jl-btn--spray.jl-btn--spray-b {
   background: var(--jl-yellow);
   color: var(--jl-black);
-  border: none;
+  border: 2px solid transparent;
 }
 
 .jl-hero--home .jl-hero-ctas .jl-btn--spray.jl-btn--spray-b:hover {
   background: var(--jl-white);
   color: var(--jl-black);
-  padding-left: 4rem;
+  border-color: var(--jl-black);
+  padding-left: clamp(2rem, 6vw, 4rem);
 }
 
 .jl-hero--home .jl-hero-ctas .jl-btn-icon {
@@ -786,7 +915,7 @@ a:hover {
   gap: 2rem;
   align-items: center;
   grid-template-columns: 1fr;
-  padding: clamp(3rem, 8vw, 5.5rem) 1.25rem;
+  padding: clamp(3rem, 8vw, 5.5rem) clamp(0.75rem, 3vw, 1.25rem);
 }
 
 @media (min-width: 900px) {
@@ -829,7 +958,7 @@ a:hover {
 /* ——— Principes (zwarte kaarten, gele gloed) ——— */
 .jl-section-principles {
   background: var(--jl-white);
-  padding: clamp(2.75rem, 6vw, 4.5rem) 1.25rem;
+  padding: clamp(2.75rem, 6vw, 4.5rem) clamp(0.75rem, 3vw, 1.25rem);
 }
 
 .jl-title-stencil {
@@ -908,7 +1037,7 @@ a:hover {
 
 /* ——— Sections ——— */
 .jl-section {
-  padding: clamp(2.5rem, 5vw, 4rem) 1.25rem;
+  padding: clamp(2.5rem, 5vw, 4rem) clamp(0.75rem, 3vw, 1.25rem);
 }
 
 .jl-section-alt {
@@ -918,6 +1047,8 @@ a:hover {
 .jl-section-inner {
   max-width: var(--jl-max);
   margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .jl-section h2 {
@@ -951,6 +1082,12 @@ a:hover {
 
 .jl-prose a:hover {
   color: var(--jl-yellow-dim);
+}
+
+/* Anchor scroll offset */
+h2[id],
+section[id] {
+  scroll-margin-top: 8rem;
 }
 
 .jl-prose p {
@@ -1037,11 +1174,46 @@ a:hover {
   margin-bottom: 0.25rem;
 }
 
+.jl-event__image {
+  position: relative;
+  overflow: hidden;
+  background: var(--jl-black);
+  width: 140px;
+  height: 140px;
+  flex-shrink: 0;
+  border-radius: 0.4rem;
+}
+
+.jl-event__image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.jl-event:hover .jl-event__image img {
+  transform: scale(1.05);
+}
+
+.jl-event--page .jl-event__image {
+  width: 220px;
+  height: 220px;
+}
+
+@media (min-width: 600px) {
+  .jl-event--page {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    gap: 1.5rem;
+    align-items: center;
+  }
+}
+
 /* ——— CTA band ——— */
 .jl-cta-band {
   background: var(--jl-black);
   color: var(--jl-white);
-  padding: clamp(2.5rem, 5vw, 3.5rem) 1.25rem;
+  padding: clamp(2.5rem, 5vw, 3.5rem) clamp(0.75rem, 3vw, 1.25rem);
   text-align: center;
   border-top: 3px solid var(--jl-yellow);
 }
@@ -1149,24 +1321,35 @@ a:hover {
 
 /* ——— Page shell ——— */
 .jl-page-header {
-  background: var(--jl-black);
-  padding: 2.25rem 1.25rem;
+  background: linear-gradient(135deg, var(--jl-black-soft) 0%, var(--jl-black) 100%);
+  padding: clamp(1.75rem, 4vw, 2.5rem) 1.25rem;
   border-bottom: 3px solid var(--jl-yellow);
 }
 
 .jl-page-header-inner {
   max-width: var(--jl-max);
   margin: 0 auto;
+  text-align: center;
 }
 
 .jl-page-header h1 {
+  margin: 0 0 0.5rem;
+  font-family: "Anton", var(--jl-font-hero);
+  font-size: clamp(2.5rem, 8vw, 4.5rem);
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  color: var(--jl-yellow);
+  line-height: 1.1;
+}
+
+.jl-page-header__subtitle {
   margin: 0;
   font-family: var(--jl-font-ui);
-  font-size: clamp(1.75rem, 3.5vw, 2.5rem);
-  font-weight: 700;
-  text-transform: uppercase;
+  font-size: clamp(0.95rem, 2vw, 1.1rem);
+  font-weight: 500;
   letter-spacing: 0.05em;
-  color: var(--jl-yellow);
+  color: rgba(255, 255, 255, 0.8);
 }
 
 .jl-page-main {
@@ -1175,6 +1358,7 @@ a:hover {
 
 .jl-page-main .jl-section-inner {
   max-width: 48rem;
+  padding: 0 clamp(0.75rem, 3vw, 1.25rem);
 }
 
 .jl-placeholder-note {
@@ -1470,9 +1654,9 @@ a:hover {
 /* CTA band knop — zelfde stijl als home hero knop */
 .jl-cta-band .jl-btn--spray {
   font-family: "Anton", var(--jl-font-hero);
-  font-size: 2rem;
+  font-size: clamp(1.25rem, 5vw, 2rem);
   font-weight: 400;
-  padding: 1.25rem 2.5rem;
+  padding: clamp(0.75rem, 2vw, 1.25rem) clamp(1.5rem, 4vw, 2.5rem);
   background: var(--jl-yellow);
   color: var(--jl-black);
   border: none;
@@ -1492,7 +1676,7 @@ a:hover {
 .jl-cta-band .jl-btn--spray:hover {
   background: var(--jl-white);
   color: var(--jl-black);
-  padding-left: 4rem;
+  padding-left: clamp(2rem, 6vw, 4rem);
 }
 
 .jl-cta-band .jl-btn--spray .jl-btn-icon {
@@ -1546,10 +1730,10 @@ a:hover {
 
 /* ——— Standpunten pagina ——— */
 .jl-standpunten-hero {
-  background: var(--jl-black);
+  background: linear-gradient(135deg, var(--jl-black-soft) 0%, var(--jl-black) 100%);
   color: var(--jl-white);
   border-bottom: 3px solid var(--jl-yellow);
-  padding: clamp(3rem, 7vw, 5rem) 1.25rem;
+  padding: clamp(2rem, 5vw, 3.25rem) clamp(0.75rem, 3vw, 1.25rem);
   text-align: center;
 }
 
@@ -1560,25 +1744,30 @@ a:hover {
 
 .jl-standpunten-hero h1 {
   margin: 0.25rem 0 0.75rem;
-  font-family: var(--jl-font-display);
-  font-size: clamp(2.75rem, 9vw, 5.5rem);
+  font-family: "Anton", var(--jl-font-hero);
+  font-size: clamp(3.5rem, 11vw, 6.5rem);
   font-weight: 400;
   line-height: 1;
-  letter-spacing: 0.04em;
+  letter-spacing: -0.02em;
   text-transform: uppercase;
   color: var(--jl-yellow);
 }
 
 .jl-standpunten-hero .jl-kicker {
-  color: rgba(255, 255, 255, 0.6);
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  color: var(--jl-yellow);
+  margin-bottom: 0.5rem;
 }
 
 .jl-standpunten-hero__lead {
   margin: 0 auto;
-  max-width: 34rem;
-  font-size: 1.125rem;
-  font-weight: 600;
-  color: rgba(255, 255, 255, 0.88);
+  max-width: 40rem;
+  font-size: clamp(1.1rem, 2.5vw, 1.35rem);
+  font-weight: 500;
+  line-height: 1.65;
+  color: rgba(255, 255, 255, 0.9);
 }
 
 /* Title variant on dark background */
@@ -1589,7 +1778,7 @@ a:hover {
 /* Top 3 section */
 .jl-top3-section {
   background: var(--jl-black-soft);
-  padding: clamp(3rem, 6vw, 4.5rem) 1.25rem;
+  padding: clamp(3rem, 6vw, 4.5rem) clamp(0.75rem, 3vw, 1.25rem);
   border-bottom: 1px solid var(--jl-border);
 }
 
@@ -1716,35 +1905,162 @@ a:hover {
 
 /* ——— Welkom Hero Section - Warm & Inviting ——— */
 .jl-welkom-hero {
-  background: linear-gradient(135deg, #ffffff 0%, #f8f8f8 100%);
-  padding: 5rem 1.25rem;
+  background: linear-gradient(135deg, #ffffff 0%, #f5f5f5 100%);
+  padding: clamp(3.5rem, 7vw, 5.5rem) clamp(0.75rem, 3vw, 1.25rem);
   position: relative;
   display: flex;
-  align-items: center;
-  gap: 3rem;
+  align-items: stretch;
+  gap: clamp(2rem, 5vw, 4rem);
+  max-width: var(--jl-max);
+  margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 @media (max-width: 1024px) {
   .jl-welkom-hero {
     flex-direction: column;
-    padding: 4rem 1.25rem;
-    gap: 2rem;
+    gap: clamp(2.5rem, 6vw, 3.5rem);
   }
 }
 
-/* Vertical Social Media Bar - Left Side */
+@media (max-width: 480px) {
+  .jl-welkom-hero__cta {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .jl-welkom-hero__cta .jl-btn--spray {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+}
+
+/* Content - Main Section */
+.jl-welkom-hero__content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 0;
+}
+
+.jl-welkom-hero__kicker {
+  font-family: var(--jl-font-ui);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--jl-black);
+  margin: 0 0 0.5rem;
+}
+
+.jl-welkom-hero__title {
+  font-family: var(--jl-font-hero);
+  font-size: clamp(2.5rem, 6vw, 4rem);
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  margin: 0 0 1.5rem;
+  color: var(--jl-black);
+  line-height: 1.1;
+}
+
+.jl-welkom-hero__text {
+  font-size: clamp(1rem, 1.5vw, 1.1rem);
+  line-height: 1.7;
+  color: var(--jl-text-muted);
+  margin: 0 0 2rem;
+  max-width: 580px;
+  font-weight: 400;
+}
+
+.jl-welkom-hero__cta {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.jl-welkom-hero__cta .jl-btn--spray {
+  font-family: "Anton", var(--jl-font-hero);
+  font-size: clamp(1.1rem, 3vw, 1.5rem);
+  font-weight: 400;
+  padding: clamp(0.75rem, 1.5vw, 1rem) clamp(1.25rem, 3vw, 2rem);
+  background: var(--jl-yellow);
+  color: var(--jl-black);
+  border: 3px solid var(--jl-yellow);
+  border-radius: 0.3rem;
+  clip-path: none;
+  filter: none;
+  -webkit-filter: none;
+  box-shadow: none;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  position: relative;
+  overflow: hidden;
+  line-height: 1;
+}
+
+.jl-welkom-hero__cta .jl-btn--spray:hover {
+  background: var(--jl-white);
+  color: var(--jl-black);
+  border-color: var(--jl-black);
+  padding-left: 3.5rem;
+}
+
+.jl-welkom-hero__cta .jl-btn--spray .jl-btn-icon {
+  width: 1.75rem;
+  height: 1.75rem;
+  position: absolute;
+  left: -2rem;
+  opacity: 0;
+  transition: all 0.3s ease;
+}
+
+.jl-welkom-hero__cta .jl-btn--spray:hover .jl-btn-icon {
+  left: 1rem;
+  opacity: 1;
+}
+
+/* Vertical Social Media Bar - Right Side */
 .jl-welkom-hero__social-vertical {
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
+  align-items: center;
+  justify-content: center;
   flex-shrink: 0;
 }
 
 @media (max-width: 1024px) {
   .jl-welkom-hero__social-vertical {
     flex-direction: row;
-    gap: 1rem;
+    gap: 1.5rem;
     justify-content: flex-start;
+  }
+}
+
+.jl-welkom-hero__social-label {
+  font-family: var(--jl-font-ui);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--jl-text-muted);
+  margin: 0;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+}
+
+@media (max-width: 1024px) {
+  .jl-welkom-hero__social-label {
+    writing-mode: horizontal-tb;
+    transform: none;
+    order: -1;
+    margin-bottom: 0.5rem;
   }
 }
 
@@ -1752,90 +2068,35 @@ a:hover {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 52px;
-  height: 52px;
-  background: var(--jl-black);
-  border: none;
-  border-radius: 8px;
-  color: var(--jl-white);
+  width: 56px;
+  height: 56px;
+  background: var(--jl-white);
+  border: 2px solid var(--jl-yellow);
+  border-radius: 0.5rem;
   text-decoration: none;
   transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
   cursor: pointer;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
 }
 
 .jl-welkom-hero__social-icon img {
-  width: 24px;
-  height: 24px;
-  filter: brightness(1) invert(1);
+  width: 28px;
+  height: 28px;
+  filter: brightness(0) saturate(100%);
   transition: filter 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .jl-welkom-hero__social-icon:hover {
   background: var(--jl-yellow);
-  transform: scale(1.1) translateY(-4px);
-  box-shadow: 0 8px 24px rgba(249, 246, 16, 0.35);
+  border-color: var(--jl-yellow);
+  transform: translateY(-8px) scale(1.08);
+  box-shadow: 0 16px 40px rgba(245, 230, 0, 0.4);
 }
 
 .jl-welkom-hero__social-icon:hover img {
-  filter: brightness(1) invert(0);
+  filter: brightness(0) saturate(100%);
 }
 
-/* Content - Right Side */
-.jl-welkom-hero__content {
-  flex: 1;
-  min-width: 0;
-}
-
-.jl-welkom-hero__kicker {
-  font-family: var(--jl-font-ui);
-  font-size: 0.8rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  color: var(--jl-yellow);
-  margin: 0 0 1rem;
-}
-
-.jl-welkom-hero__title {
-  font-family: var(--jl-font-hero);
-  font-size: 3.25rem;
-  font-weight: 900;
-  letter-spacing: -0.03em;
-  text-transform: uppercase;
-  margin: 0 0 1.5rem;
-  color: var(--jl-black);
-  line-height: 1.15;
-  max-width: 550px;
-}
-
-@media (max-width: 1024px) {
-  .jl-welkom-hero__title {
-    font-size: 2.5rem;
-  }
-}
-
-@media (max-width: 640px) {
-  .jl-welkom-hero__title {
-    font-size: 1.875rem;
-  }
-}
-
-.jl-welkom-hero__text {
-  font-size: 1.0625rem;
-  line-height: 1.75;
-  color: var(--jl-text-muted);
-  margin: 0;
-  max-width: 550px;
-  font-weight: 400;
-}
-
-@media (max-width: 640px) {
-  .jl-welkom-hero__text {
-    font-size: 1rem;
-    line-height: 1.65;
-  }
-}
 
 /* ——— Modern Image Card Grid Design ——— */
 
@@ -1952,7 +2213,7 @@ a:hover {
 
 .jl-section-title {
   font-family: var(--jl-font-hero);
-  font-size: 2.5rem;
+  font-size: clamp(2rem, 5vw, 2.5rem);
   font-weight: 900;
   letter-spacing: -0.02em;
   text-transform: uppercase;
@@ -2011,6 +2272,12 @@ a:hover {
   }
 }
 
+@media (min-width: 768px) {
+  .jl-standpunten-meer-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
 @media (min-width: 1024px) {
   .jl-standpunten-meer-grid {
     grid-template-columns: repeat(4, 1fr);
@@ -2022,7 +2289,7 @@ a:hover {
   position: relative;
   overflow: hidden;
   border-radius: 0.75rem;
-  height: 360px;
+  min-height: 320px;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
@@ -2038,16 +2305,16 @@ a:hover {
 }
 
 .jl-standpunt-card--featured {
-  height: 420px;
+  min-height: 380px;
 }
 
 @media (min-width: 768px) {
   .jl-standpunt-card {
-    height: 380px;
+    min-height: 360px;
   }
 
   .jl-standpunt-card--featured {
-    height: 440px;
+    min-height: 420px;
   }
 }
 
@@ -2195,12 +2462,12 @@ a:hover {
   }
 
   .jl-standpunt-card {
-    height: 340px;
+    min-height: 260px;
     border-radius: 0.5rem;
   }
 
   .jl-standpunt-card--featured {
-    height: 360px;
+    min-height: 280px;
   }
 
   .jl-standpunt-card__content {
@@ -2305,20 +2572,14 @@ a:hover {
 }
 
 .jl-standpunt-detail-hero__title {
-  font-family: var(--jl-font-hero);
-  font-size: 3rem;
-  font-weight: 900;
+  font-family: "Anton", var(--jl-font-hero);
+  font-size: clamp(2.75rem, 8vw, 4rem);
+  font-weight: 400;
   letter-spacing: -0.02em;
   text-transform: uppercase;
-  margin: 0 0 1rem;
-  color: var(--jl-white);
+  margin: 0 0 1.5rem;
+  color: var(--jl-yellow);
   line-height: 1.1;
-}
-
-@media (min-width: 768px) {
-  .jl-standpunt-detail-hero__title {
-    font-size: 3.5rem;
-  }
 }
 
 .jl-standpunt-detail-hero__lead {
@@ -2334,4 +2595,30 @@ a:hover {
   .jl-standpunt-detail-hero__lead {
     font-size: 1.5rem;
   }
+}
+
+/* ——— Dynamic event widget ——— */
+.jl-next-event-card {
+  background: var(--jl-white);
+  border-radius: 0.75rem;
+  padding: 2rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+@media (min-width: 640px) {
+  .jl-next-event-card {
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+  }
+}
+
+.jl-next-event-card img {
+  width: 100%;
+  height: 250px;
+  object-fit: cover;
+  border-radius: 0.5rem;
 }
