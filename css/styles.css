@@ -27,7 +27,7 @@
   --jl-font-hero: "Anton", "Bebas Neue", "Impact", sans-serif;
   --jl-font-stencil: "Stardos Stencil", "Courier New", serif;
   --jl-max: 72rem;
-  --jl-header-h: 4.5rem;
+  --jl-header-h: 5.83rem;
 }
 
 *,
@@ -161,9 +161,9 @@ a:hover {
 }
 
 .jl-logo-img {
-  height: clamp(2.35rem, 7vw, 3.2rem);
+  height: clamp(3.6rem, 12vw, 5.25rem);
   width: auto;
-  max-width: min(11rem, 50vw);
+  max-width: min(14rem, 60vw);
   object-fit: contain;
   display: block;
 }
@@ -199,11 +199,15 @@ a:hover {
 
 /* Nav */
 .jl-nav {
+  position: absolute;
+  left: 38%;
+  top: 50%;
+  transform: translate(-50%, -50%);
   display: flex;
   align-items: center;
   gap: 0.15rem 0.35rem;
   flex-wrap: wrap;
-  justify-content: flex-end;
+  z-index: 101;
 }
 
 @media (max-width: 960px) {
@@ -222,13 +226,13 @@ a:hover {
 .jl-nav > a,
 .jl-nav-item > button {
   display: inline-block;
-  padding: 0.5rem 0.6rem;
-  font-size: 0.875rem;
+  padding: 0.55rem 0.7rem;
+  font-size: 0.95rem;
   font-weight: 700;
   font-family: var(--jl-font-ui);
   text-transform: uppercase;
   letter-spacing: 0.06em;
-  color: var(--jl-yellow);
+  color: var(--jl-white);
   text-decoration: none;
   border: none;
   background: none;
@@ -238,8 +242,13 @@ a:hover {
 
 .jl-nav > a:hover,
 .jl-nav-item > button:hover {
-  color: var(--jl-white);
+  color: var(--jl-yellow);
   background: rgba(245, 230, 0, 0.08);
+}
+
+/* Actieve pagina link in nav */
+.jl-nav > a.is-active {
+  color: var(--jl-yellow);
 }
 
 .jl-nav-item > button {
@@ -320,7 +329,29 @@ a:hover {
 /* Header CTA — Word lid */
 .jl-header-cta {
   flex-shrink: 0;
-  margin-left: 0.35rem;
+  margin-left: 0.5rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.65rem 1.35rem;
+  font-size: 0.9rem;
+  font-weight: 700;
+  font-family: var(--jl-font-ui);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  background: var(--jl-yellow);
+  color: var(--jl-black);
+  border: none;
+  text-decoration: none;
+  border-radius: 0.3rem;
+  white-space: nowrap;
+  transition: background 0.2s, color 0.2s;
+  cursor: pointer;
+}
+
+.jl-header-cta:hover {
+  background: var(--jl-white);
+  color: var(--jl-black);
 }
 
 @media (max-width: 960px) {
@@ -332,24 +363,25 @@ a:hover {
 }
 
 .jl-btn-header-cta {
-  padding: 0.5rem 1.1rem;
-  font-size: 0.8125rem;
+  padding: 0.55rem 1.1rem;
+  font-size: 0.8rem;
   font-family: var(--jl-font-ui);
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.07em;
+  letter-spacing: 0.08em;
   background: var(--jl-yellow);
   color: var(--jl-black) !important;
   border: none;
   text-decoration: none;
-  border-radius: 0.2rem;
+  border-radius: 0.3rem;
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  transition: background 0.2s, color 0.2s;
 }
 
 .jl-btn-header-cta:hover {
-  background: var(--jl-yellow-hot);
+  background: var(--jl-white) !important;
   color: var(--jl-black) !important;
 }
 
@@ -519,9 +551,10 @@ a:hover {
   opacity: 1;
 }
 
-.jl-hero-social svg {
-  width: 1.35rem;
-  height: 1.35rem;
+.jl-hero-social svg,
+.jl-hero-social img {
+  width: 1.6rem;
+  height: 1.6rem;
   fill: currentColor;
 }
 
@@ -560,7 +593,9 @@ a:hover {
 }
 
 .jl-hero--home .jl-hero-headline .jl-h1-line {
-  padding: clamp(0.5rem, 1.8vw, 1.05rem) 0;
+  display: inline;
+  padding: 0;
+  margin-right: 0.15em;
 }
 
 .jl-hero-headline .jl-h1-yellow {
@@ -585,16 +620,20 @@ a:hover {
   font-weight: 600;
 }
 
-/* Home hero: Anton */
+/* Home hero: Modern stencil met strakke dikke lijnen */
 .jl-hero--home .jl-hero-headline {
-  font-family: var(--jl-font-hero);
-  letter-spacing: 0.03em;
+  font-family: "Anton", var(--jl-font-hero);
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  font-size: clamp(3rem, 10vw, 6rem);
+  text-transform: uppercase;
+  line-height: 1;
 }
 
-/* Alleen jl-stone-weathered op de kop (+ steengradients op de spans) */
+/* Geen effect, gewoon schone geel en witte letters */
 .jl-hero-headline--stone {
-  filter: url(#jl-stone-weathered);
-  -webkit-filter: url(#jl-stone-weathered);
+  filter: none;
+  -webkit-filter: none;
 }
 
 .jl-defs {
@@ -630,42 +669,25 @@ a:hover {
 
 /* Steenkleurige marmoring in de Anton-kop (home hero) */
 .jl-hero--home .jl-hero-headline--stone .jl-h1-yellow {
-  color: transparent;
-  background: linear-gradient(
-    148deg,
-    #f0e45a 0%,
-    #c4b01a 18%,
-    #8f8210 38%,
-    #ddd048 52%,
-    #6b6010 68%,
-    #e8dc50 82%,
-    #a69418 100%
-  );
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: var(--jl-yellow);
+  background: none;
+  -webkit-background-clip: border-box;
+  background-clip: border-box;
+  -webkit-text-fill-color: currentColor;
 }
 
 .jl-hero--home .jl-hero-headline--stone .jl-h1-white {
-  color: transparent;
-  background: linear-gradient(
-    162deg,
-    #f2eee6 0%,
-    #a8a49c 24%,
-    #6e6a66 42%,
-    #d4d0c8 58%,
-    #4e4a46 76%,
-    #e0dcd4 100%
-  );
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: var(--jl-white);
+  background: none;
+  -webkit-background-clip: border-box;
+  background-clip: border-box;
+  -webkit-text-fill-color: currentColor;
 }
 
 .jl-hero--home .jl-hero-lead--home {
   font-family: var(--jl-font-hero);
   font-weight: 400;
-  font-size: clamp(0.5625rem, 2.8vw + 0.42rem, 1.0625rem);
+  font-size: clamp(1.25rem, 5vw + 0.42rem, 2rem);
   letter-spacing: 0.02em;
   line-height: 1.35;
   white-space: nowrap;
@@ -679,69 +701,72 @@ a:hover {
   letter-spacing: 0.06em;
 }
 
-/* Home: grotere type, ruimere gele vlakken, ruwere “steen”-rand + lichte vervorming */
+/* Home: gele knoppen zoals header, wit bij hover, Anton font */
 .jl-hero--home .jl-hero-ctas .jl-btn--spray {
-  font-size: 1.0625rem;
-  padding: 1.05rem 1.65rem 1.15rem;
-  filter: url(#jl-cta-chipped) drop-shadow(3px 5px 0 rgba(0, 0, 0, 0.38)) drop-shadow(0 1px 0 rgba(0, 0, 0, 0.2));
-  -webkit-filter: url(#jl-cta-chipped) drop-shadow(3px 5px 0 rgba(0, 0, 0, 0.38)) drop-shadow(0 1px 0 rgba(0, 0, 0, 0.2));
-  clip-path: polygon(
-    0% 22%,
-    4% 8%,
-    14% 0%,
-    38% 4%,
-    58% 0%,
-    78% 5%,
-    96% 2%,
-    100% 18%,
-    97% 32%,
-    100% 46%,
-    96% 58%,
-    100% 74%,
-    98% 88%,
-    88% 100%,
-    64% 97%,
-    42% 100%,
-    18% 96%,
-    4% 88%,
-    0% 70%,
-    3% 52%,
-    0% 36%
-  );
+  font-family: "Anton", var(--jl-font-hero);
+  font-size: 2rem;
+  font-weight: 400;
+  padding: 1.25rem 2.5rem;
+  background: var(--jl-yellow);
+  color: var(--jl-black);
+  border: none;
+  border-radius: 0.3rem;
+  clip-path: none;
+  filter: none;
+  -webkit-filter: none;
+  box-shadow: none;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  position: relative;
+  overflow: hidden;
+  line-height: 1;
+}
+
+.jl-hero--home .jl-hero-ctas .jl-btn--spray:hover {
+  background: var(--jl-white);
+  color: var(--jl-black);
+  padding-left: 4rem;
 }
 
 .jl-hero--home .jl-hero-ctas .jl-btn--spray.jl-btn--spray-b {
-  clip-path: polygon(
-    5% 14%,
-    20% 0%,
-    48% 5%,
-    72% 0%,
-    94% 10%,
-    100% 28%,
-    96% 44%,
-    100% 60%,
-    97% 76%,
-    100% 90%,
-    82% 100%,
-    54% 96%,
-    28% 100%,
-    6% 92%,
-    0% 72%,
-    4% 54%,
-    0% 36%,
-    3% 22%
-  );
+  background: var(--jl-yellow);
+  color: var(--jl-black);
+  border: none;
+}
+
+.jl-hero--home .jl-hero-ctas .jl-btn--spray.jl-btn--spray-b:hover {
+  background: var(--jl-white);
+  color: var(--jl-black);
+  padding-left: 4rem;
 }
 
 .jl-hero--home .jl-hero-ctas .jl-btn-icon {
-  width: 1.15em;
-  height: 1.15em;
+  width: 2rem;
+  height: 2rem;
+  position: absolute;
+  left: -2.5rem;
+  opacity: 0;
+  transition: all 0.3s ease;
+}
+
+.jl-hero--home .jl-hero-ctas .jl-btn--spray:hover .jl-btn-icon {
+  left: 1.25rem;
+  opacity: 1;
 }
 
 @media (prefers-reduced-motion: reduce) {
   .jl-hero--home .jl-hero-ctas .jl-btn--spray {
-    filter: drop-shadow(3px 5px 0 rgba(0, 0, 0, 0.38));
-    -webkit-filter: drop-shadow(3px 5px 0 rgba(0, 0, 0, 0.38));
+    transition: none;
+  }
+  
+  .jl-hero--home .jl-hero-ctas .jl-btn-icon {
+    transition: none;
+  }
+  
+  .jl-hero--home .jl-hero-ctas .jl-btn--spray:hover .jl-btn-icon {
+    right: 1.25rem;
+    opacity: 1;
   }
 }
 
@@ -1440,4 +1465,651 @@ a:hover {
 
 .jl-home-alt-pillar .jl-principle-icon--svg svg {
   width: 2.25rem;
+}
+
+/* CTA band knop — zelfde stijl als home hero knop */
+.jl-cta-band .jl-btn--spray {
+  font-family: "Anton", var(--jl-font-hero);
+  font-size: 2rem;
+  font-weight: 400;
+  padding: 1.25rem 2.5rem;
+  background: var(--jl-yellow);
+  color: var(--jl-black);
+  border: none;
+  border-radius: 0.3rem;
+  clip-path: none;
+  filter: none;
+  -webkit-filter: none;
+  box-shadow: none;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  position: relative;
+  overflow: hidden;
+  line-height: 1;
+}
+
+.jl-cta-band .jl-btn--spray:hover {
+  background: var(--jl-white);
+  color: var(--jl-black);
+  padding-left: 4rem;
+}
+
+.jl-cta-band .jl-btn--spray .jl-btn-icon {
+  width: 2rem;
+  height: 2rem;
+  position: absolute;
+  left: -2.5rem;
+  opacity: 0;
+  transition: all 0.3s ease;
+}
+
+.jl-cta-band .jl-btn--spray:hover .jl-btn-icon {
+  left: 1.25rem;
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .jl-cta-band .jl-btn--spray {
+    transition: none;
+  }
+
+  .jl-cta-band .jl-btn--spray .jl-btn-icon {
+    transition: none;
+  }
+}
+
+/* Terugknop op detail-standpuntpagina's */
+.jl-standpunten-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-bottom: 1.25rem;
+  font-family: var(--jl-font-ui);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.55);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+
+.jl-standpunten-back:hover {
+  color: var(--jl-yellow);
+}
+
+/* Brede prose voor detail-pagina's */
+.jl-prose--wide {
+  max-width: 56rem;
+}
+
+/* ——— Standpunten pagina ——— */
+.jl-standpunten-hero {
+  background: var(--jl-black);
+  color: var(--jl-white);
+  border-bottom: 3px solid var(--jl-yellow);
+  padding: clamp(3rem, 7vw, 5rem) 1.25rem;
+  text-align: center;
+}
+
+.jl-standpunten-hero__inner {
+  max-width: var(--jl-max);
+  margin: 0 auto;
+}
+
+.jl-standpunten-hero h1 {
+  margin: 0.25rem 0 0.75rem;
+  font-family: var(--jl-font-display);
+  font-size: clamp(2.75rem, 9vw, 5.5rem);
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--jl-yellow);
+}
+
+.jl-standpunten-hero .jl-kicker {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.jl-standpunten-hero__lead {
+  margin: 0 auto;
+  max-width: 34rem;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.88);
+}
+
+/* Title variant on dark background */
+.jl-title-stencil--light {
+  color: var(--jl-yellow);
+}
+
+/* Top 3 section */
+.jl-top3-section {
+  background: var(--jl-black-soft);
+  padding: clamp(3rem, 6vw, 4.5rem) 1.25rem;
+  border-bottom: 1px solid var(--jl-border);
+}
+
+.jl-top3-inner {
+  max-width: var(--jl-max);
+  margin: 0 auto;
+}
+
+.jl-top3-grid {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: 1fr;
+  margin-top: 2rem;
+}
+
+@media (min-width: 768px) {
+  .jl-top3-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.jl-top3-card {
+  background: var(--jl-panel);
+  border: 1px solid rgba(245, 230, 0, 0.25);
+  border-top: 4px solid var(--jl-yellow);
+  border-radius: 0.5rem;
+  padding: 2rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: flex-start;
+  box-shadow:
+    0 0 32px rgba(245, 230, 0, 0.08),
+    0 8px 32px rgba(0, 0, 0, 0.4);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .jl-top3-card {
+    transition: none;
+  }
+}
+
+.jl-top3-card:hover {
+  transform: translateY(-5px);
+  box-shadow:
+    0 0 48px rgba(245, 230, 0, 0.18),
+    0 16px 48px rgba(0, 0, 0, 0.5);
+}
+
+.jl-top3-card__icon {
+  font-size: 2.75rem;
+  line-height: 1;
+}
+
+.jl-top3-card__title {
+  margin: 0;
+  font-family: var(--jl-font-ui);
+  font-size: 1.2rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--jl-yellow);
+  line-height: 1.2;
+}
+
+.jl-top3-card__text {
+  margin: 0;
+  font-size: 0.9375rem;
+  line-height: 1.65;
+  color: rgba(255, 255, 255, 0.82);
+  flex: 1;
+}
+
+/* Secondary standpunten grid */
+.jl-standpunten-grid {
+  display: grid;
+  gap: 1.25rem;
+  grid-template-columns: 1fr;
+  margin-top: 2rem;
+}
+
+@media (min-width: 640px) {
+  .jl-standpunten-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.jl-standpunt-item {
+  background: var(--jl-white);
+  border: 1px solid #d0d0d0;
+  border-left: 4px solid var(--jl-yellow);
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  display: flex;
+  gap: 1.25rem;
+  align-items: flex-start;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+}
+
+.jl-standpunt-item__icon {
+  font-size: 2rem;
+  line-height: 1;
+  flex-shrink: 0;
+  margin-top: 0.1rem;
+}
+
+.jl-standpunt-item h3 {
+  margin: 0 0 0.5rem;
+  font-family: var(--jl-font-ui);
+  font-size: 1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--jl-black);
+}
+
+.jl-standpunt-item p {
+  margin: 0;
+  font-size: 0.9375rem;
+  color: var(--jl-text-muted);
+  line-height: 1.6;
+}
+
+/* ——— Modern Image Card Grid Design ——— */
+
+/* Top 3 Standpunten Section */
+.jl-standpunten-hero-section {
+  background: linear-gradient(135deg, #f5f5f5 0%, #ffffff 100%);
+  padding: 4rem 1.25rem;
+  position: relative;
+}
+
+.jl-standpunten-hero-section__inner {
+  max-width: var(--jl-max);
+  margin: 0 auto;
+}
+
+.jl-section-title {
+  font-family: var(--jl-font-hero);
+  font-size: 2.5rem;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  margin: 0 0 2.5rem;
+  color: var(--jl-black);
+}
+
+.jl-section-subtitle {
+  font-size: 1.125rem;
+  color: var(--jl-text-muted);
+  margin: 0 0 2rem;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+.jl-standpunten-top3-grid {
+  display: grid;
+  gap: 1.875rem;
+  grid-template-columns: 1fr;
+  margin: 0;
+}
+
+@media (min-width: 768px) {
+  .jl-standpunten-top3-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+}
+
+/* Meer Standpunten Section */
+.jl-meer-standpunten-section {
+  background: var(--jl-white);
+  padding: 4rem 1.25rem;
+  border-top: 2px solid #f0f0f0;
+}
+
+.jl-meer-standpunten-inner {
+  max-width: var(--jl-max);
+  margin: 0 auto;
+}
+
+.jl-meer-standpunten-header {
+  margin-bottom: 3rem;
+}
+
+.jl-standpunten-meer-grid {
+  display: grid;
+  gap: 1.875rem;
+  grid-template-columns: 1fr;
+  margin: 0;
+}
+
+@media (min-width: 640px) {
+  .jl-standpunten-meer-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .jl-standpunten-meer-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* Modern Image Card */
+.jl-standpunt-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 0.75rem;
+  height: 360px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  background: var(--jl-black);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+  transition: all 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.jl-standpunt-card--link {
+  color: inherit;
+}
+
+.jl-standpunt-card--featured {
+  height: 420px;
+}
+
+@media (min-width: 768px) {
+  .jl-standpunt-card {
+    height: 380px;
+  }
+
+  .jl-standpunt-card--featured {
+    height: 440px;
+  }
+}
+
+/* Image background with responsive positioning */
+.jl-standpunt-card__image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  transition: transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 1;
+}
+
+/* Gradient overlay with premium feel */
+.jl-standpunt-card__overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    135deg,
+    rgba(0, 0, 0, 0.25) 0%,
+    rgba(0, 0, 0, 0.45) 50%,
+    rgba(0, 0, 0, 0.65) 100%
+  );
+  z-index: 2;
+  transition: background 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Card content - text overlay */
+.jl-standpunt-card__content {
+  position: relative;
+  z-index: 3;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+  color: var(--jl-white);
+  transition: all 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.jl-standpunt-card__title {
+  margin: 0;
+  font-family: var(--jl-font-display);
+  font-size: 1.5rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+  color: var(--jl-white);
+  transition: all 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.jl-standpunt-card--featured .jl-standpunt-card__title {
+  font-size: 1.75rem;
+}
+
+.jl-standpunt-card__text {
+  margin: 0;
+  font-size: 0.9375rem;
+  line-height: 1.65;
+  color: rgba(255, 255, 255, 0.88);
+  font-weight: 400;
+  transition: opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.jl-standpunt-card__link {
+  margin-top: 0.5rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--jl-yellow);
+  text-decoration: none;
+  letter-spacing: 0.02em;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  font-family: var(--jl-font-ui);
+  text-transform: uppercase;
+}
+
+.jl-standpunt-card__link::after {
+  content: '';
+  display: inline-block;
+  width: 1.25rem;
+  height: 2px;
+  background: var(--jl-yellow);
+  transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Hover state - elevated interaction */
+.jl-standpunt-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.2);
+}
+
+.jl-standpunt-card:hover .jl-standpunt-card__image {
+  transform: scale(1.08);
+}
+
+.jl-standpunt-card:hover .jl-standpunt-card__overlay {
+  background: linear-gradient(
+    135deg,
+    rgba(0, 0, 0, 0.35) 0%,
+    rgba(0, 0, 0, 0.5) 50%,
+    rgba(0, 0, 0, 0.7) 100%
+  );
+}
+
+.jl-standpunt-card:hover .jl-standpunt-card__title {
+  color: var(--jl-yellow);
+  transform: translateX(0);
+  letter-spacing: -0.015em;
+}
+
+.jl-standpunt-card:hover .jl-standpunt-card__text {
+  opacity: 0.95;
+}
+
+.jl-standpunt-card:hover .jl-standpunt-card__link {
+  color: var(--jl-yellow-hot);
+}
+
+.jl-standpunt-card:hover .jl-standpunt-card__link::after {
+  width: 1.75rem;
+}
+
+/* Mobile optimization */
+@media (max-width: 767px) {
+  .jl-standpunten-hero-section {
+    padding: 3rem 1.25rem;
+  }
+
+  .jl-meer-standpunten-section {
+    padding: 3rem 1.25rem;
+  }
+
+  .jl-section-title {
+    font-size: 2rem;
+  }
+
+  .jl-standpunt-card {
+    height: 340px;
+    border-radius: 0.5rem;
+  }
+
+  .jl-standpunt-card--featured {
+    height: 360px;
+  }
+
+  .jl-standpunt-card__content {
+    padding: 1.5rem;
+    gap: 0.75rem;
+  }
+
+  .jl-standpunt-card__title {
+    font-size: 1.25rem;
+  }
+
+  .jl-standpunt-card--featured .jl-standpunt-card__title {
+    font-size: 1.375rem;
+  }
+
+  .jl-standpunt-card__text {
+    font-size: 0.875rem;
+    line-height: 1.6;
+  }
+
+  .jl-standpunt-card:hover {
+    transform: translateY(-4px);
+  }
+
+  .jl-standpunt-card:hover .jl-standpunt-card__image {
+    transform: scale(1.05);
+  }
+}
+
+/* ——— Standpunt Detail Hero ——— */
+.jl-standpunt-detail-hero {
+  position: relative;
+  min-height: 500px;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  display: flex;
+  align-items: flex-end;
+  padding: 3rem 1.25rem;
+  overflow: hidden;
+}
+
+@media (min-width: 768px) {
+  .jl-standpunt-detail-hero {
+    min-height: 600px;
+    padding: 4rem 1.25rem;
+  }
+}
+
+.jl-standpunt-detail-hero__overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.3) 0%,
+    rgba(0, 0, 0, 0.5) 50%,
+    rgba(0, 0, 0, 0.75) 100%
+  );
+  z-index: 1;
+}
+
+.jl-standpunt-detail-hero__inner {
+  position: relative;
+  z-index: 2;
+  max-width: var(--jl-max);
+  margin: 0 auto;
+  width: 100%;
+}
+
+.jl-standpunt-detail-hero__back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--jl-yellow);
+  text-decoration: none;
+  letter-spacing: 0.02em;
+  margin-bottom: 1.5rem;
+  font-family: var(--jl-font-ui);
+  text-transform: uppercase;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.jl-standpunt-detail-hero__back:hover {
+  color: var(--jl-yellow-hot);
+  transform: translateX(-4px);
+}
+
+.jl-standpunt-detail-hero__kicker {
+  font-family: var(--jl-font-ui);
+  font-size: 0.875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--jl-yellow);
+  margin: 0 0 1rem;
+}
+
+.jl-standpunt-detail-hero__title {
+  font-family: var(--jl-font-hero);
+  font-size: 3rem;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  margin: 0 0 1rem;
+  color: var(--jl-white);
+  line-height: 1.1;
+}
+
+@media (min-width: 768px) {
+  .jl-standpunt-detail-hero__title {
+    font-size: 3.5rem;
+  }
+}
+
+.jl-standpunt-detail-hero__lead {
+  font-size: 1.25rem;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.92);
+  margin: 0;
+  font-weight: 500;
+  max-width: 650px;
+}
+
+@media (min-width: 768px) {
+  .jl-standpunt-detail-hero__lead {
+    font-size: 1.5rem;
+  }
 }

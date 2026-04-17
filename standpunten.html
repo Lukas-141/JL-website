@@ -4,18 +4,35 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Standpunten — Jonge Libertariërs</title>
-  <meta name="description" content="Standpunten van de Jonge Libertariërs: vrijheid, verantwoordelijkheid en vrije markt.">
+  <meta name="description" content="Onze standpunten: economische vrijheid, afschaffen leerplicht, eigendomsrecht, lichamelijke soevereiniteit en vrijheid van meningsuiting.">
   <link rel="icon" href="assets/images/JL-Nieuwe-Logo-scaled.png" type="image/png">
   <link rel="apple-touch-icon" href="assets/images/JL-Nieuwe-Logo-scaled.png">
   <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-  <div class="jl-topbar">
-    <div class="jl-topbar-inner">
-      <a href="steun-onze-missie.html">Steun onze missie</a>
-      <a href="word-lid.html">Lid worden</a>
-    </div>
-  </div>
+  <svg class="jl-defs" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" width="0" height="0">
+    <defs>
+      <filter id="jl-stone-weathered" x="-18%" y="-18%" width="136%" height="136%" color-interpolation-filters="sRGB">
+        <feTurbulence type="fractalNoise" baseFrequency="0.07" numOctaves="4" seed="11" result="n1"/>
+        <feDisplacementMap in="SourceGraphic" in2="n1" scale="3.2" xChannelSelector="R" yChannelSelector="G" result="d1"/>
+        <feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="3" seed="47" result="n2"/>
+        <feDisplacementMap in="d1" in2="n2" scale="1.5" xChannelSelector="R" yChannelSelector="G" result="d2"/>
+        <feTurbulence type="fractalNoise" baseFrequency="0.15" numOctaves="2" seed="3" result="n3"/>
+        <feDisplacementMap in="d2" in2="n3" scale="0.65" xChannelSelector="R" yChannelSelector="G" result="rough"/>
+        <feDropShadow in="rough" dx="3" dy="5" stdDeviation="1.1" flood-color="#000" flood-opacity="0.55" result="sh"/>
+        <feMerge>
+          <feMergeNode in="sh"/>
+          <feMergeNode in="rough"/>
+        </feMerge>
+      </filter>
+      <filter id="jl-cta-chipped" x="-10%" y="-10%" width="120%" height="120%" color-interpolation-filters="sRGB">
+        <feTurbulence type="fractalNoise" baseFrequency="0.11" numOctaves="3" seed="83" result="n1"/>
+        <feDisplacementMap in="SourceGraphic" in2="n1" scale="1.35" xChannelSelector="R" yChannelSelector="G" result="d1"/>
+        <feTurbulence type="fractalNoise" baseFrequency="0.045" numOctaves="2" seed="17" result="n2"/>
+        <feDisplacementMap in="d1" in2="n2" scale="0.65" xChannelSelector="R" yChannelSelector="G"/>
+      </filter>
+    </defs>
+  </svg>
 
   <header class="jl-header">
     <div class="jl-header-inner">
@@ -28,7 +45,7 @@
       <div class="jl-header-nav-wrap">
         <nav class="jl-nav" aria-label="Hoofdmenu">
           <a href="index.html">Home</a>
-          <a href="standpunten.html">Onze principes</a>
+          <a href="standpunten.html" class="is-active">Standpunten</a>
           <a href="agenda.html">Actie</a>
           <div class="jl-nav-item">
             <button type="button">Organisatie</button>
@@ -42,49 +59,127 @@
           <a href="nieuws.html">Nieuws</a>
           <a href="contact.html">Contact</a>
         </nav>
+        <a class="jl-header-cta jl-btn-header-cta" href="steun-onze-missie.html">Steun onze missie</a>
         <a class="jl-header-cta jl-btn-header-cta" href="word-lid.html">Word lid</a>
       </div>
     </div>
   </header>
 
-  <div class="jl-page-header">
-    <div class="jl-page-header-inner">
-      <h1>Standpunten</h1>
-    </div>
-  </div>
+  <main>
+    <!-- Hero -->
+    <section class="jl-standpunten-hero">
+      <div class="jl-standpunten-hero__inner">
+        <p class="jl-kicker">Jonge Libertariërs</p>
+        <h1>Standpunten</h1>
+        <p class="jl-standpunten-hero__lead">Geen compromissen. Geen halve maatregelen. 100% vrijheid.</p>
+      </div>
+    </section>
 
-  <main class="jl-page-main">
-    <div class="jl-section-inner jl-prose">
-      <p class="jl-placeholder-note" style="margin-bottom:1.5rem;">
-        Kopieer hier later de volledige standpuntenpagina van WordPress (tekst en eventuele uitklappers). De drie kernpunten staan hieronder alvast.
-      </p>
+    <!-- Top 3 Kernpunten - Modern Image Card Grid -->
+    <section class="jl-standpunten-hero-section" aria-labelledby="top3-title">
+      <div class="jl-standpunten-hero-section__inner">
+        <h2 id="top3-title" class="jl-section-title">Onze Kernpunten</h2>
+        <div class="jl-standpunten-top3-grid">
 
-      <h2>Vrijheid</h2>
-      <p>
-        Voor de Jonge Libertariërs is vrijheid geen loze kreet, maar de basis van een rechtvaardige samenleving.
-        Toch wordt die vrijheid in Nederland steeds verder uitgehold, vaak onder het mom van gelijkheid of het “algemeen belang”.
-      </p>
+          <a href="standpunt-economie.html" class="jl-standpunt-card jl-standpunt-card--featured jl-standpunt-card--link" id="economische-vrijheid">
+            <div class="jl-standpunt-card__image" style="background-image: url('assets/images/Standpunt Staat.jpg');"></div>
+            <div class="jl-standpunt-card__overlay"></div>
+            <div class="jl-standpunt-card__content">
+              <h3 class="jl-standpunt-card__title">Economische Vrijheid</h3>
+              <p class="jl-standpunt-card__text">Belasting is diefstal. De scheiding van staat en geld is de basis voor welvaart en ware vrijheid voor iedereen.</p>
+              <span class="jl-standpunt-card__link">Lees volledige visie →</span>
+            </div>
+          </a>
 
-      <h2>Verantwoordelijkheid</h2>
-      <p>
-        Voor de Jonge Libertariërs is verantwoordelijkheid geen last die op je schouders wordt gelegd, maar juist een teken van waardigheid.
-        In een vrije samenleving hoort ieder mens verantwoordelijkheid te dragen voor zijn eigen keuzes, zijn eigen leven,
-        en voor de mensen om hem heen als hij dat wil.
-      </p>
+          <a href="standpunt-educatie.html" class="jl-standpunt-card jl-standpunt-card--featured jl-standpunt-card--link" id="leerplicht">
+            <div class="jl-standpunt-card__image" style="background-image: url('assets/images/Standpunt Onderwijs.jpg');"></div>
+            <div class="jl-standpunt-card__overlay"></div>
+            <div class="jl-standpunt-card__content">
+              <h3 class="jl-standpunt-card__title">Onderwijsvrijheid</h3>
+              <p class="jl-standpunt-card__text">Van leerplicht naar leerrecht. Ouders bepalen, niet de staat. Absolute vrijheid in onderwijs zonder indoctrinatie.</p>
+              <span class="jl-standpunt-card__link">Lees volledige visie →</span>
+            </div>
+          </a>
 
-      <h2>Vrije markt</h2>
-      <p>
-        Voor de Jonge Libertariërs is de vrije markt een logisch gevolg van vrijheid en verantwoordelijkheid.
-        Het is het eerlijke speelveld waarop mensen vrijwillig met elkaar handelen, zonder dwang of bevoordeling van bovenaf.
-        In een vrije markt beslist niet de overheid wie mag ondernemen, wat verkocht mag worden of tegen welke prijs,
-        maar bepalen mensen zelf, via hun voorkeuren tot samenwerking, wat waardevol is.
-      </p>
+          <a href="standpunt-wonen.html" class="jl-standpunt-card jl-standpunt-card--featured jl-standpunt-card--link" id="bouwen">
+            <div class="jl-standpunt-card__image" style="background-image: url('assets/images/Standpunt Ruimte.jpg');"></div>
+            <div class="jl-standpunt-card__overlay"></div>
+            <div class="jl-standpunt-card__content">
+              <h3 class="jl-standpunt-card__title">Vrij Bouwen</h3>
+              <p class="jl-standpunt-card__text">Eigendomsrecht hersteld. Geen bureaucratie, geen bestemmingsplannen. De markt lost de woningcrisis op.</p>
+              <span class="jl-standpunt-card__link">Lees volledige visie →</span>
+            </div>
+          </a>
 
-      <p style="margin-top:2rem;">
-        <a class="jl-btn jl-btn-primary" href="word-lid.html">Word lid</a>
-        <a class="jl-btn jl-btn-dark" href="contact.html" style="margin-left:0.5rem;">Stel je vraag</a>
-      </p>
-    </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- Meer Standpunten -->
+    <section class="jl-meer-standpunten-section" aria-labelledby="overig-title">
+      <div class="jl-meer-standpunten-inner">
+        <div class="jl-meer-standpunten-header">
+          <p class="jl-kicker">Meer Standpunten</p>
+          <h2 id="overig-title" class="jl-section-title">Onze Principes</h2>
+          <p class="jl-section-subtitle">Volledige visies op alle kernthema's van libertarische vrijheid</p>
+        </div>
+
+        <div class="jl-standpunten-meer-grid">
+
+          <a href="standpunt-privacy.html" class="jl-standpunt-card jl-standpunt-card--link" id="privacy">
+            <div class="jl-standpunt-card__image" style="background-image: url('assets/images/Standpunt Privacy.jpg');"></div>
+            <div class="jl-standpunt-card__overlay"></div>
+            <div class="jl-standpunt-card__content">
+              <h3 class="jl-standpunt-card__title">Privacy & Digitale Vrijheid</h3>
+              <p class="jl-standpunt-card__text">Absoluut recht op anonimiteit en encryptie. Nee tegen massamarking, CBDC's en digitale controle.</p>
+              <span class="jl-standpunt-card__link">Ontdek meer →</span>
+            </div>
+          </a>
+
+          <a href="standpunt-defensie.html" class="jl-standpunt-card jl-standpunt-card--link" id="defensie">
+            <div class="jl-standpunt-card__image" style="background-image: url('assets/images/Standpunt Defensie.jpg');"></div>
+            <div class="jl-standpunt-card__overlay"></div>
+            <div class="jl-standpunt-card__content">
+              <h3 class="jl-standpunt-card__title">Non-Interventie</h3>
+              <p class="jl-standpunt-card__text">Geen wereldpolitie. Vrijhandel met iedereen, militaire terughoudendheid, diplomatieke neutraliteit.</p>
+              <span class="jl-standpunt-card__link">Ontdek meer →</span>
+            </div>
+          </a>
+
+          <a href="standpunt-soevereiniteit.html" class="jl-standpunt-card jl-standpunt-card--link" id="lichamelijk">
+            <div class="jl-standpunt-card__image" style="background-image: url('assets/images/Standpunt Lichaam.jpg');"></div>
+            <div class="jl-standpunt-card__overlay"></div>
+            <div class="jl-standpunt-card__content">
+              <h3 class="jl-standpunt-card__title">Lichamelijke Soevereiniteit</h3>
+              <p class="jl-standpunt-card__text">De overheid stopt bij jouw huid. Volledige vrijheid over je lichaam: drugs, euthanasie, autonomie.</p>
+              <span class="jl-standpunt-card__link">Ontdek meer →</span>
+            </div>
+          </a>
+
+          <a href="standpunt-meningsuiting.html" class="jl-standpunt-card jl-standpunt-card--link" id="meningsuiting">
+            <div class="jl-standpunt-card__image" style="background-image: url('assets/images/Standpunt Meningsuiting.jpg');"></div>
+            <div class="jl-standpunt-card__overlay"></div>
+            <div class="jl-standpunt-card__content">
+              <h3 class="jl-standpunt-card__title">Vrijheid van Meningsuiting</h3>
+              <p class="jl-standpunt-card__text">Absolute vrijheid zonder censuur. Geen haatzaaiwetten, geen 'hoeders der waarheid', alleen vrije uitwisseling.</p>
+              <span class="jl-standpunt-card__link">Ontdek meer →</span>
+            </div>
+          </a>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA band -->
+    <section class="jl-cta-band">
+      <h2>Klaar voor echte vrijheid?</h2>
+      <p>Sluit je aan bij ons in de strijd voor onbeperkte persoonlijke en economische vrijheid.</p>
+      <a class="jl-btn jl-btn-primary jl-btn--spray" href="word-lid.html" style="margin-top: 2rem;">
+        <svg class="jl-btn-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        Word lid
+      </a>
+    </section>
   </main>
 
   <footer class="jl-footer">
@@ -129,7 +224,7 @@
   <div class="jl-cookie" role="dialog" aria-label="Cookie melding">
     <div class="jl-cookie-inner">
       <p>
-        Om de website optimaal te laten functioneren, gebruiken we cookies. Door op “Accepteren” te klikken, stem je in met het gebruik
+        Om de website optimaal te laten functioneren, gebruiken we cookies. Door op "Accepteren" te klikken, stem je in met het gebruik
         van cookies zoals beschreven in ons privacybeleid. Je kunt ook weigeren; sommige functies werken dan mogelijk beperkt.
       </p>
       <div class="jl-cookie-actions">
