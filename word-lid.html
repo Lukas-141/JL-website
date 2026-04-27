@@ -89,33 +89,55 @@
       color: var(--jl-text-muted);
     }
 
-    .jl-membership-card__cta {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.5rem;
-      margin-top: 2rem;
-      padding: 1rem 2rem;
-      background: #f9f610;
-      color: var(--jl-black);
-      border: none;
-      border-radius: 0.3rem;
-      font-family: var(--jl-font-ui);
-      font-size: 0.9rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      text-decoration: none;
-      cursor: pointer;
-      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-      position: relative;
-      overflow: hidden;
+    .jl-membership-card__action {
+      margin-top: 1.5rem;
     }
 
-    .jl-membership-card__cta:hover {
-      background: #fff844;
-      transform: scale(1.02);
-      box-shadow: 0 8px 20px rgba(249, 246, 16, 0.4);
+    .jl-membership-card__action .jl-btn {
+      font-family: var(--jl-font-hero);
+      letter-spacing: 0.06em;
+    }
+
+    .jl-membership-card__action .jl-btn--spray {
+      font-family: "Anton", var(--jl-font-hero);
+      font-size: clamp(1.25rem, 5vw, 2rem);
+      font-weight: 400;
+      padding: clamp(0.75rem, 2vw, 1.25rem) clamp(1.5rem, 4vw, 2.5rem);
+      background: var(--jl-yellow);
+      color: var(--jl-black);
+      border: 2px solid transparent;
+      border-radius: 0.3rem;
+      clip-path: none;
+      filter: none;
+      -webkit-filter: none;
+      box-shadow: none;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+      position: relative;
+      overflow: hidden;
+      line-height: 1;
+    }
+
+    .jl-membership-card__action .jl-btn--spray:hover {
+      background: var(--jl-white);
+      color: var(--jl-black);
+      border-color: var(--jl-black);
+      padding-left: clamp(2rem, 6vw, 4rem);
+    }
+
+    .jl-membership-card__action .jl-btn-icon {
+      width: 2rem;
+      height: 2rem;
+      position: absolute;
+      left: -2.5rem;
+      opacity: 0;
+      transition: all 0.3s ease;
+    }
+
+    .jl-membership-card__action .jl-btn--spray:hover .jl-btn-icon {
+      left: 1.25rem;
+      opacity: 1;
     }
 
     .jl-membership-card__terms {
@@ -205,7 +227,7 @@
         font-size: 2rem;
       }
 
-      .jl-membership-card__cta {
+      .jl-membership-card__action .jl-btn--spray {
         min-height: 44px;
       }
     }
@@ -255,17 +277,17 @@
       <div class="jl-intro-section">
         <h2>Kies jouw vrijheid</h2>
         <p>
-          De Jonge Libertariërs is meer dan een organisatie — het is een beweging voor volledige persoonlijke en economische vrijheid. Als lid krijg je toegang tot evenementen, commissies, en een netwerk van gelijkgestemde jongeren die echt durven dromen van verandering.
+          Sluit je aan bij de Jonge Libertariërs en bouw mee aan een vrijer Nederland.
         </p>
         <p>
           <strong>Standaard loopt lidmaatschap via automatische incasso.</strong> Wil je liever met Bitcoin betalen?
-          Gebruik dan de <a href="doneer.html#bitcoin-lid">Bitcoin-lidmaatschapsoptie</a> met vaste bedragen en een verplichte omschrijving.
+          Gebruik dan <a href="doneer.html#bitcoin-lid">de Bitcoin-optie</a> met vast bedrag en vaste memo.
         </p>
       </div>
 
       <div class="jl-info-banner">
         <h3>Hoe werkt het?</h3>
-        <p>Kies je lidmaatschapscategorie en rond de betaling af via Stripe of Bitcoin. Na betaling verwerken we je lidmaatschap en ontvang je een bevestiging per e-mail.</p>
+        <p>Kies je categorie, betaal direct, en je lidmaatschap wordt verwerkt.</p>
       </div>
 
       <div class="jl-membership-cards">
@@ -274,15 +296,18 @@
           <span class="jl-membership-card__badge">14 t/m 27 jaar</span>
           <h3 class="jl-membership-card__title">Jongeren</h3>
           <p class="jl-membership-card__description">
-            Focus op studenten en scholieren die willen strijden voor hun toekomst. Jouw leeftijd bepaalt je vrijheid — maak er wat van.
+            Voor leden van 14 t/m 27 jaar.
           </p>
           <div class="jl-membership-card__price">
             <span class="jl-membership-card__amount">€12</span>
             <span class="jl-membership-card__period">per jaar (€1/maand)</span>
           </div>
-          <a href="https://buy.stripe.com/14AbJ05UH6tWfO74uB8Ra00" class="jl-membership-card__cta">
-            Word lid
-          </a>
+          <div class="jl-membership-card__action">
+            <a href="https://buy.stripe.com/14AbJ05UH6tWfO74uB8Ra00" class="jl-btn jl-btn-primary jl-btn--spray">
+              <svg class="jl-btn-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
+              Word lid
+            </a>
+          </div>
           <div class="jl-membership-card__terms">
             <a href="assets/Huishoudelijk-Reglement-Jonge-Libertariers-2025.pdf" target="_blank">Bekijk voorwaarden</a>
           </div>
@@ -293,15 +318,18 @@
           <span class="jl-membership-card__badge">28 en 29 jaar</span>
           <h3 class="jl-membership-card__title">Young Professionals</h3>
           <p class="jl-membership-card__description">
-            Voor degenen die al aan hun carrière bouwen en libertaire waarden willen steunen. Bouw jouw toekomst op libertaire grondslag.
+            Voor leden van 28 en 29 jaar.
           </p>
           <div class="jl-membership-card__price">
             <span class="jl-membership-card__amount">€24</span>
             <span class="jl-membership-card__period">per jaar (€2/maand)</span>
           </div>
-          <a href="https://buy.stripe.com/fZubJ082Pf0s8lF0el8Ra03" class="jl-membership-card__cta">
-            Word lid
-          </a>
+          <div class="jl-membership-card__action">
+            <a href="https://buy.stripe.com/fZubJ082Pf0s8lF0el8Ra03" class="jl-btn jl-btn-primary jl-btn--spray">
+              <svg class="jl-btn-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
+              Word lid
+            </a>
+          </div>
           <div class="jl-membership-card__terms">
             <a href="assets/Huishoudelijk-Reglement-Jonge-Libertariers-2025.pdf" target="_blank">Bekijk voorwaarden</a>
           </div>
@@ -312,15 +340,18 @@
           <span class="jl-membership-card__badge">30 jaar en ouder</span>
           <h3 class="jl-membership-card__title">Senioren</h3>
           <p class="jl-membership-card__description">
-            Voor de laatstejaars binnen de jongerenorganisatie. Steun de volgende generatie in hun strijd voor vrijheid.
+            Voor leden van 30 jaar en ouder.
           </p>
           <div class="jl-membership-card__price">
             <span class="jl-membership-card__amount">€24</span>
             <span class="jl-membership-card__period">per jaar (€2/maand)</span>
           </div>
-          <a href="https://buy.stripe.com/28EfZg0Ang4wfO7f9f8Ra05" class="jl-membership-card__cta">
-            Word lid
-          </a>
+          <div class="jl-membership-card__action">
+            <a href="https://buy.stripe.com/28EfZg0Ang4wfO7f9f8Ra05" class="jl-btn jl-btn-primary jl-btn--spray">
+              <svg class="jl-btn-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
+              Word lid
+            </a>
+          </div>
           <div class="jl-membership-card__terms">
             <a href="assets/Huishoudelijk-Reglement-Jonge-Libertariers-2025.pdf" target="_blank">Bekijk voorwaarden</a>
           </div>
@@ -350,6 +381,7 @@
         <ul>
           <li><a href="word-lid.html">Word lid</a></li>
           <li><a href="steun-onze-missie.html">Steun onze missie</a></li>
+          <li><a href="doneer.html">Doneer</a></li>
         </ul>
       </div>
       <div>
