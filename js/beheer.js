@@ -234,6 +234,25 @@ class BeheerSystem {
     return [];
   }
 
+  canonicalizeValue(value) {
+    if (Array.isArray(value)) {
+      return value.map((item) => this.canonicalizeValue(item));
+    }
+    if (value && typeof value === 'object') {
+      return Object.keys(value)
+        .sort()
+        .reduce((acc, key) => {
+          acc[key] = this.canonicalizeValue(value[key]);
+          return acc;
+        }, {});
+    }
+    return value;
+  }
+
+  areDatasetsEqual(left, right) {
+    return JSON.stringify(this.canonicalizeValue(left)) === JSON.stringify(this.canonicalizeValue(right));
+  }
+
   resolveBackupData(rawData) {
     const container = rawData && typeof rawData === 'object'
       ? (rawData.data && typeof rawData.data === 'object' ? rawData.data : rawData)
@@ -720,6 +739,14 @@ class BeheerSystem {
       } else {
         const meta = await metaRes.json();
         sha = meta.sha;
+        if (meta && meta.content) {
+          const remoteData = this.normalizeDataset(JSON.parse(this.base64ToUtf8(meta.content)));
+          const localData = this.getStoredList(key);
+          if (this.areDatasetsEqual(localData, remoteData)) {
+            this.setGitHubSyncStatus(`GitHub is al up-to-date: ${fileName}`, 'ok');
+            return { ok: true, skipped: true, fileName };
+          }
+        }
       }
 
       const data = this.getStoredList(key);
@@ -749,8 +776,9 @@ class BeheerSystem {
       this.setGitHubSyncStatus(`Gesynchroniseerd naar GitHub: ${fileName}`, 'ok');
       this.setPreferLocalData(false);
       return { ok: true, skipped: false, fileName };
-    } catch (_) {
-      this.setGitHubSyncStatus(`Sync mislukt voor ${fileName}.`, 'error');
+    } catch (error) {
+      const message = error instanceof Error && error.message ? ` (${error.message})` : '';
+      this.setGitHubSyncStatus(`Sync mislukt voor ${fileName}.${message}`, 'error');
       if (this.requireGitHubSync) {
         await this.reloadDatasetFromGitHub(key);
       }
@@ -759,11 +787,11 @@ class BeheerSystem {
   }
 
   async syncAllDatasetsToGitHub(reason) {
-    return Promise.all([
-      this.syncDatasetToGitHub(this.eventsKey, reason),
-      this.syncDatasetToGitHub(this.standpuntenKey, reason),
-      this.syncDatasetToGitHub(this.bestuurKey, reason)
-    ]);
+    const results = [];
+    results.push(await this.syncDatasetToGitHub(this.eventsKey, reason));
+    results.push(await this.syncDatasetToGitHub(this.standpuntenKey, reason));
+    results.push(await this.syncDatasetToGitHub(this.bestuurKey, reason));
+    return results;
   }
 
   escapeHtml(value) {
