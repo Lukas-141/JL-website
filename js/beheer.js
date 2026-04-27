@@ -2,7 +2,10 @@
 
 class BeheerSystem {
   constructor() {
-    this.allowedUsers = new Set(['bestuur', 'admin']);
+    this.users = {
+      'bestuur': 'JL2026!Vrijheid',
+      'admin': 'admin123'
+    };
     this.storageKey = 'jl-beheer-session';
     this.eventsKey = 'jl-events';
     this.standpuntenKey = 'jl-standpunten';
@@ -118,14 +121,16 @@ class BeheerSystem {
 
   handleLogin() {
     const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
     const errorEl = document.getElementById('loginError');
 
-    if (this.allowedUsers.has(username)) {
+    if (this.users[username] === password) {
       localStorage.setItem(this.storageKey, JSON.stringify({ username }));
       this.showDashboard(username);
     } else {
-      errorEl.textContent = 'Onbekende gebruikersnaam';
+      errorEl.textContent = 'Gebruikersnaam of wachtwoord onjuist';
       errorEl.style.display = 'block';
+      document.getElementById('password').value = '';
     }
   }
 
