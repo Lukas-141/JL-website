@@ -1,10 +1,24 @@
 async function loadEvents() {
   try {
-    let events = JSON.parse(localStorage.getItem('jl-events') || '[]');
-
-    if (events.length === 0) {
-      const response = await fetch('events.json');
-      events = await response.json();
+    let events = [];
+    const preferLocal = localStorage.getItem('jl-prefer-local-data') === '1';
+    if (preferLocal) {
+      events = JSON.parse(localStorage.getItem('jl-events') || '[]');
+    }
+    try {
+      if (!preferLocal || events.length === 0) {
+        const response = await fetch('events.json', { cache: 'no-store' });
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        const data = await response.json();
+        if (Array.isArray(data)) {
+          events = data;
+          localStorage.setItem('jl-events', JSON.stringify(data));
+        }
+      }
+    } catch (_) {
+      if (events.length === 0) {
+        events = JSON.parse(localStorage.getItem('jl-events') || '[]');
+      }
     }
 
     const container = document.querySelector('[data-all-events]');

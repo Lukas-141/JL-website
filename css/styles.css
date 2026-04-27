@@ -2598,6 +2598,138 @@ section[id] {
 }
 
 /* ——— Dynamic event widget ——— */
+
+/* ===== Mobile / responsive fixes added to address reported issues ===== */
+
+/* Header: stack nav and CTAs on small screens */
+@media (max-width: 767px) {
+  /* hide nav by default; show when JS toggles .is-open */
+  .jl-header-nav-wrap {
+    display: none;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 100%;
+    flex-direction: column;
+    align-items: stretch;
+    padding: 0.75rem 1.25rem 1.25rem;
+    background: var(--jl-black);
+    border-bottom: 3px solid var(--jl-yellow);
+    box-shadow: 0 16px 32px rgba(0, 0, 0, 0.5);
+    z-index: 105;
+  }
+
+  .jl-header-nav-wrap.is-open {
+    display: flex;
+  }
+
+  .jl-nav {
+    position: static;
+    transform: none;
+    left: auto;
+    top: auto;
+    order: 1;
+    width: 100%;
+  }
+
+  .jl-header-cta {
+    width: 100%;
+    margin: 0.5rem 0 0;
+    display: inline-flex;
+    order: 3;
+    justify-content: center;
+  }
+
+  /* ensure CTA buttons appear under the nav */
+  .jl-header-nav-wrap .jl-nav + .jl-header-cta { order: 2; }
+
+  /* reduce nav link padding for narrow screens */
+  .jl-nav > a,
+  .jl-nav-item > button {
+    padding: 0.45rem 0.5rem;
+    font-size: 0.9rem;
+  }
+}
+
+/* Bestuur page: override inline 4-column grid to responsive columns when small */
+/* Targets any element with inline style that includes grid-template-columns to avoid HTML edits */
+@media (max-width: 1024px) {
+  section > div > div[style*="grid-template-columns"] {
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)) !important;
+    max-width: 1200px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+
+  /* shrink avatar images on narrow screens */
+  section > div > div[style*="grid-template-columns"] img {
+    width: min(180px, 40vw) !important;
+    height: auto !important;
+    display: block !important;
+    margin: 0 auto 1rem !important;
+  }
+
+  /* reduce card padding a bit */
+  section > div > div[style*="grid-template-columns"] > div {
+    padding: 1.5rem 1rem !important;
+  }
+}
+
+/* Standpunten / Commissies images and cards: prevent overflow and reduce heights on mobile */
+@media (max-width: 767px) {
+  .jl-standpunt-card,
+  .jl-standpunt-card--featured {
+    min-height: 220px !important;
+  }
+
+  .jl-standpunt-card__image {
+    background-position: center !important;
+    background-size: cover !important;
+  }
+
+  .jl-standpunten-top3-grid,
+  .jl-standpunten-meer-grid,
+  .jl-top3-grid {
+    gap: 1rem;
+  }
+}
+
+/* Hero text overflow: allow wrapping and reduce large whitespace on mobile */
+@media (max-width: 767px) {
+  .jl-hero--home .jl-hero-lead {
+    white-space: normal !important;
+    padding-right: 0.75rem !important;
+  }
+
+  .jl-hero-headline,
+  .jl-hero-headline .jl-h1-line {
+    display: block !important;
+    padding: 0 0.5rem !important;
+    overflow-wrap: break-word !important;
+    word-break: break-word !important;
+  }
+
+  /* reduce hero button size a touch */
+  .jl-hero--home .jl-hero-ctas .jl-btn--spray {
+    font-size: clamp(1rem, 4.5vw, 1.5rem) !important;
+    padding: 0.6rem 1rem !important;
+  }
+}
+
+/* Small cleanups to prevent accidental horizontal scroll */
+@media (max-width: 767px) {
+  html, body {
+    overflow-x: hidden;
+  }
+
+  .jl-header-inner {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+}
+
+/* End responsive fixes */
+
 .jl-next-event-card {
   background: var(--jl-white);
   border-radius: 0.75rem;

@@ -3,13 +3,24 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Steun onze missie — Jonge Libertariërs</title>
-  <meta name="description" content="Steun de Jonge Libertariërs.">
+  <title>Standpunt — Jonge Libertariërs</title>
+  <meta name="description" content="Standpunt van de Jonge Libertariërs.">
   <link rel="icon" href="assets/images/JL-Nieuwe-Logo-scaled.png" type="image/png">
   <link rel="apple-touch-icon" href="assets/images/JL-Nieuwe-Logo-scaled.png">
   <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
+  <svg class="jl-defs" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" width="0" height="0">
+    <defs>
+      <filter id="jl-cta-chipped" x="-10%" y="-10%" width="120%" height="120%" color-interpolation-filters="sRGB">
+        <feTurbulence type="fractalNoise" baseFrequency="0.11" numOctaves="3" seed="83" result="n1"/>
+        <feDisplacementMap in="SourceGraphic" in2="n1" scale="1.35" xChannelSelector="R" yChannelSelector="G" result="d1"/>
+        <feTurbulence type="fractalNoise" baseFrequency="0.045" numOctaves="2" seed="17" result="n2"/>
+        <feDisplacementMap in="d1" in2="n2" scale="0.65" xChannelSelector="R" yChannelSelector="G"/>
+      </filter>
+    </defs>
+  </svg>
+
   <header class="jl-header">
     <div class="jl-header-inner">
       <a class="jl-logo" href="index.html">
@@ -21,7 +32,7 @@
       <div class="jl-header-nav-wrap">
         <nav class="jl-nav" aria-label="Hoofdmenu">
           <a href="index.html">Home</a>
-          <a href="standpunten.html">Standpunten</a>
+          <a href="standpunten.html" class="is-active">Standpunten</a>
           <a href="evenementen.html">Evenementen</a>
           <div class="jl-nav-item">
             <button type="button">Organisatie</button>
@@ -41,68 +52,30 @@
     </div>
   </header>
 
-  <div class="jl-page-header">
-    <div class="jl-page-header-inner">
-      <h1>Steun onze missie</h1>
-      <p class="jl-page-header__subtitle">Help ons de beweging groter te maken</p>
-    </div>
-  </div>
-
-  <main>
-    <section class="jl-page-main">
-      <div class="jl-section-inner jl-prose jl-prose--wide">
-        <h2>Waarom steun?</h2>
-        <p>
-          De Jonge Libertariërs is een onafhankelijke organisatie zonder overheidssteun of corporatisme.
-          We financieren onszelf door leden en donateurs die geloven in onze missie.
-          Jouw steun helpt ons om:
-        </p>
-        <ul>
-          <li>Meer jongeren te bereiken met onze boodschap</li>
-          <li>Evenementen en bijeenkomsten te organiseren</li>
-          <li>Professioneel campagnes te voeren</li>
-          <li>Onze organisatie draaiende te houden</li>
-        </ul>
+  <main data-standpunt-detail>
+    <section class="jl-standpunt-detail-hero" data-standpunt-hero>
+      <div class="jl-standpunt-detail-hero__overlay"></div>
+      <div class="jl-standpunt-detail-hero__inner">
+        <a href="standpunten.html" class="jl-standpunt-detail-hero__back">← Terug naar standpunten</a>
+        <p class="jl-standpunt-detail-hero__kicker" data-standpunt-kicker>Standpunt</p>
+        <h1 class="jl-standpunt-detail-hero__title" data-standpunt-title></h1>
+        <p class="jl-standpunt-detail-hero__lead" data-standpunt-lead></p>
       </div>
     </section>
 
-    <section class="jl-hero jl-hero--home" style="min-height: auto; padding: 3rem 1.25rem; background: linear-gradient(135deg, var(--jl-black-soft) 0%, var(--jl-gray) 100%);">
-      <div class="jl-hero-main" style="min-height: auto; padding: 0;">
-        <div class="jl-hero-ctas">
-          <a class="jl-btn jl-btn-primary jl-btn--spray" href="https://buy.stripe.com/5kQ4gy5UHbOggSb3qx8Ra06">
-            <span class="jl-btn-icon" style="font-size: 2rem; font-weight: bold; margin-top: -0.3rem; display: block;">€</span>
-            Donatie doen
-          </a>
-          <a class="jl-btn jl-btn-primary jl-btn--spray jl-btn--spray-b" href="word-lid.html">
-            <svg class="jl-btn-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
-            Word lid
-          </a>
-        </div>
+    <section class="jl-section">
+      <div class="jl-section-inner">
+        <div class="jl-prose jl-prose--wide" data-standpunt-body></div>
       </div>
     </section>
 
-    <section class="jl-page-main">
-      <div class="jl-section-inner jl-prose jl-prose--wide">
-        <h2>Hoe kun je bijdragen?</h2>
-
-        <h3>Word lid</h3>
-        <p>
-          Het beste manier is <a href="word-lid.html">lid te worden</a>. Je krijgt toegang tot alles wat we doen
-          en hebt inspraak in onze richting via vergaderingen en stemmen.
-        </p>
-
-        <h3>Doneer</h3>
-        <p>
-          De Jonge Libertariërs zijn een ANBI (Algemeen Nut Beogende Instelling),
-          wat betekent dat donaties fiscaal aftrekbaar zijn.
-        </p>
-
-        <h3>Vrijwilligers werk</h3>
-        <p>
-          Je hoeft niet per se geld te geven — je tijd is net zo waardevol. Help mee met <a href="commissies.html">een van onze commissies</a>
-          en draag direct bij aan onze missie.
-        </p>
-      </div>
+    <section class="jl-cta-band">
+      <h2 data-standpunt-cta-title></h2>
+      <p data-standpunt-cta-text></p>
+      <a class="jl-btn jl-btn-primary jl-btn--spray" href="word-lid.html" data-standpunt-cta-btn>
+        <svg class="jl-btn-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        <span data-standpunt-cta-btn-label>Word lid van de JL!</span>
+      </a>
     </section>
   </main>
 
@@ -111,7 +84,6 @@
       <div>
         <h3>Organisatie</h3>
         <ul>
-          <li><a href="over-ons.html">Dit is de JL</a></li>
           <li><a href="bestuur.html">Bestuur</a></li>
           <li><a href="commissies.html">Commissies</a></li>
           <li><a href="statuten-en-hr.html">Statuten &amp; HR</a></li>
@@ -162,5 +134,6 @@
   </div>
 
   <script src="js/main.js"></script>
+  <script src="js/content-loader.js"></script>
 </body>
 </html>

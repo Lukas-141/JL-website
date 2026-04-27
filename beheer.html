@@ -441,6 +441,7 @@
         <li><a class="nav-link active" data-tab="evenementen">📅 Evenementen</a></li>
         <li><a class="nav-link" data-tab="content">📝 Content</a></li>
         <li><a class="nav-link" data-tab="team">👥 Team</a></li>
+        <li><a class="nav-link" data-tab="sync">🔄 Deploy & Back-ups</a></li>
       </ul>
 
       <button id="logoutBtn" class="beheer-logout">🚪 Uitloggen</button>
@@ -520,15 +521,229 @@
       <div id="tab-content" class="beheer-panel">
         <h2>📝 Website Content</h2>
         <div class="info-box">
-          Coming soon: Content beheer voor homepage, standpunten, en pagina's
+          Beheer hier alle standpunten. Je kiest zelf de volgorde en welke 3 als kernpunten bovenaan komen.
         </div>
+
+        <div class="beheer-section">
+          <h3>Standpunt toevoegen / bewerken</h3>
+          <form id="standpuntForm">
+            <div class="beheer-form-group">
+              <label for="standpuntTitle">Titel *</label>
+              <input type="text" id="standpuntTitle" required>
+            </div>
+
+            <div class="beheer-form-group">
+              <label for="standpuntSummary">Korte tekst *</label>
+              <textarea id="standpuntSummary" required></textarea>
+            </div>
+
+            <div class="beheer-form-row">
+              <div class="beheer-form-group">
+                <label for="standpuntSlug">Pagina slug *</label>
+                <input type="text" id="standpuntSlug" placeholder="bijv. economie" required>
+              </div>
+              <div class="beheer-form-group">
+                <label for="standpuntImage">Afbeelding</label>
+                <input type="text" id="standpuntImage" placeholder="bijv. Standpunt Staat.jpg">
+              </div>
+            </div>
+
+            <div class="beheer-form-group">
+              <label for="standpuntDetailKicker">Detailpagina kicker</label>
+              <input type="text" id="standpuntDetailKicker" placeholder="bijv. Kernpunt 1 van 7">
+            </div>
+
+            <div class="beheer-form-group">
+              <label for="standpuntDetailTitle">Detailpagina titel</label>
+              <input type="text" id="standpuntDetailTitle" placeholder="bijv. Economische Vrijheid">
+            </div>
+
+            <div class="beheer-form-group">
+              <label for="standpuntDetailLead">Detailpagina intro</label>
+              <textarea id="standpuntDetailLead"></textarea>
+            </div>
+
+            <div class="beheer-form-group">
+              <label for="standpuntDetailBody">Detailpagina inhoud (HTML)</label>
+              <textarea id="standpuntDetailBody" style="min-height:260px;"></textarea>
+            </div>
+
+            <div class="beheer-form-row">
+              <div class="beheer-form-group">
+                <label for="standpuntPageTitle">Browsertitel</label>
+                <input type="text" id="standpuntPageTitle" placeholder="bijv. Economische Vrijheid — Jonge Libertariërs">
+              </div>
+              <div class="beheer-form-group">
+                <label for="standpuntMetaDescription">Meta description</label>
+                <input type="text" id="standpuntMetaDescription" placeholder="Korte SEO-omschrijving">
+              </div>
+            </div>
+
+            <div class="beheer-form-row">
+              <div class="beheer-form-group">
+                <label for="standpuntCtaTitle">CTA titel</label>
+                <input type="text" id="standpuntCtaTitle" placeholder="bijv. Klaar voor echte vrijheid?">
+              </div>
+              <div class="beheer-form-group">
+                <label for="standpuntCtaText">CTA tekst</label>
+                <input type="text" id="standpuntCtaText" placeholder="bijv. Sluit je aan bij de JL">
+              </div>
+            </div>
+
+            <div class="beheer-form-row">
+              <div class="beheer-form-group">
+                <label for="standpuntCtaButtonText">CTA knop tekst</label>
+                <input type="text" id="standpuntCtaButtonText" placeholder="bijv. Word lid van de JL!">
+              </div>
+              <div class="beheer-form-group">
+                <label for="standpuntCtaButtonLink">CTA knop link</label>
+                <input type="text" id="standpuntCtaButtonLink" placeholder="bijv. word-lid.html">
+              </div>
+            </div>
+
+            <div class="beheer-form-group">
+              <label style="display:flex;align-items:center;gap:0.5rem;font-weight:600;">
+                <input type="checkbox" id="standpuntFeatured" style="width:auto;">
+                In kernpunten (eerste 3)
+              </label>
+            </div>
+
+            <button type="submit" class="beheer-btn">➕ Standpunt toevoegen</button>
+          </form>
+        </div>
+
+        <div class="beheer-section">
+          <h3>Alle standpunten</h3>
+          <div id="standpuntenList" class="beheer-list"></div>
+        </div>
+
       </div>
 
       <!-- TAB: TEAM -->
       <div id="tab-team" class="beheer-panel">
-        <h2>👥 Team</h2>
+        <h2>👥 Bestuur</h2>
         <div class="info-box">
-          Coming soon: Bestuur en commissie leden beheren
+          Bewerk bestuursleden, voeg nieuwe toe, verwijder of wijzig volgorde inclusief foto.
+        </div>
+
+        <div class="beheer-section">
+          <h3>Bestuurslid toevoegen / bewerken</h3>
+          <form id="bestuurForm">
+            <div class="beheer-form-row">
+              <div class="beheer-form-group">
+                <label for="bestuurNaam">Naam *</label>
+                <input type="text" id="bestuurNaam" required>
+              </div>
+              <div class="beheer-form-group">
+                <label for="bestuurRol">Rol *</label>
+                <input type="text" id="bestuurRol" required>
+              </div>
+            </div>
+
+            <div class="beheer-form-group">
+              <label for="bestuurBio">Beschrijving *</label>
+              <textarea id="bestuurBio" required></textarea>
+            </div>
+
+            <div class="beheer-form-row">
+              <div class="beheer-form-group">
+                <label for="bestuurEmailPrimary">Primaire e-mail *</label>
+                <input type="email" id="bestuurEmailPrimary" required>
+              </div>
+              <div class="beheer-form-group">
+                <label for="bestuurEmailSecondary">Secundaire e-mail</label>
+                <input type="email" id="bestuurEmailSecondary" placeholder="bijv. bestuur@jongelibertariers.nl">
+              </div>
+            </div>
+
+            <div class="beheer-form-group">
+              <label for="bestuurImage">Afbeelding</label>
+              <input type="text" id="bestuurImage" placeholder="bijv. JL-Lukas-rond.png">
+            </div>
+
+            <button type="submit" class="beheer-btn">➕ Bestuurslid toevoegen</button>
+          </form>
+        </div>
+
+        <div class="beheer-section">
+          <h3>Bestuursoverzicht</h3>
+          <div id="bestuurList" class="beheer-list"></div>
+        </div>
+      </div>
+
+      <!-- TAB: DEPLOY & BACK-UPS -->
+      <div id="tab-sync" class="beheer-panel">
+        <h2>🔄 Deploy & Back-ups</h2>
+
+        <div class="beheer-section">
+          <h3>GitHub Deploy Sync</h3>
+          <div class="info-box">
+            Sla wijzigingen direct op in GitHub (events.json, standpunten.json, bestuur.json), zodat deploy dit automatisch meeneemt.
+          </div>
+          <div class="beheer-form-row">
+            <div class="beheer-form-group">
+              <label for="ghOwner">GitHub owner</label>
+              <input type="text" id="ghOwner" placeholder="bijv. Mikbit-VS">
+            </div>
+            <div class="beheer-form-group">
+              <label for="ghRepo">Repository</label>
+              <input type="text" id="ghRepo" placeholder="bijv. JL-website">
+            </div>
+          </div>
+          <div class="beheer-form-row">
+            <div class="beheer-form-group">
+              <label for="ghBranch">Branch</label>
+              <input type="text" id="ghBranch" placeholder="main">
+            </div>
+            <div class="beheer-form-group">
+              <label for="ghToken">GitHub token (repo inhoud wijzigen)</label>
+              <input type="password" id="ghToken" placeholder="ghp_...">
+            </div>
+          </div>
+          <div class="beheer-form-group">
+            <label style="display:flex;align-items:center;gap:0.5rem;font-weight:600;">
+              <input type="checkbox" id="ghRememberToken" style="width:auto;">
+              Token onthouden op dit apparaat
+            </label>
+          </div>
+          <div class="beheer-form-row">
+            <div class="beheer-form-group">
+              <button type="button" id="ghSaveConfigBtn" class="beheer-btn">💾 Config opslaan</button>
+            </div>
+            <div class="beheer-form-group">
+              <button type="button" id="ghTestBtn" class="beheer-btn">🔍 Verbinding testen</button>
+            </div>
+          </div>
+          <p id="ghSyncStatus" style="margin:0.5rem 0 0;color:var(--jl-text-muted);font-size:0.9rem;">GitHub sync nog niet geconfigureerd.</p>
+        </div>
+
+        <div class="beheer-section">
+          <h3>Back-up & Herstel</h3>
+          <div class="info-box">
+            Maak een back-up, exporteer data als JSON en herstel een eerdere versie.
+          </div>
+
+          <div class="beheer-form-row">
+            <div class="beheer-form-group">
+              <button type="button" id="backupNowBtn" class="beheer-btn">💾 Nu back-up maken</button>
+            </div>
+            <div class="beheer-form-group">
+              <button type="button" id="exportDataBtn" class="beheer-btn">📤 Exporteer data (.json)</button>
+            </div>
+          </div>
+
+          <div class="beheer-form-row">
+            <div class="beheer-form-group">
+              <button type="button" id="importDataBtn" class="beheer-btn">📥 Importeer back-up</button>
+              <input type="file" id="importDataInput" accept=".json,application/json" style="display:none;">
+            </div>
+            <div class="beheer-form-group">
+              <label for="backupRestoreSelect">Herstelpunt</label>
+              <select id="backupRestoreSelect"></select>
+            </div>
+          </div>
+
+          <button type="button" id="restoreBackupBtn" class="beheer-btn beheer-btn-delete">↩️ Herstel geselecteerde back-up</button>
         </div>
       </div>
     </div>

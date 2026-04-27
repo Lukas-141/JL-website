@@ -1,0 +1,42 @@
+[
+  {
+    "id": 1,
+    "name": "Lukas Brokke",
+    "role": "Voorzitter",
+    "bio": "Leidt vergaderingen, vertegenwoordigt de JL naar buiten en coördineert het bestuur. Verantwoordelijk voor overkoepelende strategie.",
+    "emailPrimary": "voorzitter@jongelibertariers.nl",
+    "emailSecondary": "bestuur@jongelibertariers.nl",
+    "image": "JL-Lukas-rond.png",
+    "order": 1
+  },
+  {
+    "id": 2,
+    "name": "Niek Warnas",
+    "role": "Secretaris",
+    "bio": "Beheert notulen, coördineert interne communicatie en administratie. Zorgt voor goede organisatie en documentatie.",
+    "emailPrimary": "secretaris@jongelibertariers.nl",
+    "emailSecondary": "bestuur@jongelibertariers.nl",
+    "image": "JL-Niek-rond.png",
+    "order": 2
+  },
+  {
+    "id": 3,
+    "name": "Mathijs Heineman",
+    "role": "Penningmeester",
+    "bio": "Beheert de financiën, zorgt voor transparantie en rapporteert aan leden. Verantwoordelijk voor budgettering en fondsenwerving.",
+    "emailPrimary": "penningmeester@jongelibertariers.nl",
+    "emailSecondary": "bestuur@jongelibertariers.nl",
+    "image": "JL-Mathijs-rond.png",
+    "order": 3
+  },
+  {
+    "id": 4,
+    "name": "Aaron Winters",
+    "role": "Bestuurslid Media",
+    "bio": "Verantwoordelijk voor social media, content en digitale communicatie. Zorgt ervoor dat de JL-boodschap aankomt bij jongeren.",
+    "emailPrimary": "media@jongelibertariers.nl",
+    "emailSecondary": "bestuur@jongelibertariers.nl",
+    "image": "JL-Aaron-rond.png",
+    "order": 4
+  }
+]
