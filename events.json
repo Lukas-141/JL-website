@@ -1,13 +1,13 @@
 [
   {
-    "id": 1,
-    "title": "JL Borrel Mei",
-    "date": "2026-05-15",
-    "time": "19:00",
-    "endTime": "22:00",
+    "id": 1776457454766,
+    "title": "JL Borrel mei 2026",
+    "date": "2026-05-16",
+    "time": "14:30",
+    "endTime": "18:00",
     "location": "Utrecht",
-    "organizer": "Activiteitencommissie",
-    "description": "Gezellige borrel voor alle JL leden",
+    "organizer": "Bestuur JL",
+    "description": "Kom samen met andere leden van de JL voor een gezellige borrel in Utrecht. Leuk voor ontmoeting, netwerken en lekker borrelen!",
     "image": "Terras.jpeg"
   }
 ]
