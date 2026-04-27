@@ -67,6 +67,68 @@
       font-size: 0.95rem;
       line-height: 1.6;
     }
+
+    .jl-btc-membership {
+      margin-top: 2.5rem;
+      padding: 1.5rem;
+      border: 2px solid var(--jl-black);
+      border-radius: 0.5rem;
+      background: linear-gradient(135deg, rgba(245, 230, 0, 0.1) 0%, rgba(0, 0, 0, 0.02) 100%);
+    }
+
+    .jl-btc-membership h2 {
+      margin: 0 0 0.75rem;
+      font-family: var(--jl-font-hero);
+      text-transform: uppercase;
+      letter-spacing: -0.01em;
+      color: var(--jl-black);
+    }
+
+    .jl-btc-membership-grid {
+      margin-top: 1rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
+      gap: 1rem;
+    }
+
+    .jl-btc-membership-tier {
+      background: var(--jl-white);
+      border: 1px solid #ddd;
+      border-radius: 0.45rem;
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.7rem;
+    }
+
+    .jl-btc-membership-tier h3 {
+      margin: 0;
+      font-family: var(--jl-font-ui);
+      font-size: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--jl-black);
+    }
+
+    .jl-btc-membership-tier p {
+      margin: 0;
+      font-size: 0.92rem;
+      color: var(--jl-text-muted);
+      line-height: 1.6;
+    }
+
+    .jl-btc-membership-tier code {
+      display: block;
+      margin-top: 0.3rem;
+      padding: 0.45rem 0.5rem;
+      border-radius: 0.25rem;
+      background: #f4f4f4;
+      border: 1px solid #ddd;
+      color: var(--jl-black);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 0.8rem;
+      word-break: break-word;
+    }
   </style>
 </head>
 <body>
@@ -141,6 +203,53 @@
         <div class="jl-donate-note">
           De Jonge Libertariers is ANBI. Donaties kunnen fiscaal aftrekbaar zijn.
           Bekijk <a href="steun-onze-missie.html">Steun onze missie</a> voor meer context over waar je bijdrage naartoe gaat.
+        </div>
+
+        <div id="bitcoin-lid" class="jl-btc-membership">
+          <h2>Word lid met Bitcoin</h2>
+          <p>
+            Wil je lid worden via Bitcoin? Gebruik dan het juiste bedrag en zet deze omschrijving in je betaling
+            (pas naam en e-mail aan naar je eigen gegevens).
+          </p>
+
+          <div class="jl-btc-membership-grid">
+            <article class="jl-btc-membership-tier">
+              <h3>Jongeren (14 t/m 27)</h3>
+              <p>Bedrag: <strong>$12 per jaar</strong></p>
+              <p>Omschrijving:
+                <code>JL-LID | Jongeren | Naam | email@adres.nl</code>
+              </p>
+              <a class="jl-btn jl-btn-primary jl-btn--spray" href="https://pay.blink.sv/jongelibertariers?amount=12&memo=JL-LID%20%7C%20Jongeren%20%7C%20Naam%20%7C%20email%40adres.nl&display=USD" target="_blank" rel="noopener noreferrer">
+                Start jongeren-lidmaatschap
+              </a>
+            </article>
+
+            <article class="jl-btc-membership-tier">
+              <h3>Young Professionals (28/29)</h3>
+              <p>Bedrag: <strong>$24 per jaar</strong></p>
+              <p>Omschrijving:
+                <code>JL-LID | Young Professionals | Naam | email@adres.nl</code>
+              </p>
+              <a class="jl-btn jl-btn-primary jl-btn--spray" href="https://pay.blink.sv/jongelibertariers?amount=24&memo=JL-LID%20%7C%20Young%20Professionals%20%7C%20Naam%20%7C%20email%40adres.nl&display=USD" target="_blank" rel="noopener noreferrer">
+                Start young professionals-lidmaatschap
+              </a>
+            </article>
+
+            <article class="jl-btc-membership-tier">
+              <h3>Senioren (30+)</h3>
+              <p>Bedrag: <strong>$24 per jaar</strong></p>
+              <p>Omschrijving:
+                <code>JL-LID | Senioren | Naam | email@adres.nl</code>
+              </p>
+              <a class="jl-btn jl-btn-primary jl-btn--spray" href="https://pay.blink.sv/jongelibertariers?amount=24&memo=JL-LID%20%7C%20Senioren%20%7C%20Naam%20%7C%20email%40adres.nl&display=USD" target="_blank" rel="noopener noreferrer">
+                Start senioren-lidmaatschap
+              </a>
+            </article>
+          </div>
+
+          <p class="jl-donate-card__meta">
+            Belangrijk: laat in de omschrijving je echte naam en e-mailadres staan, anders kunnen we je lidmaatschap niet goed koppelen.
+          </p>
         </div>
       </div>
     </section>
