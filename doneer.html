@@ -3,17 +3,77 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Steun onze missie — Jonge Libertariërs</title>
-  <meta name="description" content="Steun de Jonge Libertariërs.">
+  <title>Doneer — Jonge Libertariers</title>
+  <meta name="description" content="Steun de Jonge Libertariers met een bankdonatie of via Bitcoin.">
   <link rel="icon" href="assets/images/JL-Nieuwe-Logo-scaled.png" type="image/png">
   <link rel="apple-touch-icon" href="assets/images/JL-Nieuwe-Logo-scaled.png">
   <link rel="stylesheet" href="css/styles.css">
+  <style>
+    .jl-donate-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    .jl-donate-card {
+      background: var(--jl-white);
+      border: 2px solid var(--jl-black);
+      border-radius: 0.5rem;
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    }
+
+    .jl-donate-card h2 {
+      margin: 0;
+      font-family: var(--jl-font-hero);
+      font-size: 1.7rem;
+      text-transform: uppercase;
+      letter-spacing: -0.01em;
+      color: var(--jl-black);
+    }
+
+    .jl-donate-card p {
+      margin: 0;
+      color: var(--jl-text-muted);
+      line-height: 1.65;
+      font-size: 1rem;
+    }
+
+    .jl-donate-card__meta {
+      margin-top: auto;
+      font-size: 0.9rem;
+      color: var(--jl-text-muted);
+    }
+
+    .jl-donate-link {
+      font-family: var(--jl-font-ui);
+      font-size: 0.85rem;
+      word-break: break-all;
+      color: var(--jl-black);
+      text-decoration: underline;
+    }
+
+    .jl-donate-note {
+      margin-top: 2rem;
+      background: rgba(245, 230, 0, 0.12);
+      border-left: 4px solid var(--jl-yellow);
+      border-radius: 0.35rem;
+      padding: 1rem 1.2rem;
+      color: var(--jl-black);
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+  </style>
 </head>
 <body>
   <header class="jl-header">
     <div class="jl-header-inner">
       <a class="jl-logo" href="index.html">
-        <img class="jl-logo-img" src="assets/images/JL-Nieuwe-Logo-scaled.png" width="323" height="323" alt="Jonge Libertariërs" decoding="async">
+        <img class="jl-logo-img" src="assets/images/JL-Nieuwe-Logo-scaled.png" width="323" height="323" alt="Jonge Libertariers" decoding="async">
       </a>
       <button class="jl-nav-toggle" type="button" aria-label="Menu openen" aria-expanded="false">
         <span></span><span></span><span></span>
@@ -43,66 +103,45 @@
 
   <div class="jl-page-header">
     <div class="jl-page-header-inner">
-      <h1>Steun onze missie</h1>
-      <p class="jl-page-header__subtitle">Help ons de beweging groter te maken</p>
+      <h1>Doneer</h1>
+      <p class="jl-page-header__subtitle">Steun de Jonge Libertariers via bank of Bitcoin</p>
     </div>
   </div>
 
   <main>
     <section class="jl-page-main">
       <div class="jl-section-inner jl-prose jl-prose--wide">
-        <h2>Waarom steun?</h2>
         <p>
-          De Jonge Libertariërs is een onafhankelijke organisatie zonder overheidssteun of corporatisme.
-          We financieren onszelf door leden en donateurs die geloven in onze missie.
-          Jouw steun helpt ons om:
+          Kies de donatiemethode die bij je past. Iedere bijdrage helpt ons om jongeren te bereiken,
+          bijeenkomsten te organiseren en de libertarische beweging te versterken.
         </p>
-        <ul>
-          <li>Meer jongeren te bereiken met onze boodschap</li>
-          <li>Evenementen en bijeenkomsten te organiseren</li>
-          <li>Professioneel campagnes te voeren</li>
-          <li>Onze organisatie draaiende te houden</li>
-        </ul>
-      </div>
-    </section>
 
-    <section class="jl-hero jl-hero--home" style="min-height: auto; padding: 3rem 1.25rem; background: linear-gradient(135deg, var(--jl-black-soft) 0%, var(--jl-gray) 100%);">
-      <div class="jl-hero-main" style="min-height: auto; padding: 0;">
-        <div class="jl-hero-ctas">
-          <a class="jl-btn jl-btn-primary jl-btn--spray" href="doneer.html">
-            <span class="jl-btn-icon" style="font-size: 2rem; font-weight: bold; margin-top: -0.3rem; display: block;">€</span>
-            Doneer nu
-          </a>
-          <a class="jl-btn jl-btn-primary jl-btn--spray jl-btn--spray-b" href="word-lid.html">
-            <svg class="jl-btn-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
-            Word lid
-          </a>
+        <div class="jl-donate-grid">
+          <article class="jl-donate-card">
+            <h2>Bank / iDEAL</h2>
+            <p>Doneer veilig via onze bestaande bankkaart-link.</p>
+            <a class="jl-btn jl-btn-primary jl-btn--spray" href="https://buy.stripe.com/5kQ4gy5UHbOggSb3qx8Ra06" target="_blank" rel="noopener noreferrer">
+              <span class="jl-btn-icon" style="font-size: 2rem; font-weight: bold; margin-top: -0.3rem; display: block;">EUR</span>
+              Doneer via bank
+            </a>
+            <p class="jl-donate-card__meta">Je gaat naar onze beveiligde betaalomgeving.</p>
+          </article>
+
+          <article class="jl-donate-card">
+            <h2>Bitcoin</h2>
+            <p>Doneer direct via onze Bitcoin-betaallink.</p>
+            <a class="jl-btn jl-btn-primary jl-btn--spray jl-btn--spray-b" href="https://pay.blink.sv/jongelibertariers?amount=0&memo=&display=USD" target="_blank" rel="noopener noreferrer">
+              <svg class="jl-btn-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
+              Doneer met Bitcoin
+            </a>
+            <a class="jl-donate-link" href="https://pay.blink.sv/jongelibertariers?amount=0&memo=&display=USD" target="_blank" rel="noopener noreferrer">pay.blink.sv/jongelibertariers</a>
+          </article>
         </div>
-      </div>
-    </section>
 
-    <section class="jl-page-main">
-      <div class="jl-section-inner jl-prose jl-prose--wide">
-        <h2>Hoe kun je bijdragen?</h2>
-
-        <h3>Word lid</h3>
-        <p>
-          Het beste manier is <a href="word-lid.html">lid te worden</a>. Je krijgt toegang tot alles wat we doen
-          en hebt inspraak in onze richting via vergaderingen en stemmen.
-        </p>
-
-        <h3>Doneer</h3>
-        <p>
-          De Jonge Libertariërs zijn een ANBI (Algemeen Nut Beogende Instelling),
-          wat betekent dat donaties fiscaal aftrekbaar zijn.
-          Je kunt nu kiezen tussen <a href="doneer.html">bankdonatie of Bitcoin</a>.
-        </p>
-
-        <h3>Vrijwilligers werk</h3>
-        <p>
-          Je hoeft niet per se geld te geven — je tijd is net zo waardevol. Help mee met <a href="commissies.html">een van onze commissies</a>
-          en draag direct bij aan onze missie.
-        </p>
+        <div class="jl-donate-note">
+          De Jonge Libertariers is ANBI. Donaties kunnen fiscaal aftrekbaar zijn.
+          Bekijk <a href="steun-onze-missie.html">Steun onze missie</a> voor meer context over waar je bijdrage naartoe gaat.
+        </div>
       </div>
     </section>
   </main>
@@ -147,7 +186,7 @@
         <p><a href="tel:+31613990120">+31 6 13990120</a></p>
       </div>
     </div>
-    <div class="jl-footer-bottom">© 2026 Jonge Libertariërs</div>
+    <div class="jl-footer-bottom">© 2026 Jonge Libertariers</div>
   </footer>
 
   <div class="jl-cookie" role="dialog" aria-label="Cookie melding">
