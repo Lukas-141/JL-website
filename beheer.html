@@ -678,12 +678,16 @@
         <div class="beheer-section">
           <h3>GitHub Deploy Sync</h3>
           <div class="info-box">
-            Sla wijzigingen direct op in GitHub (events.json, standpunten.json, bestuur.json), zodat deploy dit automatisch meeneemt.
+            Deze beheeromgeving is GitHub-first: zonder token zijn bewerkingen uitgeschakeld. Wijzigingen worden direct naar GitHub geschreven
+            (events.json, standpunten.json, bestuur.json), zodat deploy dit automatisch meeneemt.
           </div>
+          <p id="ghSyncRequiredNotice" style="margin:0 0 1rem;color:#c00;font-weight:600;display:none;">
+            GitHub sync is verplicht om te kunnen bewerken. Vul owner/repo/token in en klik op “Config opslaan”.
+          </p>
           <div class="beheer-form-row">
             <div class="beheer-form-group">
               <label for="ghOwner">GitHub owner</label>
-              <input type="text" id="ghOwner" placeholder="bijv. Mikbit-VS">
+              <input type="text" id="ghOwner" placeholder="bijv. Lukas-141">
             </div>
             <div class="beheer-form-group">
               <label for="ghRepo">Repository</label>
@@ -720,7 +724,7 @@
         <div class="beheer-section">
           <h3>Back-up & Herstel</h3>
           <div class="info-box">
-            Maak een back-up, exporteer data als JSON en herstel een eerdere versie.
+            Back-ups worden lokaal in deze browser opgeslagen. Voor echte opslag gebruik je GitHub sync of exporteer je data als JSON.
           </div>
 
           <div class="beheer-form-row">

@@ -15,6 +15,7 @@ class BeheerSystem {
     this.githubConfigKey = 'jl-github-config';
     this.githubTokenLocalKey = 'jl-github-token';
     this.githubTokenSessionKey = 'jl-github-token-session';
+    this.requireGitHubSync = true;
     this.init();
   }
 
@@ -56,26 +57,26 @@ class BeheerSystem {
     });
 
     // Event form
-    document.getElementById('eventForm').addEventListener('submit', (e) => {
+    document.getElementById('eventForm').addEventListener('submit', async (e) => {
       e.preventDefault();
-      this.addEvent();
+      await this.addEvent();
     });
 
     // Standpunten form
     const standpuntForm = document.getElementById('standpuntForm');
     if (standpuntForm) {
-      standpuntForm.addEventListener('submit', (e) => {
+      standpuntForm.addEventListener('submit', async (e) => {
         e.preventDefault();
-        this.addStandpunt();
+        await this.addStandpunt();
       });
     }
 
     // Bestuur form
     const bestuurForm = document.getElementById('bestuurForm');
     if (bestuurForm) {
-      bestuurForm.addEventListener('submit', (e) => {
+      bestuurForm.addEventListener('submit', async (e) => {
         e.preventDefault();
-        this.addBestuurslid();
+        await this.addBestuurslid();
       });
     }
 
@@ -107,7 +108,9 @@ class BeheerSystem {
 
     const ghSaveConfigBtn = document.getElementById('ghSaveConfigBtn');
     if (ghSaveConfigBtn) {
-      ghSaveConfigBtn.addEventListener('click', () => this.saveGitHubSettingsFromForm());
+      ghSaveConfigBtn.addEventListener('click', async () => {
+        await this.saveGitHubSettingsFromForm();
+      });
     }
 
     const ghTestBtn = document.getElementById('ghTestBtn');
@@ -146,11 +149,18 @@ class BeheerSystem {
     document.getElementById('dashboard').style.display = 'grid';
     document.getElementById('userDisplay').textContent = username;
 
-    await Promise.all([
-      this.seedStorageFromFile(this.eventsKey, 'events.json'),
-      this.seedStorageFromFile(this.standpuntenKey, 'standpunten.json'),
-      this.seedStorageFromFile(this.bestuurKey, 'bestuur.json')
-    ]);
+    const syncReady = this.isGitHubSyncConfigured();
+    let loadedFromGitHub = false;
+    if (syncReady) {
+      loadedFromGitHub = await this.loadAllDataFromGitHub();
+    }
+    if (!loadedFromGitHub) {
+      await Promise.all([
+        this.seedStorageFromFile(this.eventsKey, 'events.json'),
+        this.seedStorageFromFile(this.standpuntenKey, 'standpunten.json'),
+        this.seedStorageFromFile(this.bestuurKey, 'bestuur.json')
+      ]);
+    }
 
     this.loadEvents();
     this.loadStandpunten();
@@ -158,6 +168,7 @@ class BeheerSystem {
     this.ensureInitialBackup();
     this.renderBackupList();
     this.loadGitHubSettingsToForm();
+    this.updateSyncRequirement();
   }
 
   switchTab(tabName) {
@@ -337,6 +348,7 @@ class BeheerSystem {
   }
 
   importData(event) {
+    if (!this.ensureGitHubSyncReady()) return;
     const input = event.target;
     const file = input.files && input.files[0];
     if (!file) return;
@@ -379,6 +391,7 @@ class BeheerSystem {
   }
 
   async restoreSelectedBackup() {
+    if (!this.ensureGitHubSyncReady()) return;
     const select = document.getElementById('backupRestoreSelect');
     if (!select || !select.value) {
       alert('Kies eerst een back-up.');
@@ -421,17 +434,55 @@ class BeheerSystem {
     try {
       const parsed = JSON.parse(localStorage.getItem(this.githubConfigKey) || '{}');
       return {
-        owner: parsed.owner || 'Mikbit-VS',
+        owner: parsed.owner || 'Lukas-141',
         repo: parsed.repo || 'JL-website',
         branch: parsed.branch || 'main'
       };
     } catch (_) {
-      return { owner: 'Mikbit-VS', repo: 'JL-website', branch: 'main' };
+      return { owner: 'Lukas-141', repo: 'JL-website', branch: 'main' };
     }
   }
 
   getGitHubToken() {
     return localStorage.getItem(this.githubTokenLocalKey) || sessionStorage.getItem(this.githubTokenSessionKey) || '';
+  }
+
+  isGitHubSyncConfigured() {
+    const config = this.getGitHubConfig();
+    const token = this.getGitHubToken();
+    return Boolean(config.owner && config.repo && config.branch && token);
+  }
+
+  setEditingEnabled(enabled) {
+    const controls = document.querySelectorAll('#dashboard input, #dashboard textarea, #dashboard select, #dashboard button');
+    controls.forEach((control) => {
+      if (control.closest('#tab-sync')) return;
+      if (control.id === 'logoutBtn') return;
+      control.disabled = !enabled;
+    });
+  }
+
+  updateSyncRequirement() {
+    if (!this.requireGitHubSync) {
+      this.setEditingEnabled(true);
+      return;
+    }
+    const ready = this.isGitHubSyncConfigured();
+    this.setEditingEnabled(ready);
+    const notice = document.getElementById('ghSyncRequiredNotice');
+    if (notice) notice.style.display = ready ? 'none' : 'block';
+    if (!ready) {
+      this.setGitHubSyncStatus('GitHub sync vereist om wijzigingen op te slaan.', 'error');
+    }
+  }
+
+  ensureGitHubSyncReady() {
+    if (!this.requireGitHubSync) return true;
+    if (this.isGitHubSyncConfigured()) return true;
+    this.setGitHubSyncStatus('GitHub sync vereist om wijzigingen op te slaan.', 'error');
+    this.switchTab('sync');
+    alert('Vul GitHub owner/repo/token in om wijzigingen op te slaan.');
+    return false;
   }
 
   setGitHubSyncStatus(message, status) {
@@ -464,9 +515,10 @@ class BeheerSystem {
     } else {
       this.setGitHubSyncStatus('GitHub sync nog niet geconfigureerd.', 'idle');
     }
+    this.updateSyncRequirement();
   }
 
-  saveGitHubSettingsFromForm() {
+  async saveGitHubSettingsFromForm() {
     const owner = (document.getElementById('ghOwner')?.value || '').trim();
     const repo = (document.getElementById('ghRepo')?.value || '').trim();
     const branch = (document.getElementById('ghBranch')?.value || 'main').trim() || 'main';
@@ -494,6 +546,15 @@ class BeheerSystem {
     }
 
     this.setGitHubSyncStatus('GitHub sync instellingen opgeslagen.', 'ok');
+    this.updateSyncRequirement();
+    if (this.isGitHubSyncConfigured()) {
+      const loaded = await this.loadAllDataFromGitHub();
+      if (loaded) {
+        this.loadEvents();
+        this.loadStandpunten();
+        this.loadBestuur();
+      }
+    }
   }
 
   async testGitHubConnection() {
@@ -535,11 +596,97 @@ class BeheerSystem {
     return btoa(binary);
   }
 
+  base64ToUtf8(encoded) {
+    const binary = atob(String(encoded || '').replace(/\s/g, ''));
+    const bytes = Uint8Array.from(binary, (char) => char.charCodeAt(0));
+    return new TextDecoder().decode(bytes);
+  }
+
+  async fetchDatasetFromGitHub(fileName) {
+    const config = this.getGitHubConfig();
+    if (!config.owner || !config.repo || !config.branch) return null;
+
+    const headers = {
+      Accept: 'application/vnd.github+json'
+    };
+    const token = this.getGitHubToken();
+    if (token) {
+      headers.Authorization = `Bearer ${token}`;
+    }
+
+    const response = await fetch(
+      `https://api.github.com/repos/${encodeURIComponent(config.owner)}/${encodeURIComponent(config.repo)}/contents/${encodeURIComponent(fileName)}?ref=${encodeURIComponent(config.branch)}`,
+      { headers }
+    );
+    if (response.status === 404) return [];
+    if (!response.ok) throw new Error(`GET ${response.status}`);
+
+    const payload = await response.json();
+    if (!payload || !payload.content) return [];
+    const decoded = this.base64ToUtf8(payload.content);
+    const parsed = JSON.parse(decoded);
+    return this.normalizeDataset(parsed);
+  }
+
+  async loadAllDataFromGitHub() {
+    try {
+      const [events, standpunten, bestuur] = await Promise.all([
+        this.fetchDatasetFromGitHub('events.json'),
+        this.fetchDatasetFromGitHub('standpunten.json'),
+        this.fetchDatasetFromGitHub('bestuur.json')
+      ]);
+      if (!events || !standpunten || !bestuur) return false;
+      this.setStoredList(this.eventsKey, events);
+      this.setStoredList(this.standpuntenKey, standpunten);
+      this.setStoredList(this.bestuurKey, bestuur);
+      this.setPreferLocalData(false);
+      return true;
+    } catch (_) {
+      this.setGitHubSyncStatus('GitHub data laden mislukt. Controleer token en repo.', 'error');
+      return false;
+    }
+  }
+
+  async reloadDatasetFromGitHub(key) {
+    try {
+      const fileName = this.getDatasetFileNameByKey(key);
+      if (!fileName) return false;
+      const data = await this.fetchDatasetFromGitHub(fileName);
+      if (!data) return false;
+      this.setStoredList(key, data);
+      this.refreshListForKey(key);
+      return true;
+    } catch (_) {
+      return false;
+    }
+  }
+
   getDatasetFileNameByKey(key) {
     if (key === this.eventsKey) return 'events.json';
     if (key === this.standpuntenKey) return 'standpunten.json';
     if (key === this.bestuurKey) return 'bestuur.json';
     return '';
+  }
+
+  refreshListForKey(key) {
+    if (key === this.eventsKey) this.loadEvents();
+    if (key === this.standpuntenKey) this.loadStandpunten();
+    if (key === this.bestuurKey) this.loadBestuur();
+  }
+
+  async commitDatasetChange(key, nextItems, reason, successMessage) {
+    const previous = this.getStoredList(key);
+    this.setStoredList(key, nextItems);
+    this.refreshListForKey(key);
+    const result = await this.syncDatasetToGitHub(key, reason);
+    if (!result.ok) {
+      this.setStoredList(key, previous);
+      this.refreshListForKey(key);
+      alert('Sync mislukt. Wijziging is niet opgeslagen.');
+      return false;
+    }
+    if (successMessage) alert(successMessage);
+    return true;
   }
 
   async syncDatasetToGitHub(key, reason) {
@@ -551,7 +698,7 @@ class BeheerSystem {
     const config = this.getGitHubConfig();
     const token = this.getGitHubToken();
     if (!token || !config.owner || !config.repo || !config.branch) {
-      this.setGitHubSyncStatus('GitHub sync niet actief (vul instellingen + token in).', 'idle');
+      this.setGitHubSyncStatus('GitHub sync vereist om wijzigingen op te slaan.', 'error');
       return { ok: false, skipped: true, fileName };
     }
 
@@ -600,9 +747,13 @@ class BeheerSystem {
       );
       if (!putRes.ok) throw new Error(`PUT ${putRes.status}`);
       this.setGitHubSyncStatus(`Gesynchroniseerd naar GitHub: ${fileName}`, 'ok');
+      this.setPreferLocalData(false);
       return { ok: true, skipped: false, fileName };
     } catch (_) {
       this.setGitHubSyncStatus(`Sync mislukt voor ${fileName}.`, 'error');
+      if (this.requireGitHubSync) {
+        await this.reloadDatasetFromGitHub(key);
+      }
       return { ok: false, skipped: false, fileName };
     }
   }
@@ -685,7 +836,8 @@ class BeheerSystem {
   }
 
   // EVENTS MANAGEMENT
-  addEvent() {
+  async addEvent() {
+    if (!this.ensureGitHubSyncReady()) return;
     const btn = document.querySelector('#eventForm button[type="submit"]');
     const editId = btn.dataset.editId ? parseInt(btn.dataset.editId) : null;
 
@@ -707,19 +859,22 @@ class BeheerSystem {
     if (editId) {
       // Replace existing event
       events = events.map(e => e.id === editId ? event : e);
-      alert('Evenement bijgewerkt!');
     } else {
       // Add new event
       events.push(event);
-      alert('Evenement toegevoegd!');
     }
 
-    this.setStoredList(this.eventsKey, events);
+    const saved = await this.commitDatasetChange(
+      this.eventsKey,
+      events,
+      editId ? 'Evenement bijgewerkt' : 'Evenement toegevoegd',
+      editId ? 'Evenement bijgewerkt!' : 'Evenement toegevoegd!'
+    );
+    if (!saved) return;
+
     document.getElementById('eventForm').reset();
     btn.textContent = '➕ Evenement toevoegen';
     delete btn.dataset.editId;
-    this.loadEvents();
-    this.syncDatasetToGitHub(this.eventsKey, editId ? 'Evenement bijgewerkt' : 'Evenement toegevoegd');
   }
 
   loadEvents() {
@@ -770,19 +925,19 @@ class BeheerSystem {
     document.getElementById('eventForm').scrollIntoView({ behavior: 'smooth' });
   }
 
-  deleteEvent(id) {
+  async deleteEvent(id) {
+    if (!this.ensureGitHubSyncReady()) return;
     if (confirm('Weet je zeker dat je dit evenement wilt verwijderen?')) {
       this.createBackup(`Evenement verwijderd (${id})`);
       let events = this.getStoredList(this.eventsKey);
       events = events.filter(e => e.id !== id);
-      this.setStoredList(this.eventsKey, events);
-      this.loadEvents();
-      this.syncDatasetToGitHub(this.eventsKey, 'Evenement verwijderd');
+      await this.commitDatasetChange(this.eventsKey, events, 'Evenement verwijderd', 'Evenement verwijderd.');
     }
   }
 
   // STANDPUNTEN MANAGEMENT
-  addStandpunt() {
+  async addStandpunt() {
+    if (!this.ensureGitHubSyncReady()) return;
     const btn = document.querySelector('#standpuntForm button[type="submit"]');
     const editId = btn.dataset.editId ? parseInt(btn.dataset.editId, 10) : null;
     let standpunten = this.getStoredList(this.standpuntenKey).map((item, index) => this.normalizeStandpunt(item, index));
@@ -832,18 +987,21 @@ class BeheerSystem {
     this.createBackup(editId ? `Standpunt bewerkt (${standpunt.title})` : `Standpunt toegevoegd (${standpunt.title})`);
     if (editId) {
       standpunten = standpunten.map((item) => (item.id === editId ? standpunt : item));
-      alert('Standpunt bijgewerkt!');
     } else {
       standpunten.push(standpunt);
-      alert('Standpunt toegevoegd!');
     }
 
-    this.setStoredList(this.standpuntenKey, standpunten);
+    const saved = await this.commitDatasetChange(
+      this.standpuntenKey,
+      standpunten,
+      editId ? 'Standpunt bijgewerkt' : 'Standpunt toegevoegd',
+      editId ? 'Standpunt bijgewerkt!' : 'Standpunt toegevoegd!'
+    );
+    if (!saved) return;
+
     document.getElementById('standpuntForm').reset();
     btn.textContent = '➕ Standpunt toevoegen';
     delete btn.dataset.editId;
-    this.loadStandpunten();
-    this.syncDatasetToGitHub(this.standpuntenKey, editId ? 'Standpunt bijgewerkt' : 'Standpunt toegevoegd');
   }
 
   loadStandpunten() {
@@ -879,7 +1037,8 @@ class BeheerSystem {
     }).join('');
   }
 
-  moveStandpunt(id, direction) {
+  async moveStandpunt(id, direction) {
+    if (!this.ensureGitHubSyncReady()) return;
     const standpunten = this.getStoredList(this.standpuntenKey)
       .map((item, index) => this.normalizeStandpunt(item, index))
       .sort((a, b) => (Number(a.order) || 0) - (Number(b.order) || 0));
@@ -892,9 +1051,7 @@ class BeheerSystem {
     standpunten[index].order = standpunten[swapIndex].order;
     standpunten[swapIndex].order = currentOrder;
 
-    this.setStoredList(this.standpuntenKey, standpunten);
-    this.loadStandpunten();
-    this.syncDatasetToGitHub(this.standpuntenKey, 'Standpunt volgorde aangepast');
+    await this.commitDatasetChange(this.standpuntenKey, standpunten, 'Standpunt volgorde aangepast');
   }
 
   editStandpunt(id) {
@@ -925,17 +1082,17 @@ class BeheerSystem {
     document.getElementById('standpuntForm').scrollIntoView({ behavior: 'smooth' });
   }
 
-  deleteStandpunt(id) {
+  async deleteStandpunt(id) {
+    if (!this.ensureGitHubSyncReady()) return;
     if (!confirm('Weet je zeker dat je dit standpunt wilt verwijderen?')) return;
     this.createBackup(`Standpunt verwijderd (${id})`);
     const standpunten = this.getStoredList(this.standpuntenKey).filter((item) => item.id !== id);
-    this.setStoredList(this.standpuntenKey, standpunten);
-    this.loadStandpunten();
-    this.syncDatasetToGitHub(this.standpuntenKey, 'Standpunt verwijderd');
+    await this.commitDatasetChange(this.standpuntenKey, standpunten, 'Standpunt verwijderd', 'Standpunt verwijderd.');
   }
 
   // BESTUUR MANAGEMENT
-  addBestuurslid() {
+  async addBestuurslid() {
+    if (!this.ensureGitHubSyncReady()) return;
     const btn = document.querySelector('#bestuurForm button[type="submit"]');
     const editId = btn.dataset.editId ? parseInt(btn.dataset.editId, 10) : null;
     let bestuur = this.getStoredList(this.bestuurKey);
@@ -956,18 +1113,21 @@ class BeheerSystem {
     this.createBackup(editId ? `Bestuurslid bewerkt (${lid.name})` : `Bestuurslid toegevoegd (${lid.name})`);
     if (editId) {
       bestuur = bestuur.map((item) => (item.id === editId ? lid : item));
-      alert('Bestuurslid bijgewerkt!');
     } else {
       bestuur.push(lid);
-      alert('Bestuurslid toegevoegd!');
     }
 
-    this.setStoredList(this.bestuurKey, bestuur);
+    const saved = await this.commitDatasetChange(
+      this.bestuurKey,
+      bestuur,
+      editId ? 'Bestuurslid bijgewerkt' : 'Bestuurslid toegevoegd',
+      editId ? 'Bestuurslid bijgewerkt!' : 'Bestuurslid toegevoegd!'
+    );
+    if (!saved) return;
+
     document.getElementById('bestuurForm').reset();
     btn.textContent = '➕ Bestuurslid toevoegen';
     delete btn.dataset.editId;
-    this.loadBestuur();
-    this.syncDatasetToGitHub(this.bestuurKey, editId ? 'Bestuurslid bijgewerkt' : 'Bestuurslid toegevoegd');
   }
 
   loadBestuur() {
@@ -999,7 +1159,8 @@ class BeheerSystem {
     `).join('');
   }
 
-  moveBestuur(id, direction) {
+  async moveBestuur(id, direction) {
+    if (!this.ensureGitHubSyncReady()) return;
     const bestuur = this.getStoredList(this.bestuurKey)
       .sort((a, b) => (Number(a.order) || 0) - (Number(b.order) || 0));
     const index = bestuur.findIndex((item) => item.id === id);
@@ -1011,9 +1172,7 @@ class BeheerSystem {
     bestuur[index].order = bestuur[swapIndex].order;
     bestuur[swapIndex].order = currentOrder;
 
-    this.setStoredList(this.bestuurKey, bestuur);
-    this.loadBestuur();
-    this.syncDatasetToGitHub(this.bestuurKey, 'Bestuur volgorde aangepast');
+    await this.commitDatasetChange(this.bestuurKey, bestuur, 'Bestuur volgorde aangepast');
   }
 
   editBestuur(id) {
@@ -1034,13 +1193,12 @@ class BeheerSystem {
     document.getElementById('bestuurForm').scrollIntoView({ behavior: 'smooth' });
   }
 
-  deleteBestuur(id) {
+  async deleteBestuur(id) {
+    if (!this.ensureGitHubSyncReady()) return;
     if (!confirm('Weet je zeker dat je dit bestuurslid wilt verwijderen?')) return;
     this.createBackup(`Bestuurslid verwijderd (${id})`);
     const bestuur = this.getStoredList(this.bestuurKey).filter((item) => item.id !== id);
-    this.setStoredList(this.bestuurKey, bestuur);
-    this.loadBestuur();
-    this.syncDatasetToGitHub(this.bestuurKey, 'Bestuurslid verwijderd');
+    await this.commitDatasetChange(this.bestuurKey, bestuur, 'Bestuurslid verwijderd', 'Bestuurslid verwijderd.');
   }
 
 }
