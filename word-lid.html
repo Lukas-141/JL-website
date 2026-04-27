@@ -93,12 +93,19 @@
       margin-top: 1.5rem;
     }
 
-    .jl-membership-card__action .jl-btn {
+    .jl-home-btn-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      align-items: center;
+    }
+
+    .jl-home-btn-row .jl-btn {
       font-family: var(--jl-font-hero);
       letter-spacing: 0.06em;
     }
 
-    .jl-membership-card__action .jl-btn--spray {
+    .jl-home-btn-row .jl-btn--spray {
       font-family: "Anton", var(--jl-font-hero);
       font-size: clamp(1.25rem, 5vw, 2rem);
       font-weight: 400;
@@ -117,16 +124,30 @@
       position: relative;
       overflow: hidden;
       line-height: 1;
+      white-space: nowrap;
     }
 
-    .jl-membership-card__action .jl-btn--spray:hover {
+    .jl-home-btn-row .jl-btn--spray:hover {
       background: var(--jl-white);
       color: var(--jl-black);
       border-color: var(--jl-black);
       padding-left: clamp(2rem, 6vw, 4rem);
     }
 
-    .jl-membership-card__action .jl-btn-icon {
+    .jl-home-btn-row .jl-btn--spray.jl-btn--spray-b {
+      background: var(--jl-yellow);
+      color: var(--jl-black);
+      border: 2px solid transparent;
+    }
+
+    .jl-home-btn-row .jl-btn--spray.jl-btn--spray-b:hover {
+      background: var(--jl-white);
+      color: var(--jl-black);
+      border-color: var(--jl-black);
+      padding-left: clamp(2rem, 6vw, 4rem);
+    }
+
+    .jl-home-btn-row .jl-btn-icon {
       width: 2rem;
       height: 2rem;
       position: absolute;
@@ -135,7 +156,7 @@
       transition: all 0.3s ease;
     }
 
-    .jl-membership-card__action .jl-btn--spray:hover .jl-btn-icon {
+    .jl-home-btn-row .jl-btn--spray:hover .jl-btn-icon {
       left: 1.25rem;
       opacity: 1;
     }
@@ -209,6 +230,102 @@
       color: var(--jl-text-muted);
     }
 
+    .jl-btc-jump {
+      margin: -1.5rem 0 2rem;
+      padding: 1rem 1.2rem;
+      border: 2px solid var(--jl-black);
+      border-radius: 0.5rem;
+      background: rgba(249, 246, 16, 0.15);
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem 1rem;
+    }
+
+    .jl-btc-jump p {
+      margin: 0;
+      color: var(--jl-black);
+      font-weight: 700;
+      font-size: 0.95rem;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    .jl-btc-membership {
+      margin-top: 3rem;
+      background: var(--jl-white);
+      border: 2px solid var(--jl-black);
+      border-radius: 0.5rem;
+      padding: 2rem;
+    }
+
+    .jl-btc-membership h3 {
+      margin: 0 0 0.75rem;
+      font-family: var(--jl-font-hero);
+      font-size: 1.65rem;
+      text-transform: uppercase;
+      letter-spacing: -0.01em;
+      color: var(--jl-black);
+    }
+
+    .jl-btc-membership > p {
+      margin: 0 0 1rem;
+      color: var(--jl-text-muted);
+    }
+
+    .jl-btc-membership-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .jl-btc-membership-tier {
+      border: 1px solid #e2e2e2;
+      border-radius: 0.4rem;
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+      background: #fafafa;
+    }
+
+    .jl-btc-membership-tier h4 {
+      margin: 0;
+      font-family: var(--jl-font-ui);
+      font-size: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--jl-black);
+    }
+
+    .jl-btc-membership-tier p {
+      margin: 0;
+      font-size: 0.92rem;
+      line-height: 1.45;
+      color: var(--jl-text-muted);
+    }
+
+    .jl-btc-membership-tier code {
+      display: block;
+      margin-top: 0.25rem;
+      padding: 0.4rem 0.5rem;
+      border: 1px solid #ddd;
+      border-radius: 0.25rem;
+      background: #f0f0f0;
+      color: var(--jl-black);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 0.8rem;
+      word-break: break-word;
+    }
+
+    .jl-btc-membership__note {
+      margin-top: 1rem;
+      font-size: 0.9rem;
+      color: var(--jl-text-muted);
+    }
+
     @media (max-width: 768px) {
       .jl-membership-cards {
         grid-template-columns: 1fr;
@@ -227,7 +344,7 @@
         font-size: 2rem;
       }
 
-      .jl-membership-card__action .jl-btn--spray {
+      .jl-home-btn-row .jl-btn--spray {
         min-height: 44px;
       }
     }
@@ -281,13 +398,23 @@
         </p>
         <p>
           <strong>Standaard loopt lidmaatschap via automatische incasso.</strong> Wil je liever met Bitcoin betalen?
-          Gebruik dan <a href="doneer.html#bitcoin-lid">de Bitcoin-optie</a> met vast bedrag en vaste memo.
+          Gebruik dan de Bitcoin-optie hieronder met vast bedrag en vaste memo.
         </p>
       </div>
 
       <div class="jl-info-banner">
         <h3>Hoe werkt het?</h3>
         <p>Kies je categorie, betaal direct, en je lidmaatschap wordt verwerkt.</p>
+      </div>
+
+      <div class="jl-btc-jump">
+        <p>Liever via Bitcoin?</p>
+        <div class="jl-home-btn-row">
+          <a href="#bitcoin-lid" class="jl-btn jl-btn-primary jl-btn--spray jl-btn--spray-b">
+            <svg class="jl-btn-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            Lid worden met Bitcoin
+          </a>
+        </div>
       </div>
 
       <div class="jl-membership-cards">
@@ -303,10 +430,12 @@
             <span class="jl-membership-card__period">per jaar (€1/maand)</span>
           </div>
           <div class="jl-membership-card__action">
-            <a href="https://buy.stripe.com/14AbJ05UH6tWfO74uB8Ra00" class="jl-btn jl-btn-primary jl-btn--spray">
-              <svg class="jl-btn-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
-              Word lid
-            </a>
+            <div class="jl-home-btn-row">
+              <a href="https://buy.stripe.com/14AbJ05UH6tWfO74uB8Ra00" class="jl-btn jl-btn-primary jl-btn--spray">
+                <svg class="jl-btn-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                Word lid
+              </a>
+            </div>
           </div>
           <div class="jl-membership-card__terms">
             <a href="assets/Huishoudelijk-Reglement-Jonge-Libertariers-2025.pdf" target="_blank">Bekijk voorwaarden</a>
@@ -325,10 +454,12 @@
             <span class="jl-membership-card__period">per jaar (€2/maand)</span>
           </div>
           <div class="jl-membership-card__action">
-            <a href="https://buy.stripe.com/fZubJ082Pf0s8lF0el8Ra03" class="jl-btn jl-btn-primary jl-btn--spray">
-              <svg class="jl-btn-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
-              Word lid
-            </a>
+            <div class="jl-home-btn-row">
+              <a href="https://buy.stripe.com/fZubJ082Pf0s8lF0el8Ra03" class="jl-btn jl-btn-primary jl-btn--spray">
+                <svg class="jl-btn-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                Word lid
+              </a>
+            </div>
           </div>
           <div class="jl-membership-card__terms">
             <a href="assets/Huishoudelijk-Reglement-Jonge-Libertariers-2025.pdf" target="_blank">Bekijk voorwaarden</a>
@@ -347,15 +478,62 @@
             <span class="jl-membership-card__period">per jaar (€2/maand)</span>
           </div>
           <div class="jl-membership-card__action">
-            <a href="https://buy.stripe.com/28EfZg0Ang4wfO7f9f8Ra05" class="jl-btn jl-btn-primary jl-btn--spray">
-              <svg class="jl-btn-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
-              Word lid
-            </a>
+            <div class="jl-home-btn-row">
+              <a href="https://buy.stripe.com/28EfZg0Ang4wfO7f9f8Ra05" class="jl-btn jl-btn-primary jl-btn--spray">
+                <svg class="jl-btn-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                Word lid
+              </a>
+            </div>
           </div>
           <div class="jl-membership-card__terms">
             <a href="assets/Huishoudelijk-Reglement-Jonge-Libertariers-2025.pdf" target="_blank">Bekijk voorwaarden</a>
           </div>
         </div>
+      </div>
+
+      <div id="bitcoin-lid" class="jl-btc-membership">
+        <h3>Lid worden met Bitcoin</h3>
+        <p>Kies je categorie, betaal exact het bedrag, en laat de memo in dit format staan.</p>
+
+        <div class="jl-btc-membership-grid">
+          <article class="jl-btc-membership-tier">
+            <h4>Jongeren (14 t/m 27)</h4>
+            <p><strong>Bedrag:</strong> $12 per jaar</p>
+            <p><strong>Memo:</strong> <code>JL-LID | JONGEREN | NAAM | EMAIL</code></p>
+            <div class="jl-home-btn-row">
+              <a class="jl-btn jl-btn-primary jl-btn--spray" href="https://pay.blink.sv/jongelibertariers?amount=12&memo=JL-LID%20%7C%20JONGEREN%20%7C%20NAAM%20%7C%20EMAIL&display=USD" target="_blank" rel="noopener noreferrer">
+                <svg class="jl-btn-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                Betaal $12
+              </a>
+            </div>
+          </article>
+
+          <article class="jl-btc-membership-tier">
+            <h4>Young Professionals (28/29)</h4>
+            <p><strong>Bedrag:</strong> $24 per jaar</p>
+            <p><strong>Memo:</strong> <code>JL-LID | YOUNG-PRO | NAAM | EMAIL</code></p>
+            <div class="jl-home-btn-row">
+              <a class="jl-btn jl-btn-primary jl-btn--spray" href="https://pay.blink.sv/jongelibertariers?amount=24&memo=JL-LID%20%7C%20YOUNG-PRO%20%7C%20NAAM%20%7C%20EMAIL&display=USD" target="_blank" rel="noopener noreferrer">
+                <svg class="jl-btn-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                Betaal $24
+              </a>
+            </div>
+          </article>
+
+          <article class="jl-btc-membership-tier">
+            <h4>Senioren (30+)</h4>
+            <p><strong>Bedrag:</strong> $24 per jaar</p>
+            <p><strong>Memo:</strong> <code>JL-LID | SENIOREN | NAAM | EMAIL</code></p>
+            <div class="jl-home-btn-row">
+              <a class="jl-btn jl-btn-primary jl-btn--spray jl-btn--spray-b" href="https://pay.blink.sv/jongelibertariers?amount=24&memo=JL-LID%20%7C%20SENIOREN%20%7C%20NAAM%20%7C%20EMAIL&display=USD" target="_blank" rel="noopener noreferrer">
+                <svg class="jl-btn-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                Betaal $24
+              </a>
+            </div>
+          </article>
+        </div>
+
+        <p class="jl-btc-membership__note">Vervang NAAM en EMAIL met je eigen gegevens, anders kunnen we je lidmaatschap niet koppelen.</p>
       </div>
 
       <div class="jl-info-banner" style="margin-top: 4rem;">

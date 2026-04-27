@@ -49,14 +49,20 @@
       color: var(--jl-text-muted);
     }
 
-    .jl-donate-card .jl-btn,
-    .jl-btc-membership-tier .jl-btn {
+    .jl-home-btn-row {
+      margin-top: 0.25rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      align-items: center;
+    }
+
+    .jl-home-btn-row .jl-btn {
       font-family: var(--jl-font-hero);
       letter-spacing: 0.06em;
     }
 
-    .jl-donate-card .jl-btn--spray,
-    .jl-btc-membership-tier .jl-btn--spray {
+    .jl-home-btn-row .jl-btn--spray {
       font-family: "Anton", var(--jl-font-hero);
       font-size: clamp(1.25rem, 5vw, 2rem);
       font-weight: 400;
@@ -75,18 +81,30 @@
       position: relative;
       overflow: hidden;
       line-height: 1;
+      white-space: nowrap;
     }
 
-    .jl-donate-card .jl-btn--spray:hover,
-    .jl-btc-membership-tier .jl-btn--spray:hover {
+    .jl-home-btn-row .jl-btn--spray:hover {
       background: var(--jl-white);
       color: var(--jl-black);
       border-color: var(--jl-black);
       padding-left: clamp(2rem, 6vw, 4rem);
     }
 
-    .jl-donate-card .jl-btn-icon,
-    .jl-btc-membership-tier .jl-btn-icon {
+    .jl-home-btn-row .jl-btn--spray.jl-btn--spray-b {
+      background: var(--jl-yellow);
+      color: var(--jl-black);
+      border: 2px solid transparent;
+    }
+
+    .jl-home-btn-row .jl-btn--spray.jl-btn--spray-b:hover {
+      background: var(--jl-white);
+      color: var(--jl-black);
+      border-color: var(--jl-black);
+      padding-left: clamp(2rem, 6vw, 4rem);
+    }
+
+    .jl-home-btn-row .jl-btn-icon {
       width: 2rem;
       height: 2rem;
       position: absolute;
@@ -95,8 +113,7 @@
       transition: all 0.3s ease;
     }
 
-    .jl-donate-card .jl-btn--spray:hover .jl-btn-icon,
-    .jl-btc-membership-tier .jl-btn--spray:hover .jl-btn-icon {
+    .jl-home-btn-row .jl-btn--spray:hover .jl-btn-icon {
       left: 1.25rem;
       opacity: 1;
     }
@@ -110,76 +127,6 @@
       color: var(--jl-black);
       font-size: 0.95rem;
       line-height: 1.6;
-    }
-
-    .jl-btc-membership {
-      margin-top: 2.5rem;
-      padding: 1.5rem;
-      border: 2px solid var(--jl-black);
-      border-radius: 0.5rem;
-      background: linear-gradient(135deg, rgba(245, 230, 0, 0.1) 0%, rgba(0, 0, 0, 0.02) 100%);
-    }
-
-    .jl-btc-membership h2 {
-      margin: 0 0 0.75rem;
-      font-family: var(--jl-font-hero);
-      text-transform: uppercase;
-      letter-spacing: -0.01em;
-      color: var(--jl-black);
-    }
-
-    .jl-btc-steps {
-      margin: 0.75rem 0 0;
-      padding-left: 1.15rem;
-      color: var(--jl-text-muted);
-      line-height: 1.55;
-      font-size: 0.95rem;
-    }
-
-    .jl-btc-membership-grid {
-      margin-top: 1rem;
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
-      gap: 1rem;
-    }
-
-    .jl-btc-membership-tier {
-      background: var(--jl-white);
-      border: 1px solid #ddd;
-      border-radius: 0.45rem;
-      padding: 1rem;
-      display: flex;
-      flex-direction: column;
-      gap: 0.7rem;
-    }
-
-    .jl-btc-membership-tier h3 {
-      margin: 0;
-      font-family: var(--jl-font-ui);
-      font-size: 1rem;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-      color: var(--jl-black);
-    }
-
-    .jl-btc-membership-tier p {
-      margin: 0;
-      font-size: 0.9rem;
-      color: var(--jl-text-muted);
-      line-height: 1.5;
-    }
-
-    .jl-btc-membership-tier code {
-      display: block;
-      margin-top: 0.3rem;
-      padding: 0.45rem 0.5rem;
-      border-radius: 0.25rem;
-      background: #f4f4f4;
-      border: 1px solid #ddd;
-      color: var(--jl-black);
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-      font-size: 0.8rem;
-      word-break: break-word;
     }
   </style>
 </head>
@@ -233,81 +180,31 @@
           <article class="jl-donate-card">
             <h2>Bank / iDEAL</h2>
             <p>Eenmalige donatie via iDEAL of kaart.</p>
-            <a class="jl-btn jl-btn-primary jl-btn--spray" href="https://buy.stripe.com/5kQ4gy5UHbOggSb3qx8Ra06" target="_blank" rel="noopener noreferrer">
-              <svg class="jl-btn-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
-              Doneer via bank
-            </a>
+            <div class="jl-home-btn-row">
+              <a class="jl-btn jl-btn-primary jl-btn--spray" href="https://buy.stripe.com/5kQ4gy5UHbOggSb3qx8Ra06" target="_blank" rel="noopener noreferrer">
+                <svg class="jl-btn-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                Doneer bank
+              </a>
+            </div>
             <p class="jl-donate-card__meta">Je gaat naar onze beveiligde betaalomgeving.</p>
           </article>
 
           <article class="jl-donate-card">
             <h2>Bitcoin</h2>
             <p>Vrij bedrag via onze Bitcoin-betaallink.</p>
-            <a class="jl-btn jl-btn-primary jl-btn--spray jl-btn--spray-b" href="https://pay.blink.sv/jongelibertariers?amount=0&memo=&display=USD" target="_blank" rel="noopener noreferrer">
-              <svg class="jl-btn-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
-              Doneer met Bitcoin
-            </a>
+            <div class="jl-home-btn-row">
+              <a class="jl-btn jl-btn-primary jl-btn--spray jl-btn--spray-b" href="https://pay.blink.sv/jongelibertariers?amount=0&memo=&display=USD" target="_blank" rel="noopener noreferrer">
+                <svg class="jl-btn-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                Doneer BTC
+              </a>
+            </div>
             <p class="jl-donate-card__meta">Direct geregeld via Blink.</p>
           </article>
         </div>
 
         <div class="jl-donate-note">
           De Jonge Libertariers is ANBI. Donaties kunnen fiscaal aftrekbaar zijn.
-          Bekijk <a href="steun-onze-missie.html">Steun onze missie</a> voor meer context over waar je bijdrage naartoe gaat.
-        </div>
-
-        <div id="bitcoin-lid" class="jl-btc-membership">
-          <h2>Lid worden met Bitcoin</h2>
-          <p>
-            Dit is de korte route:
-          </p>
-          <ol class="jl-btc-steps">
-            <li>Kies je categorie.</li>
-            <li>Betaal exact het bedrag.</li>
-            <li>Laat de memo in het juiste format staan met je naam en e-mail.</li>
-          </ol>
-
-          <div class="jl-btc-membership-grid">
-            <article class="jl-btc-membership-tier">
-              <h3>Jongeren (14 t/m 27)</h3>
-              <p><strong>Bedrag:</strong> $12 per jaar</p>
-              <p><strong>Memo:</strong>
-                <code>JL-LID | JONGEREN | NAAM | EMAIL</code>
-              </p>
-              <a class="jl-btn jl-btn-primary jl-btn--spray" href="https://pay.blink.sv/jongelibertariers?amount=12&memo=JL-LID%20%7C%20JONGEREN%20%7C%20NAAM%20%7C%20EMAIL&display=USD" target="_blank" rel="noopener noreferrer">
-                <svg class="jl-btn-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
-                Betaal $12
-              </a>
-            </article>
-
-            <article class="jl-btc-membership-tier">
-              <h3>Young Professionals (28/29)</h3>
-              <p><strong>Bedrag:</strong> $24 per jaar</p>
-              <p><strong>Memo:</strong>
-                <code>JL-LID | YOUNG-PRO | NAAM | EMAIL</code>
-              </p>
-              <a class="jl-btn jl-btn-primary jl-btn--spray" href="https://pay.blink.sv/jongelibertariers?amount=24&memo=JL-LID%20%7C%20YOUNG-PRO%20%7C%20NAAM%20%7C%20EMAIL&display=USD" target="_blank" rel="noopener noreferrer">
-                <svg class="jl-btn-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
-                Betaal $24
-              </a>
-            </article>
-
-            <article class="jl-btc-membership-tier">
-              <h3>Senioren (30+)</h3>
-              <p><strong>Bedrag:</strong> $24 per jaar</p>
-              <p><strong>Memo:</strong>
-                <code>JL-LID | SENIOREN | NAAM | EMAIL</code>
-              </p>
-              <a class="jl-btn jl-btn-primary jl-btn--spray" href="https://pay.blink.sv/jongelibertariers?amount=24&memo=JL-LID%20%7C%20SENIOREN%20%7C%20NAAM%20%7C%20EMAIL&display=USD" target="_blank" rel="noopener noreferrer">
-                <svg class="jl-btn-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
-                Betaal $24
-              </a>
-            </article>
-          </div>
-
-          <p class="jl-donate-card__meta">
-            Gebruik je echte naam en e-mail in de memo, anders kunnen we je lidmaatschap niet koppelen.
-          </p>
+          Voor lidmaatschap via Bitcoin ga je naar <a href="word-lid.html#bitcoin-lid">Word lid</a>.
         </div>
       </div>
     </section>
