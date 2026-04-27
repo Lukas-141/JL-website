@@ -22,6 +22,7 @@ async function loadEvents() {
     }
 
     const container = document.querySelector('[data-all-events]');
+    if (!container) return;
 
     if (!events || events.length === 0) {
       container.innerHTML = '<p style="text-align:center;color:var(--jl-text-muted);">Geen evenementen gepland.</p>';
