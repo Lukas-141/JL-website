@@ -11,7 +11,7 @@
   <style>
     .jl-membership-cards {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
       gap: 2rem;
       margin: 3rem 0;
     }
@@ -253,11 +253,11 @@
     }
 
     .jl-btc-membership {
-      margin-top: 3rem;
-      background: var(--jl-white);
-      border: 2px solid var(--jl-black);
-      border-radius: 0.5rem;
-      padding: 2rem;
+      margin-top: 0;
+      background: transparent;
+      border: 0;
+      border-radius: 0;
+      padding: 0;
     }
 
     .jl-btc-membership h3 {
@@ -326,6 +326,68 @@
       color: var(--jl-text-muted);
     }
 
+    .jl-consent-box {
+      margin: 1rem 0 1.5rem;
+      padding: 0.85rem 1rem;
+      border: 1px solid #d6d6d6;
+      border-radius: 0.4rem;
+      background: #fafafa;
+    }
+
+    .jl-consent-box__title {
+      margin: 0 0 0.5rem;
+      font-family: var(--jl-font-ui);
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--jl-text-muted);
+    }
+
+    .jl-consent-box__label {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      margin: 0;
+      color: var(--jl-black);
+      font-size: 0.95rem;
+      line-height: 1.5;
+      font-weight: 500;
+      cursor: pointer;
+    }
+
+    .jl-consent-box__input {
+      width: 1.1rem;
+      height: 1.1rem;
+      margin-top: 0.15rem;
+      accent-color: var(--jl-black);
+      flex-shrink: 0;
+    }
+
+    .jl-home-btn-row .jl-btn.jl-btn--consent-disabled {
+      opacity: 0.5;
+      filter: grayscale(0.35);
+      cursor: not-allowed;
+    }
+
+    .jl-membership-card__terms code {
+      display: block;
+      margin-top: 0.5rem;
+      padding: 0.45rem 0.6rem;
+      border: 1px solid #ddd;
+      border-radius: 0.25rem;
+      background: #f4f4f4;
+      color: var(--jl-black);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 0.8rem;
+      word-break: break-word;
+      text-decoration: none;
+    }
+
+    .jl-membership-view[hidden] {
+      display: none !important;
+    }
+
     @media (max-width: 768px) {
       .jl-membership-cards {
         grid-template-columns: 1fr;
@@ -391,150 +453,212 @@
 
   <main class="jl-page-main">
     <div class="jl-section-inner">
-      <div class="jl-intro-section">
-        <h2>Kies jouw vrijheid</h2>
-        <p>
-          Sluit je aan bij de Jonge Libertariërs en bouw mee aan een vrijer Nederland.
-        </p>
-        <p>
-          <strong>Standaard loopt lidmaatschap via automatische incasso.</strong> Wil je liever met Bitcoin betalen?
-          Gebruik dan de Bitcoin-optie hieronder met vast bedrag en vaste memo.
-        </p>
-      </div>
-
-      <div class="jl-info-banner">
-        <h3>Hoe werkt het?</h3>
-        <p>Kies je categorie, betaal direct, en je lidmaatschap wordt verwerkt.</p>
-      </div>
-
-      <div class="jl-btc-jump">
-        <p>Liever via Bitcoin?</p>
-        <div class="jl-home-btn-row">
-          <a href="#bitcoin-lid" class="jl-btn jl-btn-primary jl-btn--spray jl-btn--spray-b">
-            <svg class="jl-btn-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
-            Lid worden met Bitcoin
-          </a>
-        </div>
-      </div>
-
-      <div class="jl-membership-cards">
-        <!-- Kaart 1: Jongeren -->
-        <div class="jl-membership-card">
-          <span class="jl-membership-card__badge">14 t/m 27 jaar</span>
-          <h3 class="jl-membership-card__title">Jongeren</h3>
-          <p class="jl-membership-card__description">
-            Voor leden van 14 t/m 27 jaar.
+      <section id="bank-options" class="jl-membership-view">
+        <div class="jl-intro-section">
+          <h2>Kies jouw vrijheid</h2>
+          <p>
+            Sluit je aan bij de Jonge Libertariërs en bouw mee aan een vrijer Nederland.
           </p>
-          <div class="jl-membership-card__price">
-            <span class="jl-membership-card__amount">€12</span>
-            <span class="jl-membership-card__period">per jaar (€1/maand)</span>
-          </div>
-          <div class="jl-membership-card__action">
-            <div class="jl-home-btn-row">
-              <a href="https://buy.stripe.com/14AbJ05UH6tWfO74uB8Ra00" class="jl-btn jl-btn-primary jl-btn--spray">
-                <svg class="jl-btn-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
-                Word lid
-              </a>
-            </div>
-          </div>
-          <div class="jl-membership-card__terms">
-            <a href="assets/Huishoudelijk-Reglement-Jonge-Libertariers-2025.pdf" target="_blank">Bekijk voorwaarden</a>
-          </div>
-        </div>
-
-        <!-- Kaart 2: Young Professionals -->
-        <div class="jl-membership-card">
-          <span class="jl-membership-card__badge">28 en 29 jaar</span>
-          <h3 class="jl-membership-card__title">Young Professionals</h3>
-          <p class="jl-membership-card__description">
-            Voor leden van 28 en 29 jaar.
+          <p>
+            <strong>Standaard loopt lidmaatschap via automatische incasso.</strong> Wil je liever met Bitcoin betalen?
+            Gebruik dan de Bitcoin-optie hieronder met vast bedrag en vaste memo.
           </p>
-          <div class="jl-membership-card__price">
-            <span class="jl-membership-card__amount">€24</span>
-            <span class="jl-membership-card__period">per jaar (€2/maand)</span>
-          </div>
-          <div class="jl-membership-card__action">
-            <div class="jl-home-btn-row">
-              <a href="https://buy.stripe.com/fZubJ082Pf0s8lF0el8Ra03" class="jl-btn jl-btn-primary jl-btn--spray">
-                <svg class="jl-btn-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
-                Word lid
-              </a>
-            </div>
-          </div>
-          <div class="jl-membership-card__terms">
-            <a href="assets/Huishoudelijk-Reglement-Jonge-Libertariers-2025.pdf" target="_blank">Bekijk voorwaarden</a>
+        </div>
+
+        <div class="jl-info-banner">
+          <h3>Hoe werkt het?</h3>
+          <p>Kies je categorie, betaal direct, en je lidmaatschap wordt verwerkt.</p>
+        </div>
+
+        <div class="jl-btc-jump">
+          <p>Liever via Bitcoin?</p>
+          <div class="jl-home-btn-row">
+            <a href="#bitcoin" class="jl-btn jl-btn-primary jl-btn--spray jl-btn--spray-b">
+              <svg class="jl-btn-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
+              Lid worden met Bitcoin
+            </a>
           </div>
         </div>
 
-        <!-- Kaart 3: Senioren -->
-        <div class="jl-membership-card">
-          <span class="jl-membership-card__badge">30 jaar en ouder</span>
-          <h3 class="jl-membership-card__title">Senioren</h3>
-          <p class="jl-membership-card__description">
-            Voor leden van 30 jaar en ouder.
-          </p>
-          <div class="jl-membership-card__price">
-            <span class="jl-membership-card__amount">€24</span>
-            <span class="jl-membership-card__period">per jaar (€2/maand)</span>
-          </div>
-          <div class="jl-membership-card__action">
-            <div class="jl-home-btn-row">
-              <a href="https://buy.stripe.com/28EfZg0Ang4wfO7f9f8Ra05" class="jl-btn jl-btn-primary jl-btn--spray">
-                <svg class="jl-btn-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
-                Word lid
-              </a>
-            </div>
-          </div>
-          <div class="jl-membership-card__terms">
-            <a href="assets/Huishoudelijk-Reglement-Jonge-Libertariers-2025.pdf" target="_blank">Bekijk voorwaarden</a>
-          </div>
-        </div>
-      </div>
-
-      <div id="bitcoin-lid" class="jl-btc-membership">
-        <h3>Lid worden met Bitcoin</h3>
-        <p>Kies je categorie, betaal exact het bedrag, en laat de memo in dit format staan.</p>
-
-        <div class="jl-btc-membership-grid">
-          <article class="jl-btc-membership-tier">
-            <h4>Jongeren (14 t/m 27)</h4>
-            <p><strong>Bedrag:</strong> $12 per jaar</p>
-            <p><strong>Memo:</strong> <code>JL-LID | JONGEREN | NAAM | EMAIL</code></p>
-            <div class="jl-home-btn-row">
-              <a class="jl-btn jl-btn-primary jl-btn--spray" href="https://pay.blink.sv/jongelibertariers?amount=12&memo=JL-LID%20%7C%20JONGEREN%20%7C%20NAAM%20%7C%20EMAIL&display=USD" target="_blank" rel="noopener noreferrer">
-                <svg class="jl-btn-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
-                Betaal $12
-              </a>
-            </div>
-          </article>
-
-          <article class="jl-btc-membership-tier">
-            <h4>Young Professionals (28/29)</h4>
-            <p><strong>Bedrag:</strong> $24 per jaar</p>
-            <p><strong>Memo:</strong> <code>JL-LID | YOUNG-PRO | NAAM | EMAIL</code></p>
-            <div class="jl-home-btn-row">
-              <a class="jl-btn jl-btn-primary jl-btn--spray" href="https://pay.blink.sv/jongelibertariers?amount=24&memo=JL-LID%20%7C%20YOUNG-PRO%20%7C%20NAAM%20%7C%20EMAIL&display=USD" target="_blank" rel="noopener noreferrer">
-                <svg class="jl-btn-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
-                Betaal $24
-              </a>
-            </div>
-          </article>
-
-          <article class="jl-btc-membership-tier">
-            <h4>Senioren (30+)</h4>
-            <p><strong>Bedrag:</strong> $24 per jaar</p>
-            <p><strong>Memo:</strong> <code>JL-LID | SENIOREN | NAAM | EMAIL</code></p>
-            <div class="jl-home-btn-row">
-              <a class="jl-btn jl-btn-primary jl-btn--spray jl-btn--spray-b" href="https://pay.blink.sv/jongelibertariers?amount=24&memo=JL-LID%20%7C%20SENIOREN%20%7C%20NAAM%20%7C%20EMAIL&display=USD" target="_blank" rel="noopener noreferrer">
-                <svg class="jl-btn-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
-                Betaal $24
-              </a>
-            </div>
-          </article>
+        <div class="jl-consent-box">
+          <p class="jl-consent-box__title">Verplicht voor lidmaatschap</p>
+          <label class="jl-consent-box__label" for="bank-consent">
+            <input class="jl-consent-box__input" type="checkbox" id="bank-consent">
+            <span>Ik onderschrijf het non-agressieprincipe en wijs daarmee de initiatie van geweld en dwang tegen anderen en hun eigendom af.</span>
+          </label>
         </div>
 
-        <p class="jl-btc-membership__note">Vervang NAAM en EMAIL met je eigen gegevens, anders kunnen we je lidmaatschap niet koppelen.</p>
-      </div>
+        <div class="jl-membership-cards">
+          <!-- Kaart 1: Jongeren -->
+          <div class="jl-membership-card">
+            <span class="jl-membership-card__badge">14 t/m 27 jaar</span>
+            <h3 class="jl-membership-card__title">Jongeren</h3>
+            <p class="jl-membership-card__description">
+              Voor leden van 14 t/m 27 jaar.
+            </p>
+            <div class="jl-membership-card__price">
+              <span class="jl-membership-card__amount">€12</span>
+              <span class="jl-membership-card__period">per jaar (€1/maand)</span>
+            </div>
+            <div class="jl-membership-card__action">
+              <div class="jl-home-btn-row">
+                <a href="https://buy.stripe.com/14AbJ05UH6tWfO74uB8Ra00" class="jl-btn jl-btn-primary jl-btn--spray" data-membership-pay>
+                  <svg class="jl-btn-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                  Word lid
+                </a>
+              </div>
+            </div>
+            <div class="jl-membership-card__terms">
+              <a href="assets/Huishoudelijk-Reglement-Jonge-Libertariers-2025.pdf" target="_blank">Bekijk voorwaarden</a>
+            </div>
+          </div>
+
+          <!-- Kaart 2: Young Professionals -->
+          <div class="jl-membership-card">
+            <span class="jl-membership-card__badge">28 en 29 jaar</span>
+            <h3 class="jl-membership-card__title">Young Professionals</h3>
+            <p class="jl-membership-card__description">
+              Voor leden van 28 en 29 jaar.
+            </p>
+            <div class="jl-membership-card__price">
+              <span class="jl-membership-card__amount">€24</span>
+              <span class="jl-membership-card__period">per jaar (€2/maand)</span>
+            </div>
+            <div class="jl-membership-card__action">
+              <div class="jl-home-btn-row">
+                <a href="https://buy.stripe.com/fZubJ082Pf0s8lF0el8Ra03" class="jl-btn jl-btn-primary jl-btn--spray" data-membership-pay>
+                  <svg class="jl-btn-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                  Word lid
+                </a>
+              </div>
+            </div>
+            <div class="jl-membership-card__terms">
+              <a href="assets/Huishoudelijk-Reglement-Jonge-Libertariers-2025.pdf" target="_blank">Bekijk voorwaarden</a>
+            </div>
+          </div>
+
+          <!-- Kaart 3: Senioren -->
+          <div class="jl-membership-card">
+            <span class="jl-membership-card__badge">30 jaar en ouder</span>
+            <h3 class="jl-membership-card__title">Senioren</h3>
+            <p class="jl-membership-card__description">
+              Voor leden van 30 jaar en ouder. Naar rato: €2 per maand voor de maanden dat je 30 bent.
+            </p>
+            <div class="jl-membership-card__price">
+              <span class="jl-membership-card__amount">€2</span>
+              <span class="jl-membership-card__period">per maand (naar rato)</span>
+            </div>
+            <div class="jl-membership-card__action">
+              <div class="jl-home-btn-row">
+                <a href="https://buy.stripe.com/28EfZg0Ang4wfO7f9f8Ra05" class="jl-btn jl-btn-primary jl-btn--spray" data-membership-pay>
+                  <svg class="jl-btn-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                  Word lid
+                </a>
+              </div>
+            </div>
+            <div class="jl-membership-card__terms">
+              <a href="assets/Huishoudelijk-Reglement-Jonge-Libertariers-2025.pdf" target="_blank">Bekijk voorwaarden</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="bitcoin-options" class="jl-membership-view" hidden>
+        <div id="bitcoin-lid" class="jl-btc-membership">
+          <h3>Lid worden met Bitcoin</h3>
+          <p>Kies je categorie en gebruik daarna exact de memo in het opgegeven format.</p>
+          <div class="jl-home-btn-row" style="margin-bottom:1rem;">
+            <a href="word-lid.html" class="jl-btn jl-btn-primary jl-btn--spray">
+              <svg class="jl-btn-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
+              Terug naar bankopties
+            </a>
+          </div>
+
+          <div class="jl-consent-box">
+            <p class="jl-consent-box__title">Verplicht voor lidmaatschap</p>
+            <label class="jl-consent-box__label" for="bitcoin-consent">
+              <input class="jl-consent-box__input" type="checkbox" id="bitcoin-consent">
+              <span>Ik onderschrijf het non-agressieprincipe en wijs daarmee de initiatie van geweld en dwang tegen anderen en hun eigendom af.</span>
+            </label>
+          </div>
+
+          <div class="jl-membership-cards">
+            <div class="jl-membership-card">
+              <span class="jl-membership-card__badge">14 t/m 27 jaar</span>
+              <h3 class="jl-membership-card__title">Jongeren</h3>
+              <p class="jl-membership-card__description">
+                Betaal met Bitcoin en gebruik daarna de memo exact zoals hieronder.
+              </p>
+              <div class="jl-membership-card__price">
+                <span class="jl-membership-card__amount">€12</span>
+                <span class="jl-membership-card__period">per jaar</span>
+              </div>
+              <div class="jl-membership-card__action">
+                <div class="jl-home-btn-row">
+                  <a class="jl-btn jl-btn-primary jl-btn--spray" href="https://pay.blink.sv/jongelibertariers?amount=12&memo=JL-LID%20%7C%20JONGEREN%20%7C%20NAAM%20%7C%20EMAIL&display=EUR" target="_blank" rel="noopener noreferrer" data-membership-pay>
+                    <svg class="jl-btn-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                    Word lid
+                  </a>
+                </div>
+              </div>
+              <div class="jl-membership-card__terms">
+                Memo:
+                <code>JL-LID | JONGEREN | NAAM | EMAIL</code>
+              </div>
+            </div>
+
+            <div class="jl-membership-card">
+              <span class="jl-membership-card__badge">28 en 29 jaar</span>
+              <h3 class="jl-membership-card__title">Young Professionals</h3>
+              <p class="jl-membership-card__description">
+                Betaal met Bitcoin en gebruik daarna de memo exact zoals hieronder.
+              </p>
+              <div class="jl-membership-card__price">
+                <span class="jl-membership-card__amount">€24</span>
+                <span class="jl-membership-card__period">per jaar</span>
+              </div>
+              <div class="jl-membership-card__action">
+                <div class="jl-home-btn-row">
+                  <a class="jl-btn jl-btn-primary jl-btn--spray" href="https://pay.blink.sv/jongelibertariers?amount=24&memo=JL-LID%20%7C%20YOUNG-PRO%20%7C%20NAAM%20%7C%20EMAIL&display=EUR" target="_blank" rel="noopener noreferrer" data-membership-pay>
+                    <svg class="jl-btn-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                    Word lid
+                  </a>
+                </div>
+              </div>
+              <div class="jl-membership-card__terms">
+                Memo:
+                <code>JL-LID | YOUNG-PRO | NAAM | EMAIL</code>
+              </div>
+            </div>
+
+            <div class="jl-membership-card">
+              <span class="jl-membership-card__badge">30 jaar en ouder</span>
+              <h3 class="jl-membership-card__title">Senioren</h3>
+              <p class="jl-membership-card__description">
+                Naar rato: €2 per maand voor de maanden dat je 30 bent in dit jaar.
+              </p>
+              <div class="jl-membership-card__price">
+                <span class="jl-membership-card__amount">€2</span>
+                <span class="jl-membership-card__period">per maand (naar rato)</span>
+              </div>
+              <div class="jl-membership-card__action">
+                <div class="jl-home-btn-row">
+                  <a class="jl-btn jl-btn-primary jl-btn--spray" href="https://pay.blink.sv/jongelibertariers?amount=24&memo=JL-LID%20%7C%20SENIOREN%20%7C%20NAAM%20%7C%20EMAIL&display=EUR" target="_blank" rel="noopener noreferrer" data-membership-pay>
+                    <svg class="jl-btn-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                    Word lid
+                  </a>
+                </div>
+              </div>
+              <div class="jl-membership-card__terms">
+                Memo:
+                <code>JL-LID | SENIOREN | NAAM | EMAIL</code>
+              </div>
+            </div>
+          </div>
+
+          <p class="jl-btc-membership__note">Vervang NAAM en EMAIL met je eigen gegevens, anders kunnen we je lidmaatschap niet koppelen.</p>
+        </div>
+      </section>
 
       <div class="jl-info-banner" style="margin-top: 4rem;">
         <h3>Vragen over lidmaatschap?</h3>
@@ -600,5 +724,62 @@
   </div>
 
   <script src="js/main.js"></script>
+  <script>
+    (() => {
+      const bankView = document.getElementById('bank-options');
+      const bitcoinView = document.getElementById('bitcoin-options');
+      if (!bankView || !bitcoinView) return;
+
+      const isBitcoinMode = () => {
+        const hash = String(window.location.hash || '').toLowerCase();
+        return hash === '#bitcoin' || hash === '#bitcoin-lid';
+      };
+
+      const applyMode = () => {
+        const bitcoin = isBitcoinMode();
+        bankView.hidden = bitcoin;
+        bitcoinView.hidden = !bitcoin;
+      };
+
+      const setupConsent = (viewId, checkboxId) => {
+        const view = document.getElementById(viewId);
+        const checkbox = document.getElementById(checkboxId);
+        if (!view || !checkbox) return;
+
+        const payLinks = Array.from(view.querySelectorAll('[data-membership-pay]'));
+        if (!payLinks.length) return;
+
+        const updatePayLinks = () => {
+          payLinks.forEach((link) => {
+            if (checkbox.checked) {
+              link.classList.remove('jl-btn--consent-disabled');
+              link.removeAttribute('aria-disabled');
+              return;
+            }
+
+            link.classList.add('jl-btn--consent-disabled');
+            link.setAttribute('aria-disabled', 'true');
+          });
+        };
+
+        view.addEventListener('click', (event) => {
+          const payLink = event.target.closest('[data-membership-pay]');
+          if (!payLink) return;
+          if (payLink.getAttribute('aria-disabled') !== 'true') return;
+
+          event.preventDefault();
+          checkbox.focus();
+        });
+
+        checkbox.addEventListener('change', updatePayLinks);
+        updatePayLinks();
+      };
+
+      applyMode();
+      window.addEventListener('hashchange', applyMode);
+      setupConsent('bank-options', 'bank-consent');
+      setupConsent('bitcoin-options', 'bitcoin-consent');
+    })();
+  </script>
 </body>
 </html>
