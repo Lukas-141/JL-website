@@ -9,5 +9,16 @@
     "organizer": "Bestuur JL",
     "description": "Kom samen met andere leden van de JL voor een gezellige borrel in Utrecht. Leuk voor ontmoeting, netwerken en lekker borrelen!",
     "image": "Terras.jpeg"
+  },
+  {
+    "id": 1781948233228,
+    "title": "JL Zomer BBQ",
+    "date": "2026-06-21",
+    "time": "17:00",
+    "endTime": "",
+    "location": "Leiden",
+    "organizer": "Bestuur JL",
+    "description": "BBq test event 1",
+    "image": "Bbq.jpg"
   }
 ]
