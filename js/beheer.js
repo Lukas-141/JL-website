@@ -151,15 +151,6 @@ class BeheerSystem {
       restoreBackupBtn.addEventListener('click', () => this.restoreSelectedBackup());
     }
 
-    const ghSaveTokenBtn = document.getElementById('ghSaveTokenBtn');
-    if (ghSaveTokenBtn) {
-      ghSaveTokenBtn.addEventListener('click', () => this.saveBestuurToken());
-    }
-
-    const ghTestBtn = document.getElementById('ghTestBtn');
-    if (ghTestBtn) {
-      ghTestBtn.addEventListener('click', () => this.testGitHubConnection());
-    }
   }
 
   handleLogin() {
@@ -285,7 +276,7 @@ class BeheerSystem {
         { name: 'team', label: '👥 Team' },
         { name: 'suggestions', label: '📬 Suggesties' },
         { name: 'users', label: '👤 Gebruikers' },
-        { name: 'sync', label: '🔄 Back-ups' }
+        { name: 'sync', label: '💾 Back-ups' }
       ],
       'Activiteiten Commissie': [
         { name: 'evenementen', label: '📅 Evenementen' }
@@ -384,7 +375,6 @@ class BeheerSystem {
     }
     if (tabName === 'sync') {
       this.renderBackupList();
-      this.loadGitHubTokenToForm();
     }
   }
 
@@ -551,7 +541,10 @@ class BeheerSystem {
     if (!listEl) return;
 
     if (backups.length === 0) {
-      listEl.innerHTML = '<div style="color:var(--jl-text-muted);font-size:0.9rem;padding:1rem 0;">Nog geen back-ups beschikbaar.</div>';
+      listEl.innerHTML = `<div class="backup-empty">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+        Nog geen back-ups beschikbaar
+      </div>`;
       return;
     }
 
@@ -559,20 +552,21 @@ class BeheerSystem {
       const date = new Date(backup.createdAt).toLocaleString('nl-NL');
       const data = backup.data || {};
       const counts = [
-        data.events ? `${data.events.length} evenementen` : null,
-        data.standpunten ? `${data.standpunten.length} standpunten` : null,
-        data.bestuur ? `${data.bestuur.length} teamleden` : null
+        data.events ? `${data.events.length} ev.` : null,
+        data.standpunten ? `${data.standpunten.length} sp.` : null,
+        data.bestuur ? `${data.bestuur.length} leden` : null
       ].filter(Boolean).join(' · ');
 
       return `
         <div class="backup-card">
+          <div class="backup-card-icon">💾</div>
           <div class="backup-card-info">
-            <div class="backup-card-title">💾 ${this.escapeHtml(backup.reason)}</div>
-            <div class="backup-card-meta">${date}${counts ? ' &nbsp;·&nbsp; ' + counts : ''}</div>
+            <div class="backup-card-title">${this.escapeHtml(backup.reason)}</div>
+            <div class="backup-card-meta">${date}${counts ? '&ensp;·&ensp;' + counts : ''}</div>
           </div>
           <div class="backup-card-actions">
-            <button class="backup-restore-btn" onclick="beheer.restoreBackupById(${backup.id})">↩️ Herstel</button>
-            <button class="backup-delete-btn" onclick="beheer.deleteBackup(${backup.id})">🗑️</button>
+            <button class="backup-restore-btn" onclick="beheer.restoreBackupById(${backup.id})">Herstel</button>
+            <button class="backup-delete-btn" onclick="beheer.deleteBackup(${backup.id})" title="Verwijder">🗑</button>
           </div>
         </div>
       `;
@@ -743,23 +737,8 @@ class BeheerSystem {
   }
 
   updateSyncRequirement() {
-    const session = this.getSession();
-    // Non-Bestuur always enabled — they submit via Worker, no token needed
-    if (!session || session.role !== 'Bestuur') {
-      this.setEditingEnabled(true);
-      return;
-    }
-    if (!this.requireGitHubSync) {
-      this.setEditingEnabled(true);
-      return;
-    }
-    const ready = this.isGitHubSyncConfigured();
-    this.setEditingEnabled(ready);
-    const notice = document.getElementById('ghSyncRequiredNotice');
-    if (notice) notice.style.display = ready ? 'none' : 'block';
-    if (!ready) {
-      this.setGitHubSyncStatus('GitHub token vereist om wijzigingen te pushen.', 'error');
-    }
+    // Everyone can always edit — token is only asked when actually pushing
+    this.setEditingEnabled(true);
   }
 
   ensureGitHubSyncReady() {
@@ -783,86 +762,9 @@ class BeheerSystem {
     else el.style.color = 'var(--jl-text-muted)';
   }
 
-  loadGitHubSettingsToForm() {
+  async testGitHubConnection() {
     const config = this.getGitHubConfig();
     const token = this.getGitHubToken();
-
-    const ownerEl = document.getElementById('ghOwner');
-    const repoEl = document.getElementById('ghRepo');
-    const branchEl = document.getElementById('ghBranch');
-    const tokenEl = document.getElementById('ghToken');
-    const rememberEl = document.getElementById('ghRememberToken');
-
-    if (ownerEl) ownerEl.value = config.owner;
-    if (repoEl) repoEl.value = config.repo;
-    if (branchEl) branchEl.value = config.branch;
-    if (tokenEl) tokenEl.value = token;
-    if (rememberEl) rememberEl.checked = Boolean(localStorage.getItem(this.githubTokenLocalKey));
-
-    if (token) {
-      this.setGitHubSyncStatus('GitHub sync geconfigureerd.', 'ok');
-    } else {
-      this.setGitHubSyncStatus('GitHub sync nog niet geconfigureerd.', 'idle');
-    }
-    this.updateSyncRequirement();
-  }
-
-  async saveGitHubSettingsFromForm() {
-    const owner = (document.getElementById('ghOwner')?.value || '').trim();
-    const repo = (document.getElementById('ghRepo')?.value || '').trim();
-    const branch = (document.getElementById('ghBranch')?.value || 'main').trim() || 'main';
-    const token = (document.getElementById('ghToken')?.value || '').trim();
-    const rememberToken = Boolean(document.getElementById('ghRememberToken')?.checked);
-
-    if (!owner || !repo) {
-      this.setGitHubSyncStatus('Owner en repository zijn verplicht.', 'error');
-      return;
-    }
-
-    localStorage.setItem(this.githubConfigKey, JSON.stringify({ owner, repo, branch }));
-
-    if (token) {
-      if (rememberToken) {
-        localStorage.setItem(this.githubTokenLocalKey, token);
-        sessionStorage.removeItem(this.githubTokenSessionKey);
-      } else {
-        sessionStorage.setItem(this.githubTokenSessionKey, token);
-        localStorage.removeItem(this.githubTokenLocalKey);
-      }
-    } else {
-      localStorage.removeItem(this.githubTokenLocalKey);
-      sessionStorage.removeItem(this.githubTokenSessionKey);
-    }
-
-    this.setGitHubSyncStatus('GitHub sync instellingen opgeslagen.', 'ok');
-    this.updateSyncRequirement();
-    if (this.isGitHubSyncConfigured()) {
-      const loaded = await this.loadAllDataFromGitHub();
-      if (loaded) {
-        this.loadEvents();
-        this.loadStandpunten();
-        this.loadBestuur();
-      }
-    }
-  }
-
-  async testGitHubConnection() {
-    const saved = this.getGitHubConfig();
-    const config = {
-      owner: (document.getElementById('ghOwner')?.value || saved.owner || '').trim(),
-      repo: (document.getElementById('ghRepo')?.value || saved.repo || '').trim(),
-      branch: (document.getElementById('ghBranch')?.value || saved.branch || 'main').trim() || 'main'
-    };
-    const token = (document.getElementById('ghToken')?.value || this.getGitHubToken() || '').trim();
-
-    if (!config.owner || !config.repo) {
-      this.setGitHubSyncStatus('Owner en repository zijn verplicht.', 'error');
-      return;
-    }
-    if (!token) {
-      this.setGitHubSyncStatus('Voer eerst een GitHub token in.', 'error');
-      return;
-    }
 
     try {
       const response = await fetch(`https://api.github.com/repos/${encodeURIComponent(config.owner)}/${encodeURIComponent(config.repo)}`, {
@@ -1691,8 +1593,13 @@ class BeheerSystem {
   }
 
   async approveSuggestion(suggestionId) {
-    const token = this.getGitHubToken();
-    if (!token) { alert('Voer eerst een GitHub token in via de Back-ups tab.'); return; }
+    let token = this.getGitHubToken();
+    if (!token) {
+      token = prompt('Voer je GitHub Personal Access Token in om deze suggestie goed te keuren en te pushen:\n(Wordt opgeslagen op dit apparaat)');
+      if (!token) return;
+      localStorage.setItem(this.githubTokenLocalKey, token.trim());
+      token = token.trim();
+    }
 
     const config = this.getGitHubConfig();
 
@@ -1756,8 +1663,13 @@ class BeheerSystem {
   }
 
   async rejectSuggestion(suggestionId) {
-    const token = this.getGitHubToken();
-    if (!token) { alert('Voer eerst een GitHub token in via de Back-ups tab.'); return; }
+    let token = this.getGitHubToken();
+    if (!token) {
+      token = prompt('Voer je GitHub Personal Access Token in:\n(Wordt opgeslagen op dit apparaat)');
+      if (!token) return;
+      localStorage.setItem(this.githubTokenLocalKey, token.trim());
+      token = token.trim();
+    }
 
     const config = this.getGitHubConfig();
     const reason = prompt('Reden voor afwijzing (optioneel):') ?? '';
@@ -1785,30 +1697,6 @@ class BeheerSystem {
       this.loadSuggestions();
     } catch (err) {
       alert(`Fout bij afwijzen: ${err.message}`);
-    }
-  }
-
-  // BESTUUR TOKEN MANAGEMENT
-  saveBestuurToken() {
-    const tokenEl = document.getElementById('ghToken');
-    if (!tokenEl) return;
-    const token = tokenEl.value.trim();
-    if (!token) { alert('Voer een token in.'); return; }
-
-    localStorage.setItem(this.githubTokenLocalKey, token);
-    this.setGitHubSyncStatus('✓ Token opgeslagen', 'ok');
-    alert('✓ GitHub token opgeslagen op dit apparaat.');
-  }
-
-  loadGitHubTokenToForm() {
-    const token = this.getGitHubToken();
-    const tokenEl = document.getElementById('ghToken');
-    if (tokenEl && token) tokenEl.value = token;
-
-    if (token) {
-      this.setGitHubSyncStatus('✓ Token ingesteld', 'ok');
-    } else {
-      this.setGitHubSyncStatus('○ Geen token ingesteld', 'idle');
     }
   }
 

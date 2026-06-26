@@ -574,76 +574,121 @@
     }
 
     /* BACKUP LIST */
+    .backup-toolbar {
+      display: flex;
+      gap: 0.625rem;
+      flex-wrap: wrap;
+      margin-bottom: 1.5rem;
+    }
+
+    .backup-toolbar .beheer-btn {
+      font-size: 0.85rem;
+      padding: 0.5rem 1rem;
+    }
+
     .backup-list {
       display: flex;
       flex-direction: column;
-      gap: 0.75rem;
-      max-height: 400px;
-      overflow-y: auto;
+      gap: 0.5rem;
+    }
+
+    .backup-empty {
+      text-align: center;
+      padding: 2.5rem 1rem;
+      color: var(--jl-text-muted);
+      border: 2px dashed #e0e0e0;
+      border-radius: 0.5rem;
+      font-size: 0.9rem;
+    }
+
+    .backup-empty svg {
+      display: block;
+      margin: 0 auto 0.75rem;
+      opacity: 0.35;
     }
 
     .backup-card {
       display: flex;
       align-items: center;
-      justify-content: space-between;
+      gap: 1rem;
       padding: 0.875rem 1rem;
-      border: 1px solid #eee;
-      border-radius: 0.375rem;
-      background: #fafafa;
-      transition: border-color 0.2s;
+      border: 1px solid #ececec;
+      border-radius: 0.5rem;
+      background: #fff;
+      transition: box-shadow 0.15s, border-color 0.15s;
     }
 
     .backup-card:hover {
       border-color: var(--jl-yellow);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+
+    .backup-card-icon {
+      width: 2.25rem;
+      height: 2.25rem;
+      border-radius: 0.375rem;
+      background: #fff8cc;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      flex-shrink: 0;
     }
 
     .backup-card-info {
       flex: 1;
+      min-width: 0;
     }
 
     .backup-card-title {
       font-weight: 600;
-      font-size: 0.9rem;
+      font-size: 0.875rem;
       color: var(--jl-black);
-      margin: 0 0 0.2rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .backup-card-meta {
-      font-size: 0.78rem;
+      font-size: 0.775rem;
       color: var(--jl-text-muted);
+      margin-top: 0.15rem;
     }
 
     .backup-card-actions {
       display: flex;
-      gap: 0.5rem;
-      margin-left: 1rem;
-    }
-
-    .backup-card-actions button {
-      padding: 0.4rem 0.75rem;
-      font-size: 0.8rem;
-      border: none;
-      border-radius: 0.25rem;
-      cursor: pointer;
+      gap: 0.4rem;
+      flex-shrink: 0;
     }
 
     .backup-restore-btn {
+      padding: 0.375rem 0.875rem;
+      font-size: 0.8rem;
+      font-weight: 600;
       background: var(--jl-yellow);
       color: var(--jl-black);
-      font-weight: 600;
+      border: none;
+      border-radius: 0.375rem;
+      cursor: pointer;
+      transition: opacity 0.15s;
     }
 
-    .backup-restore-btn:hover {
-      opacity: 0.9;
-    }
+    .backup-restore-btn:hover { opacity: 0.85; }
 
     .backup-delete-btn {
-      background: #f44;
-      color: white;
+      padding: 0.375rem 0.625rem;
+      font-size: 0.8rem;
+      background: #fff;
+      color: #c00;
+      border: 1px solid #eee;
+      border-radius: 0.375rem;
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s;
     }
 
     .backup-delete-btn:hover {
-      background: #c00;
+      background: #fff0f0;
+      border-color: #f99;
     }
 
   </style>
@@ -975,55 +1020,30 @@
         </div>
       </div>
 
-      <!-- TAB: DEPLOY & BACK-UPS -->
+      <!-- TAB: BACK-UPS -->
       <div id=”tab-sync” class=”beheer-panel”>
-        <h2>🔄 Deploy & Back-ups</h2>
+        <h2>💾 Back-ups</h2>
 
         <div class=”beheer-section”>
-          <h3>GitHub Token (Bestuur)</h3>
-          <div class=”info-box”>
-            Vul hier je GitHub Personal Access Token in. Hiermee kan Bestuur goedgekeurde wijzigingen pushen naar de live website. Token wordt alleen lokaal opgeslagen op dit apparaat.
-          </div>
-          <div class=”beheer-form-row” style=”margin-top:1rem;”>
-            <div class=”beheer-form-group”>
-              <label for=”ghToken”>Personal Access Token</label>
-              <input type=”password” id=”ghToken” placeholder=”ghp_xxxxxxxxxxxx” autocomplete=”off”>
-            </div>
-            <div class=”beheer-form-group” style=”display:flex;align-items:flex-end;gap:0.5rem;”>
-              <button type=”button” id=”ghSaveTokenBtn” class=”beheer-btn” style=”white-space:nowrap;”>💾 Opslaan</button>
-              <button type=”button” id=”ghTestBtn” class=”beheer-btn” style=”background:#f5f5f5;color:var(--jl-black);white-space:nowrap;”>🔌 Testen</button>
-            </div>
-          </div>
-          <p id=”ghSyncStatus” style=”margin:0.75rem 0 0;font-size:0.9rem;font-weight:600;color:var(--jl-text-muted);”>
-            ○ Geen token ingesteld
-          </p>
-        </div>
-
-        <div class=”beheer-section”>
-          <h3>Back-up & Herstel</h3>
-          <div class=”info-box”>
-            Back-ups worden lokaal opgeslagen (tot 50 snapshots). Exporteer als JSON voor externe opslag.
-          </div>
-
-          <div class=”beheer-form-row”>
-            <div class=”beheer-form-group”>
-              <button type=”button” id=”backupNowBtn” class=”beheer-btn”>💾 Nu back-up maken</button>
-            </div>
-            <div class=”beheer-form-group”>
-              <button type=”button” id=”exportDataBtn” class=”beheer-btn”>📤 Exporteer data (.json)</button>
+          <div style=”display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem;”>
+            <div>
+              <h3 style=”margin:0 0 0.2rem;”>Herstelpunten <span id=”backupCount” style=”font-size:0.8rem;color:var(--jl-text-muted);font-weight:400;”></span></h3>
+              <p style=”margin:0;font-size:0.85rem;color:var(--jl-text-muted);”>Lokaal opgeslagen snapshots van alle data. Max. 50.</p>
             </div>
           </div>
 
-          <div class=”beheer-form-row”>
-            <div class=”beheer-form-group”>
-              <button type=”button” id=”importDataBtn” class=”beheer-btn”>📥 Importeer back-up</button>
-              <input type=”file” id=”importDataInput” accept=”.json,application/json” style=”display:none;”>
-            </div>
+          <div class=”backup-toolbar”>
+            <button type=”button” id=”backupNowBtn” class=”beheer-btn”>💾 Nu back-up maken</button>
+            <button type=”button” id=”exportDataBtn” class=”beheer-btn” style=”background:#f5f5f5;color:var(--jl-black);”>📤 Exporteren</button>
+            <button type=”button” id=”importDataBtn” class=”beheer-btn” style=”background:#f5f5f5;color:var(--jl-black);”>📥 Importeren</button>
+            <input type=”file” id=”importDataInput” accept=”.json,application/json” style=”display:none;”>
           </div>
 
-          <h4 style=”margin:1.5rem 0 0.75rem;color:var(--jl-black);”>Herstelpunten <span id=”backupCount” style=”font-size:0.8rem;color:var(--jl-text-muted);font-weight:400;”></span></h4>
           <div id=”backupList” class=”backup-list”>
-            <div style=”color:var(--jl-text-muted);font-size:0.9rem;padding:1rem 0;”>Nog geen back-ups beschikbaar.</div>
+            <div class=”backup-empty”>
+              <svg width=”32” height=”32” viewBox=”0 0 24 24” fill=”none” stroke=”currentColor” stroke-width=”1.5”><path d=”M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z”/><polyline points=”17 21 17 13 7 13 7 21”/><polyline points=”7 3 7 8 15 8”/></svg>
+              Nog geen back-ups beschikbaar
+            </div>
           </div>
 
           <select id=”backupRestoreSelect” style=”display:none;”></select>
