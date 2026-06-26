@@ -1610,12 +1610,133 @@ class BeheerSystem {
             <small style="color:var(--jl-text-muted);">Aangemaakt: ${new Date(user.createdAt).toLocaleDateString('nl-NL')}</small>
           </div>
           <div class="beheer-item-actions">
-            <button class="beheer-btn" style="background:#ddd;color:#111;padding:0.5rem 0.75rem;font-size:0.85rem;">📋 ${permissionsText}</button>
+            <button class="beheer-btn" style="background:#ddd;color:#111;padding:0.5rem 0.75rem;font-size:0.85rem;" onclick="beheer.editPermissions('${user.id}')">📋 ${permissionsText}</button>
             <button class="beheer-btn beheer-btn-delete" onclick="beheer.deleteUser('${user.id}')" style="padding:0.5rem 0.75rem;font-size:0.85rem;">🗑️ Verwijderen</button>
           </div>
         </div>
       `;
     }).join('');
+  }
+
+  editPermissions(userId) {
+    const user = this.allUsers.find(u => u.id === userId);
+    if (!user) return;
+
+    // Store current user being edited
+    this.editingUser = user;
+
+    const modal = document.getElementById('permissionModal');
+    const usernameEl = document.getElementById('permModalUsername');
+    const permListEl = document.getElementById('permissionsList');
+
+    usernameEl.textContent = user.username;
+
+    // All available permissions
+    const allPermissions = [
+      'view:events',
+      'edit:events',
+      'delete:own:events',
+      'view:standpunten',
+      'edit:standpunten',
+      'delete:own:standpunten',
+      'upload:images',
+      'view:audit',
+      'manage:users'
+    ];
+
+    // Admin permission
+    const hasAllPerms = user.permissions.includes('*');
+
+    permListEl.innerHTML = `
+      <div style="margin-bottom:1rem;">
+        <label style="display:flex;align-items:center;gap:0.5rem;font-weight:600;cursor:pointer;">
+          <input type="checkbox" id="perm_admin" ${hasAllPerms ? 'checked' : ''} onchange="beheer.toggleAdminPerms()">
+          ✨ Alle permissies (Admin/Bestuur)
+        </label>
+      </div>
+
+      <hr style="border:none;border-top:1px solid #ddd;margin:1rem 0;">
+
+      <div ${hasAllPerms ? 'style="opacity:0.5;pointer-events:none;"' : ''}>
+        ${allPermissions.map(perm => {
+          const isChecked = user.permissions.includes(perm);
+          return `
+            <label style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.5rem;cursor:pointer;">
+              <input type="checkbox" class="perm_item" data-perm="${perm}" ${isChecked ? 'checked' : ''}>
+              ${this.getPermissionLabel(perm)}
+            </label>
+          `;
+        }).join('')}
+      </div>
+    `;
+
+    modal.style.display = 'flex';
+  }
+
+  getPermissionLabel(perm) {
+    const labels = {
+      'view:events': '👁️ Evenementen bekijken',
+      'edit:events': '✏️ Evenementen bewerken',
+      'delete:own:events': '🗑️ Eigen evenementen verwijderen',
+      'view:standpunten': '👁️ Standpunten bekijken',
+      'edit:standpunten': '✏️ Standpunten bewerken',
+      'delete:own:standpunten': '🗑️ Eigen standpunten verwijderen',
+      'upload:images': '🖼️ Afbeeldingen uploaden',
+      'view:audit': '👁️ Activity Log bekijken',
+      'manage:users': '👤 Gebruikers beheren'
+    };
+    return labels[perm] || perm;
+  }
+
+  toggleAdminPerms() {
+    const adminCheckbox = document.getElementById('perm_admin');
+    const permItems = document.querySelectorAll('.perm_item');
+
+    if (adminCheckbox.checked) {
+      permItems.forEach(item => item.disabled = true);
+    } else {
+      permItems.forEach(item => item.disabled = false);
+    }
+  }
+
+  savePermissions() {
+    if (!this.editingUser) return;
+
+    const adminCheckbox = document.getElementById('perm_admin');
+    let newPermissions = [];
+
+    if (adminCheckbox.checked) {
+      newPermissions = ['*'];
+    } else {
+      const checkedPerms = document.querySelectorAll('.perm_item:checked');
+      newPermissions = Array.from(checkedPerms).map(p => p.dataset.perm);
+    }
+
+    // Update user
+    const userIndex = this.allUsers.findIndex(u => u.id === this.editingUser.id);
+    if (userIndex >= 0) {
+      const oldPermissions = this.allUsers[userIndex].permissions;
+      this.allUsers[userIndex].permissions = newPermissions;
+
+      // Save to localStorage
+      localStorage.setItem(this.usersKey, JSON.stringify(this.allUsers));
+
+      // Log to audit
+      auditLogger.log(
+        'edit',
+        'user',
+        this.editingUser.id,
+        this.editingUser.username,
+        { permissions: oldPermissions },
+        { permissions: newPermissions },
+        'success',
+        'Permissies aangepast'
+      );
+
+      alert('Permissies opgeslagen!');
+      this.renderUserList();
+      document.getElementById('permissionModal').style.display = 'none';
+    }
   }
 
   deleteUser(userId) {

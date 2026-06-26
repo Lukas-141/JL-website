@@ -545,7 +545,7 @@
         <!-- Dynamisch gevuld op basis van role -->
       </ul>
 
-      <button id="logoutBtn" class="beheer-logout">🚪 Uitloggen</button>
+      <button id="logoutBtn" class="beheer-logout" onclick="beheer.logout()">🚪 Uitloggen</button>
     </div>
 
     <!-- MAIN CONTENT -->
@@ -890,6 +890,18 @@
 
           <button type="button" id="restoreBackupBtn" class="beheer-btn beheer-btn-delete">↩️ Herstel geselecteerde back-up</button>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PERMISSION EDITOR MODAL -->
+  <div id="permissionModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:9999;justify-content:center;align-items:center;">
+    <div style="background:var(--jl-white);border-radius:0.5rem;padding:2rem;max-width:400px;width:90%;max-height:80vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,0.3);">
+      <h3 style="margin-top:0;color:var(--jl-black);">Permissies voor <span id="permModalUsername"></span></h3>
+      <div id="permissionsList" style="margin:1.5rem 0;"></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:2rem;">
+        <button class="beheer-btn" onclick="beheer.savePermissions()" style="width:100%;">💾 Opslaan</button>
+        <button class="beheer-btn" style="background:#ddd;color:#111;width:100%;" onclick="document.getElementById('permissionModal').style.display='none';">Sluiten</button>
       </div>
     </div>
   </div>
