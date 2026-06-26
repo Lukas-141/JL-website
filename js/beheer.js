@@ -151,6 +151,14 @@ class BeheerSystem {
       restoreBackupBtn.addEventListener('click', () => this.restoreSelectedBackup());
     }
 
+    const loginTokenBtn = document.getElementById('loginTokenBtn');
+    if (loginTokenBtn) loginTokenBtn.addEventListener('click', () => this.handleTokenStep(true));
+
+    const loginTokenSkipBtn = document.getElementById('loginTokenSkipBtn');
+    if (loginTokenSkipBtn) loginTokenSkipBtn.addEventListener('click', () => this.handleTokenStep(false));
+
+    const loginToken = document.getElementById('loginToken');
+    if (loginToken) loginToken.addEventListener('keydown', (e) => { if (e.key === 'Enter') this.handleTokenStep(true); });
   }
 
   handleLogin() {
@@ -210,8 +218,32 @@ class BeheerSystem {
       console.warn('Audit logging error (non-critical):', e.message);
     }
 
-    // Show dashboard
+    // Bestuur gets a token step before dashboard
+    if (user.role === 'Bestuur') {
+      this.showLoginStep2();
+      return;
+    }
+
     this.showDashboard(user.username);
+  }
+
+  showLoginStep2() {
+    document.getElementById('loginForm').style.display = 'none';
+    document.getElementById('loginError').style.display = 'none';
+    const step2 = document.getElementById('loginStep2');
+    if (step2) step2.style.display = 'block';
+    const existing = this.getGitHubToken();
+    const input = document.getElementById('loginToken');
+    if (input && existing) input.value = existing;
+  }
+
+  handleTokenStep(save) {
+    if (save) {
+      const token = (document.getElementById('loginToken')?.value || '').trim();
+      if (token) localStorage.setItem(this.githubTokenLocalKey, token);
+    }
+    const session = this.getSession();
+    this.showDashboard(session.username);
   }
 
   logout() {
@@ -379,6 +411,7 @@ class BeheerSystem {
     }
     if (tabName === 'sync') {
       this.renderBackupList();
+      this.updateSyncTab();
     }
   }
 
@@ -731,6 +764,92 @@ class BeheerSystem {
     return Boolean(config.owner && config.repo && config.branch && token);
   }
 
+  updateSyncTab() {
+    const token = this.getGitHubToken();
+    const badge = document.getElementById('syncTokenBadge');
+    const masked = document.getElementById('syncTokenMasked');
+    if (token) {
+      if (masked) masked.textContent = `ghp_••••••••••••${token.slice(-4)}`;
+      if (badge) { badge.textContent = '✓ Token ingesteld'; badge.style.background = '#e8f5e9'; badge.style.color = '#0a7a33'; }
+    } else {
+      if (masked) masked.textContent = 'Geen token ingesteld';
+      if (badge) { badge.textContent = '○ Geen token'; badge.style.background = '#f5f5f5'; badge.style.color = 'var(--jl-text-muted)'; }
+    }
+    const testStatus = document.getElementById('syncTestStatus');
+    const pushStatus = document.getElementById('syncPushStatus');
+    if (testStatus) testStatus.style.display = 'none';
+    if (pushStatus) pushStatus.style.display = 'none';
+  }
+
+  toggleTokenEdit() {
+    const edit = document.getElementById('syncTokenEdit');
+    if (!edit) return;
+    const visible = edit.style.display !== 'none';
+    edit.style.display = visible ? 'none' : 'block';
+    if (!visible) {
+      const input = document.getElementById('syncTokenInput');
+      if (input) { input.value = this.getGitHubToken(); input.focus(); }
+    }
+  }
+
+  saveTokenFromSync() {
+    const token = (document.getElementById('syncTokenInput')?.value || '').trim();
+    if (!token) { alert('Voer een token in.'); return; }
+    localStorage.setItem(this.githubTokenLocalKey, token);
+    this.toggleTokenEdit();
+    this.updateSyncTab();
+  }
+
+  async testGitHubConnection() {
+    const btn = document.getElementById('syncTestBtn');
+    const status = document.getElementById('syncTestStatus');
+    if (btn) btn.disabled = true;
+    if (status) { status.style.display = 'block'; status.textContent = '⏳ Verbinding testen...'; status.style.color = 'var(--jl-text-muted)'; }
+    const config = this.getGitHubConfig();
+    const token = this.getGitHubToken();
+    if (!token) {
+      if (status) { status.textContent = '⚠️ Geen token ingesteld — voer eerst een token in.'; status.style.color = '#c00'; }
+      if (btn) btn.disabled = false;
+      return;
+    }
+    try {
+      const res = await fetch(`https://api.github.com/repos/${encodeURIComponent(config.owner)}/${encodeURIComponent(config.repo)}`, {
+        headers: { Accept: 'application/vnd.github+json', Authorization: `Bearer ${token}` }
+      });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const data = await res.json();
+      if (status) { status.textContent = `✓ Verbonden met ${data.full_name}`; status.style.color = '#0a7a33'; }
+    } catch (err) {
+      if (status) { status.textContent = `✗ Mislukt: ${err.message}`; status.style.color = '#c00'; }
+    } finally {
+      if (btn) btn.disabled = false;
+    }
+  }
+
+  async pushToGitHub() {
+    const btn = document.getElementById('syncPushBtn');
+    const status = document.getElementById('syncPushStatus');
+    if (btn) btn.disabled = true;
+    if (status) { status.style.display = 'block'; status.textContent = '⏳ Data pushen naar GitHub...'; status.style.color = 'var(--jl-text-muted)'; }
+    const token = this.getGitHubToken();
+    if (!token) {
+      if (status) { status.textContent = '⚠️ Geen token ingesteld — voer eerst een token in.'; status.style.color = '#c00'; }
+      if (btn) btn.disabled = false;
+      return;
+    }
+    try {
+      await this.syncAllDatasetsToGitHub();
+      const now = new Date().toLocaleString('nl-NL');
+      if (status) { status.textContent = `✓ Gesynchroniseerd op ${now}`; status.style.color = '#0a7a33'; }
+      const label = document.getElementById('syncLastPushLabel');
+      if (label) label.textContent = `Laatste push: ${now}`;
+    } catch (err) {
+      if (status) { status.textContent = `✗ Push mislukt: ${err.message}`; status.style.color = '#c00'; }
+    } finally {
+      if (btn) btn.disabled = false;
+    }
+  }
+
   setEditingEnabled(enabled) {
     const controls = document.querySelectorAll('#dashboard input, #dashboard textarea, #dashboard select, #dashboard button');
     controls.forEach((control) => {
@@ -766,23 +885,6 @@ class BeheerSystem {
     else el.style.color = 'var(--jl-text-muted)';
   }
 
-  async testGitHubConnection() {
-    const config = this.getGitHubConfig();
-    const token = this.getGitHubToken();
-
-    try {
-      const response = await fetch(`https://api.github.com/repos/${encodeURIComponent(config.owner)}/${encodeURIComponent(config.repo)}`, {
-        headers: {
-          Accept: 'application/vnd.github+json',
-          Authorization: `Bearer ${token}`
-        }
-      });
-      if (!response.ok) throw new Error(`HTTP ${response.status}`);
-      this.setGitHubSyncStatus('GitHub verbinding OK.', 'ok');
-    } catch (_) {
-      this.setGitHubSyncStatus('GitHub verbinding mislukt. Controleer owner/repo/token.', 'error');
-    }
-  }
 
   utf8ToBase64(text) {
     const bytes = new TextEncoder().encode(text);
