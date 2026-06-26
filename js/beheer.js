@@ -1873,51 +1873,16 @@ class BeheerSystem {
     statusDiv.appendChild(statusEl);
 
     try {
-      // Validate file client-side
-      const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
-      const maxSize = 5 * 1024 * 1024; // 5MB
-
-      if (!allowedTypes.includes(file.type)) {
-        throw new Error(`Ongeldig bestandstype: ${file.type}. Toegestaan: JPG, PNG, WebP`);
-      }
-
-      if (file.size > maxSize) {
-        throw new Error(`Bestand te groot: ${(file.size / 1024 / 1024).toFixed(1)}MB. Max: 5MB`);
-      }
-
-      // Upload to server
-      const formData = new FormData();
-      formData.append('file', file);
-
-      const response = await fetch('/api/upload', {
-        method: 'POST',
-        body: formData
-      });
-
-      const result = await response.json();
+      const result = await window.imageUploader.uploadFile(file, 'general');
 
       if (result.success) {
         statusEl.className = 'beheer-upload-status success';
         statusEl.innerHTML = `✓ ${result.message}<div class="beheer-image-name">${result.fileName}</div>`;
         itemField.value = result.fileName;
-
-        // Log to audit trail
-        if (window.auditLogger) {
-          const session = this.getSession();
-          window.auditLogger.log(
-            'upload',
-            'image',
-            `img_${Date.now()}`,
-            result.fileName,
-            null,
-            { size: file.size, type: file.type, uploadedBy: session?.username },
-            'success'
-          );
-        }
       } else {
-        throw new Error(result.error || 'Upload failed');
+        statusEl.className = 'beheer-upload-status error';
+        statusEl.innerHTML = `✗ Fout: ${result.error}`;
       }
-
     } catch (err) {
       statusEl.className = 'beheer-upload-status error';
       statusEl.innerHTML = `✗ Upload fout: ${err.message}`;
