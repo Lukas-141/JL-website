@@ -1,0 +1,29 @@
+[
+  {
+    "id": "user_bestuur_1",
+    "username": "bestuur",
+    "passwordHash": "$2a$10$N9qo8uLOickgx2ZMRZoMye6pLMJf3d...",
+    "role": "Bestuur",
+    "email": "bestuur@jongelibertariers.nl",
+    "permissions": ["*"],
+    "createdAt": "2026-06-26T00:00:00Z"
+  },
+  {
+    "id": "user_activiteiten_1",
+    "username": "anna",
+    "passwordHash": "$2a$10$N9qo8uLOickgx2ZMRZoMye6pLMJf3d...",
+    "role": "Activiteiten Commissie",
+    "email": "anna@jongelibertariers.nl",
+    "permissions": ["view:events", "edit:events", "delete:own:events", "upload:images", "view:audit"],
+    "createdAt": "2026-06-26T00:00:00Z"
+  },
+  {
+    "id": "user_standpunten_1",
+    "username": "marcus",
+    "passwordHash": "$2a$10$N9qo8uLOickgx2ZMRZoMye6pLMJf3d...",
+    "role": "Standpunten Commissie",
+    "email": "marcus@jongelibertariers.nl",
+    "permissions": ["view:standpunten", "edit:standpunten", "delete:own:standpunten", "upload:images", "view:audit"],
+    "createdAt": "2026-06-26T00:00:00Z"
+  }
+]

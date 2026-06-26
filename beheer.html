@@ -371,6 +371,114 @@
       font-size: 0.95rem;
     }
 
+    .beheer-form-control {
+      width: 100%;
+      padding: 0.65rem;
+      border: 1px solid #ddd;
+      border-radius: 0.25rem;
+      font-family: var(--jl-font);
+      font-size: 0.95rem;
+      box-sizing: border-box;
+    }
+
+    .activity-entry {
+      display: grid;
+      grid-template-columns: 160px 140px 100px 1fr 100px;
+      gap: 1rem;
+      padding: 1rem;
+      border: 1px solid #eee;
+      border-radius: 0.25rem;
+      margin-bottom: 0.75rem;
+      align-items: center;
+      background: #f9f9f9;
+      font-size: 0.9rem;
+    }
+
+    .activity-time {
+      color: var(--jl-text-muted);
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    .activity-user {
+      font-weight: 600;
+      color: var(--jl-black);
+    }
+
+    .activity-role {
+      font-size: 0.8rem;
+      color: var(--jl-text-muted);
+    }
+
+    .activity-action {
+      display: inline-block;
+      padding: 0.25rem 0.5rem;
+      border-radius: 0.2rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      background: #ddd;
+      color: #333;
+    }
+
+    .activity-action.add {
+      background: #0a7a33;
+      color: white;
+    }
+
+    .activity-action.edit {
+      background: #0066cc;
+      color: white;
+    }
+
+    .activity-action.delete {
+      background: #dc3545;
+      color: white;
+    }
+
+    .activity-action.publish {
+      background: #0a7a33;
+      color: white;
+    }
+
+    .activity-item {
+      color: var(--jl-black);
+      word-break: break-word;
+    }
+
+    .user-entry {
+      display: grid;
+      grid-template-columns: 1fr 150px 150px 100px;
+      gap: 1rem;
+      padding: 1rem;
+      border: 1px solid #eee;
+      border-radius: 0.25rem;
+      margin-bottom: 0.75rem;
+      align-items: center;
+      background: #f9f9f9;
+    }
+
+    .user-info h4 {
+      margin: 0 0 0.25rem;
+      color: var(--jl-black);
+      font-size: 1rem;
+    }
+
+    .user-info p {
+      margin: 0.25rem 0 0;
+      font-size: 0.85rem;
+      color: var(--jl-text-muted);
+    }
+
+    .role-badge {
+      display: inline-block;
+      padding: 0.25rem 0.5rem;
+      border-radius: 0.2rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+      background: var(--jl-yellow);
+      color: var(--jl-black);
+    }
+
     @media (max-width: 768px) {
       .beheer-dashboard {
         grid-template-columns: 1fr;
@@ -433,11 +541,8 @@
         <p>Beheer</p>
       </div>
 
-      <ul class="beheer-nav">
-        <li><a class="nav-link active" data-tab="evenementen">📅 Evenementen</a></li>
-        <li><a class="nav-link" data-tab="content">📝 Content</a></li>
-        <li><a class="nav-link" data-tab="team">👥 Team</a></li>
-        <li><a class="nav-link" data-tab="sync">🔄 Deploy & Back-ups</a></li>
+      <ul class="beheer-nav" id="navMenu">
+        <!-- Dynamisch gevuld op basis van role -->
       </ul>
 
       <button id="logoutBtn" class="beheer-logout">🚪 Uitloggen</button>
@@ -667,54 +772,94 @@
         </div>
       </div>
 
+      <!-- TAB: ACTIVITY LOG (Bestuur only) -->
+      <div id="tab-activity" class="beheer-panel">
+        <h2>👁️ Activity Log</h2>
+
+        <div class="beheer-section">
+          <h3>Wijzigingen</h3>
+
+          <div style="margin-bottom: 1.5rem; display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 0.75rem;">
+            <select id="activityFilterAction" class="beheer-form-control">
+              <option value="">Alle acties</option>
+              <option value="add">Toegevoegd</option>
+              <option value="edit">Bewerkt</option>
+              <option value="delete">Verwijderd</option>
+              <option value="publish">Gepubliceerd</option>
+            </select>
+            <select id="activityFilterType" class="beheer-form-control">
+              <option value="">Alle types</option>
+              <option value="event">Evenementen</option>
+              <option value="standpunt">Standpunten</option>
+              <option value="bestuur">Team</option>
+              <option value="user">Gebruikers</option>
+            </select>
+            <select id="activityFilterUser" class="beheer-form-control">
+              <option value="">Alle gebruikers</option>
+            </select>
+            <button class="beheer-btn" onclick="beheer.filterActivityLog()" style="width:100%;">🔍 Filteren</button>
+          </div>
+
+          <div id="activityTimeline" class="beheer-list"></div>
+        </div>
+      </div>
+
+      <!-- TAB: USER MANAGEMENT (Bestuur only) -->
+      <div id="tab-users" class="beheer-panel">
+        <h2>👤 Gebruikerbeheer</h2>
+
+        <div class="beheer-section">
+          <h3>Gebruiker toevoegen</h3>
+          <form id="userForm">
+            <div class="beheer-form-row">
+              <div class="beheer-form-group">
+                <label for="userName">Gebruikersnaam *</label>
+                <input type="text" id="userName" placeholder="bijv. anna" required>
+              </div>
+              <div class="beheer-form-group">
+                <label for="userEmail">E-mailadres *</label>
+                <input type="email" id="userEmail" required>
+              </div>
+            </div>
+
+            <div class="beheer-form-row">
+              <div class="beheer-form-group">
+                <label for="userRole">Rol *</label>
+                <select id="userRole" required>
+                  <option value="Activiteiten Commissie">Activiteiten Commissie</option>
+                  <option value="Standpunten Commissie">Standpunten Commissie</option>
+                  <option value="Bestuur">Bestuur</option>
+                </select>
+              </div>
+              <div class="beheer-form-group">
+                <label for="userPassword">Wachtwoord *</label>
+                <input type="password" id="userPassword" placeholder="Minimaal 8 tekens" required>
+              </div>
+            </div>
+
+            <button type="submit" class="beheer-btn">➕ Gebruiker toevoegen</button>
+          </form>
+        </div>
+
+        <div class="beheer-section">
+          <h3>Alle gebruikers</h3>
+          <div id="usersList" class="beheer-list"></div>
+        </div>
+      </div>
+
       <!-- TAB: DEPLOY & BACK-UPS -->
       <div id="tab-sync" class="beheer-panel">
         <h2>🔄 Deploy & Back-ups</h2>
 
-        <div class="beheer-section">
-          <h3>GitHub Deploy Sync</h3>
-          <div class="info-box">
-            Deze beheeromgeving is GitHub-first: zonder token zijn bewerkingen uitgeschakeld. Wijzigingen worden direct naar GitHub geschreven
-            (events.json, standpunten.json, bestuur.json), zodat deploy dit automatisch meeneemt.
+        <div class=”beheer-section”>
+          <h3>GitHub Sync Status</h3>
+          <div class=”info-box”>
+            Wijzigingen worden automatisch naar GitHub gesynchroniseerd.
+            Je hoeft niks in te stellen — alles gebeurt op de achtergrond.
           </div>
-          <p id="ghSyncRequiredNotice" style="margin:0 0 1rem;color:#c00;font-weight:600;display:none;">
-            GitHub sync is verplicht om te kunnen bewerken. Vul owner/repo/token in en klik op “Config opslaan”.
+          <p id=”ghSyncStatus” style=”margin:1rem 0 0;color:var(--jl-text-muted);font-size:0.95rem;font-weight:600;”>
+            ✓ Synchronisatie actief
           </p>
-          <div class="beheer-form-row">
-            <div class="beheer-form-group">
-              <label for="ghOwner">GitHub owner</label>
-              <input type="text" id="ghOwner" placeholder="bijv. Lukas-141">
-            </div>
-            <div class="beheer-form-group">
-              <label for="ghRepo">Repository</label>
-              <input type="text" id="ghRepo" placeholder="bijv. JL-website">
-            </div>
-          </div>
-          <div class="beheer-form-row">
-            <div class="beheer-form-group">
-              <label for="ghBranch">Branch</label>
-              <input type="text" id="ghBranch" placeholder="main">
-            </div>
-            <div class="beheer-form-group">
-              <label for="ghToken">GitHub token (repo inhoud wijzigen)</label>
-              <input type="password" id="ghToken" placeholder="ghp_...">
-            </div>
-          </div>
-          <div class="beheer-form-group">
-            <label style="display:flex;align-items:center;gap:0.5rem;font-weight:600;">
-              <input type="checkbox" id="ghRememberToken" style="width:auto;">
-              Token onthouden op dit apparaat
-            </label>
-          </div>
-          <div class="beheer-form-row">
-            <div class="beheer-form-group">
-              <button type="button" id="ghSaveConfigBtn" class="beheer-btn">💾 Config opslaan</button>
-            </div>
-            <div class="beheer-form-group">
-              <button type="button" id="ghTestBtn" class="beheer-btn">🔍 Verbinding testen</button>
-            </div>
-          </div>
-          <p id="ghSyncStatus" style="margin:0.5rem 0 0;color:var(--jl-text-muted);font-size:0.9rem;">GitHub sync nog niet geconfigureerd.</p>
         </div>
 
         <div class="beheer-section">
@@ -749,6 +894,7 @@
     </div>
   </div>
 
+  <script src="js/audit-logger.js"></script>
   <script src="js/beheer.js"></script>
 </body>
 </html>

@@ -2,11 +2,8 @@
 
 class BeheerSystem {
   constructor() {
-    this.users = {
-      'bestuur': 'JL2026!Vrijheid',
-      'admin': 'admin123'
-    };
     this.storageKey = 'jl-beheer-session';
+    this.usersKey = 'jl-users-cache';
     this.eventsKey = 'jl-events';
     this.standpuntenKey = 'jl-standpunten';
     this.bestuurKey = 'jl-bestuur';
@@ -16,12 +13,45 @@ class BeheerSystem {
     this.githubTokenLocalKey = 'jl-github-token';
     this.githubTokenSessionKey = 'jl-github-token-session';
     this.requireGitHubSync = true;
+    this.allUsers = [];
     this.init();
   }
 
-  init() {
+  async init() {
+    await this.loadUsersFromFile();
     this.checkSession();
     this.setupEventListeners();
+  }
+
+  async loadUsersFromFile() {
+    try {
+      const response = await fetch('users.json');
+      this.allUsers = await response.json();
+    } catch (error) {
+      console.error('Failed to load users.json:', error);
+      this.allUsers = [];
+    }
+  }
+
+  getSession() {
+    try {
+      const session = localStorage.getItem(this.storageKey);
+      return session ? JSON.parse(session) : null;
+    } catch (_) {
+      return null;
+    }
+  }
+
+  setSession(sessionData) {
+    localStorage.setItem(this.storageKey, JSON.stringify(sessionData));
+  }
+
+  hasPermission(permission) {
+    const session = this.getSession();
+    if (!session) return false;
+    if (session.permissions && session.permissions.includes('*')) return true;
+    if (session.permissions && session.permissions.includes(permission)) return true;
+    return false;
   }
 
   checkSession() {
@@ -124,19 +154,94 @@ class BeheerSystem {
     const password = document.getElementById('password').value;
     const errorEl = document.getElementById('loginError');
 
-    if (this.users[username] === password) {
-      localStorage.setItem(this.storageKey, JSON.stringify({ username }));
-      this.showDashboard(username);
-    } else {
+    const user = this.allUsers.find(u => u.username === username);
+
+    if (!user) {
       errorEl.textContent = 'Gebruikersnaam of wachtwoord onjuist';
       errorEl.style.display = 'block';
       document.getElementById('password').value = '';
+      return;
     }
+
+    // Simplified: direct compare password (in production: use bcrypt)
+    if (user.passwordHash && user.passwordHash !== password && !this.verifyPassword(password, user.passwordHash)) {
+      errorEl.textContent = 'Gebruikersnaam of wachtwoord onjuist';
+      errorEl.style.display = 'block';
+      document.getElementById('password').value = '';
+      return;
+    }
+
+    // Login successful
+    const session = {
+      username: user.username,
+      userId: user.id,
+      role: user.role,
+      email: user.email,
+      permissions: user.permissions,
+      loginTime: new Date().toISOString()
+    };
+
+    this.setSession(session);
+
+    // Log to audit
+    auditLogger.log('login', 'user', user.id, user.username, null, { username: user.username, role: user.role });
+
+    this.showDashboard(user.username);
+  }
+
+  verifyPassword(password, hash) {
+    // Simple comparison for demo
+    // In production: use bcrypt.compare()
+    return password === hash;
   }
 
   logout() {
+    const session = this.getSession();
+    if (session) {
+      auditLogger.log('logout', 'user', session.userId, session.username, null, null);
+    }
     localStorage.removeItem(this.storageKey);
     this.showLogin();
+  }
+
+  renderSidebar() {
+    const session = this.getSession();
+    if (!session) return;
+
+    const tabs = this.getTabsByRole(session.role);
+    const navMenu = document.getElementById('navMenu');
+
+    navMenu.innerHTML = tabs.map((tab, index) => `
+      <li><a class="nav-link ${index === 0 ? 'active' : ''}" data-tab="${tab.name}">${tab.label}</a></li>
+    `).join('');
+
+    navMenu.querySelectorAll('.nav-link').forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        this.switchTab(link.dataset.tab);
+      });
+    });
+  }
+
+  getTabsByRole(role) {
+    const allTabs = {
+      'Bestuur': [
+        { name: 'evenementen', label: '📅 Evenementen' },
+        { name: 'content', label: '📝 Content' },
+        { name: 'team', label: '👥 Team' },
+        { name: 'activity', label: '👁️ Activity Log' },
+        { name: 'users', label: '👤 Gebruikers' },
+        { name: 'sync', label: '🔄 Back-ups' }
+      ],
+      'Activiteiten Commissie': [
+        { name: 'evenementen', label: '📅 Evenementen' }
+      ],
+      'Standpunten Commissie': [
+        { name: 'content', label: '📝 Content' }
+      ]
+    };
+
+    return allTabs[role] || [];
   }
 
   showLogin() {
@@ -145,9 +250,14 @@ class BeheerSystem {
   }
 
   async showDashboard(username) {
+    const session = this.getSession();
+
     document.getElementById('loginScreen').style.display = 'none';
     document.getElementById('dashboard').style.display = 'grid';
-    document.getElementById('userDisplay').textContent = username;
+    document.getElementById('userDisplay').textContent = `${username} (${session.role})`;
+
+    // Render sidebar based on role
+    this.renderSidebar();
 
     const syncReady = this.isGitHubSyncConfigured();
     let loadedFromGitHub = false;
@@ -167,7 +277,13 @@ class BeheerSystem {
     this.loadBestuur();
     this.ensureInitialBackup();
     this.renderBackupList();
-    this.loadGitHubSettingsToForm();
+
+    // Load Activity Log if user has permission
+    if (this.hasPermission('view:audit')) {
+      this.renderActivityLog();
+      this.loadUserManagement();
+    }
+
     this.updateSyncRequirement();
   }
 
@@ -868,6 +984,7 @@ class BeheerSystem {
     if (!this.ensureGitHubSyncReady()) return;
     const btn = document.querySelector('#eventForm button[type="submit"]');
     const editId = btn.dataset.editId ? parseInt(btn.dataset.editId) : null;
+    const session = this.getSession();
 
     const event = {
       id: editId || Date.now(),
@@ -878,17 +995,21 @@ class BeheerSystem {
       location: document.getElementById('eventLocation').value,
       organizer: document.getElementById('eventOrganizer').value,
       description: document.getElementById('eventDescription').value,
-      image: document.getElementById('eventImage').value
+      image: document.getElementById('eventImage').value,
+      createdBy: editId ? (this.getStoredList(this.eventsKey).find(e => e.id === editId)?.createdBy || session.username) : session.username,
+      createdAt: editId ? (this.getStoredList(this.eventsKey).find(e => e.id === editId)?.createdAt || new Date().toISOString()) : new Date().toISOString(),
+      lastEditedBy: session.username,
+      lastEditedAt: new Date().toISOString()
     };
 
     let events = this.getStoredList(this.eventsKey);
+    const previousEvent = editId ? events.find(e => e.id === editId) : null;
 
     this.createBackup(editId ? `Evenement bewerkt (${event.title})` : `Evenement toegevoegd (${event.title})`);
+
     if (editId) {
-      // Replace existing event
       events = events.map(e => e.id === editId ? event : e);
     } else {
-      // Add new event
       events.push(event);
     }
 
@@ -898,7 +1019,18 @@ class BeheerSystem {
       editId ? 'Evenement bijgewerkt' : 'Evenement toegevoegd',
       editId ? 'Evenement bijgewerkt!' : 'Evenement toegevoegd!'
     );
+
     if (!saved) return;
+
+    // Log to audit trail
+    auditLogger.log(
+      editId ? 'edit' : 'add',
+      'event',
+      event.id,
+      event.title,
+      previousEvent,
+      event
+    );
 
     document.getElementById('eventForm').reset();
     btn.textContent = '➕ Evenement toevoegen';
@@ -956,10 +1088,16 @@ class BeheerSystem {
   async deleteEvent(id) {
     if (!this.ensureGitHubSyncReady()) return;
     if (confirm('Weet je zeker dat je dit evenement wilt verwijderen?')) {
-      this.createBackup(`Evenement verwijderd (${id})`);
       let events = this.getStoredList(this.eventsKey);
+      const deletedEvent = events.find(e => e.id === id);
+
+      this.createBackup(`Evenement verwijderd (${id})`);
       events = events.filter(e => e.id !== id);
+
       await this.commitDatasetChange(this.eventsKey, events, 'Evenement verwijderd', 'Evenement verwijderd.');
+
+      // Log to audit
+      auditLogger.log('delete', 'event', id, deletedEvent?.title || 'Unknown', deletedEvent, null);
     }
   }
 
@@ -968,6 +1106,8 @@ class BeheerSystem {
     if (!this.ensureGitHubSyncReady()) return;
     const btn = document.querySelector('#standpuntForm button[type="submit"]');
     const editId = btn.dataset.editId ? parseInt(btn.dataset.editId, 10) : null;
+    const session = this.getSession();
+
     let standpunten = this.getStoredList(this.standpuntenKey).map((item, index) => this.normalizeStandpunt(item, index));
 
     const featured = document.getElementById('standpuntFeatured').checked;
@@ -1009,7 +1149,11 @@ class BeheerSystem {
       ctaButtonText: document.getElementById('standpuntCtaButtonText').value.trim(),
       ctaButtonLink: document.getElementById('standpuntCtaButtonLink').value.trim(),
       featured,
-      order: previous ? previous.order : maxOrder + 1
+      order: previous ? previous.order : maxOrder + 1,
+      createdBy: editId ? (previous?.createdBy || session.username) : session.username,
+      createdAt: editId ? (previous?.createdAt || new Date().toISOString()) : new Date().toISOString(),
+      lastEditedBy: session.username,
+      lastEditedAt: new Date().toISOString()
     };
 
     this.createBackup(editId ? `Standpunt bewerkt (${standpunt.title})` : `Standpunt toegevoegd (${standpunt.title})`);
@@ -1026,6 +1170,16 @@ class BeheerSystem {
       editId ? 'Standpunt bijgewerkt!' : 'Standpunt toegevoegd!'
     );
     if (!saved) return;
+
+    // Log to audit
+    auditLogger.log(
+      editId ? 'edit' : 'add',
+      'standpunt',
+      standpunt.id,
+      standpunt.title,
+      previous,
+      standpunt
+    );
 
     document.getElementById('standpuntForm').reset();
     btn.textContent = '➕ Standpunt toevoegen';
@@ -1113,9 +1267,17 @@ class BeheerSystem {
   async deleteStandpunt(id) {
     if (!this.ensureGitHubSyncReady()) return;
     if (!confirm('Weet je zeker dat je dit standpunt wilt verwijderen?')) return;
+
+    const allStandpunten = this.getStoredList(this.standpuntenKey);
+    const deletedStandpunt = allStandpunten.find(item => item.id === id);
+
     this.createBackup(`Standpunt verwijderd (${id})`);
-    const standpunten = this.getStoredList(this.standpuntenKey).filter((item) => item.id !== id);
+    const standpunten = allStandpunten.filter((item) => item.id !== id);
+
     await this.commitDatasetChange(this.standpuntenKey, standpunten, 'Standpunt verwijderd', 'Standpunt verwijderd.');
+
+    // Log to audit
+    auditLogger.log('delete', 'standpunt', id, deletedStandpunt?.title || 'Unknown', deletedStandpunt, null);
   }
 
   // BESTUUR MANAGEMENT
@@ -1123,6 +1285,8 @@ class BeheerSystem {
     if (!this.ensureGitHubSyncReady()) return;
     const btn = document.querySelector('#bestuurForm button[type="submit"]');
     const editId = btn.dataset.editId ? parseInt(btn.dataset.editId, 10) : null;
+    const session = this.getSession();
+
     let bestuur = this.getStoredList(this.bestuurKey);
     const previous = bestuur.find((item) => item.id === editId);
     const maxOrder = bestuur.reduce((max, item) => Math.max(max, Number(item.order) || 0), 0);
@@ -1135,7 +1299,11 @@ class BeheerSystem {
       emailPrimary: document.getElementById('bestuurEmailPrimary').value.trim(),
       emailSecondary: document.getElementById('bestuurEmailSecondary').value.trim(),
       image: document.getElementById('bestuurImage').value.trim(),
-      order: previous ? previous.order : maxOrder + 1
+      order: previous ? previous.order : maxOrder + 1,
+      createdBy: editId ? (previous?.createdBy || session.username) : session.username,
+      createdAt: editId ? (previous?.createdAt || new Date().toISOString()) : new Date().toISOString(),
+      lastEditedBy: session.username,
+      lastEditedAt: new Date().toISOString()
     };
 
     this.createBackup(editId ? `Bestuurslid bewerkt (${lid.name})` : `Bestuurslid toegevoegd (${lid.name})`);
@@ -1152,6 +1320,16 @@ class BeheerSystem {
       editId ? 'Bestuurslid bijgewerkt!' : 'Bestuurslid toegevoegd!'
     );
     if (!saved) return;
+
+    // Log to audit
+    auditLogger.log(
+      editId ? 'edit' : 'add',
+      'bestuur',
+      lid.id,
+      lid.name,
+      previous,
+      lid
+    );
 
     document.getElementById('bestuurForm').reset();
     btn.textContent = '➕ Bestuurslid toevoegen';
@@ -1224,9 +1402,205 @@ class BeheerSystem {
   async deleteBestuur(id) {
     if (!this.ensureGitHubSyncReady()) return;
     if (!confirm('Weet je zeker dat je dit bestuurslid wilt verwijderen?')) return;
+
+    const allBestuur = this.getStoredList(this.bestuurKey);
+    const deletedLid = allBestuur.find(item => item.id === id);
+
     this.createBackup(`Bestuurslid verwijderd (${id})`);
-    const bestuur = this.getStoredList(this.bestuurKey).filter((item) => item.id !== id);
+    const bestuur = allBestuur.filter((item) => item.id !== id);
+
     await this.commitDatasetChange(this.bestuurKey, bestuur, 'Bestuurslid verwijderd', 'Bestuurslid verwijderd.');
+
+    // Log to audit
+    auditLogger.log('delete', 'bestuur', id, deletedLid?.name || 'Unknown', deletedLid, null);
+  }
+
+  // ACTIVITY LOG
+  renderActivityLog() {
+    const filters = {
+      action: document.getElementById('activityFilterAction')?.value || '',
+      type: document.getElementById('activityFilterType')?.value || '',
+      user: document.getElementById('activityFilterUser')?.value || ''
+    };
+
+    const filtered = auditLogger.filterAudit(filters);
+    const timeline = document.getElementById('activityTimeline');
+    if (!timeline) return;
+
+    if (filtered.length === 0) {
+      timeline.innerHTML = '<p style="color:var(--jl-text-muted);">Geen wijzigingen</p>';
+      return;
+    }
+
+    timeline.innerHTML = filtered.map(entry => {
+      const time = new Date(entry.timestamp).toLocaleString('nl-NL');
+      const actionClass = this.getActionClass(entry.action);
+
+      return `
+        <div class="activity-entry">
+          <div class="activity-time">${time}</div>
+          <div class="activity-user">
+            ${entry.user}
+            <div class="activity-role">${entry.role}</div>
+          </div>
+          <div class="activity-action ${actionClass}">${entry.action}</div>
+          <div class="activity-item"><strong>${entry.itemTitle}</strong><br><small>${entry.type}</small></div>
+          <button class="beheer-btn" style="padding:0.5rem 0.75rem;font-size:0.8rem;" onclick="beheer.showActivityDiff('${entry.id}')">📊 Details</button>
+        </div>
+      `;
+    }).join('');
+  }
+
+  getActionClass(action) {
+    const classes = {
+      'add': 'add',
+      'edit': 'edit',
+      'delete': 'delete',
+      'publish': 'publish',
+      'login': 'add',
+      'logout': 'edit'
+    };
+    return classes[action] || '';
+  }
+
+  filterActivityLog() {
+    this.renderActivityLog();
+  }
+
+  showActivityDiff(entryId) {
+    const entry = auditLogger.getAuditLog().find(e => e.id === entryId);
+    if (!entry) return;
+
+    const beforeStr = entry.before ? JSON.stringify(entry.before, null, 2) : '(Nieuw)';
+    const afterStr = entry.after ? JSON.stringify(entry.after, null, 2) : '(Verwijderd)';
+
+    alert(`Wijziging op ${new Date(entry.timestamp).toLocaleString('nl-NL')}\n\nVan:\n${beforeStr.substring(0, 200)}...\n\nNaar:\n${afterStr.substring(0, 200)}...`);
+  }
+
+  // USER MANAGEMENT
+  loadUserManagement() {
+    const userFilterSelect = document.getElementById('activityFilterUser');
+    if (userFilterSelect && this.allUsers) {
+      userFilterSelect.innerHTML = `<option value="">Alle gebruikers</option>` + this.allUsers.map(u =>
+        `<option value="${u.username}">${u.username}</option>`
+      ).join('');
+    }
+
+    const userForm = document.getElementById('userForm');
+    if (userForm) {
+      userForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        await this.handleAddUser();
+      });
+    }
+
+    this.renderUserList();
+  }
+
+  async handleAddUser() {
+    const session = this.getSession();
+    if (session.role !== 'Bestuur') {
+      alert('Alleen Bestuur kan gebruikers toevoegen.');
+      return;
+    }
+
+    const username = document.getElementById('userName').value.trim();
+    const email = document.getElementById('userEmail').value.trim();
+    const role = document.getElementById('userRole').value;
+    const password = document.getElementById('userPassword').value;
+
+    if (!username || !email || !password) {
+      alert('Vul alle verplichte velden in.');
+      return;
+    }
+
+    if (password.length < 8) {
+      alert('Wachtwoord moet minstens 8 tekens zijn.');
+      return;
+    }
+
+    // Check if user exists
+    if (this.allUsers.find(u => u.username === username)) {
+      alert('Gebruiker bestaat al.');
+      return;
+    }
+
+    // Create new user
+    const newUser = {
+      id: `user_${Date.now()}`,
+      username,
+      passwordHash: password, // In production: use bcrypt
+      role,
+      email,
+      permissions: this.getPermissionsByRole(role),
+      createdAt: new Date().toISOString()
+    };
+
+    this.allUsers.push(newUser);
+
+    // Save to localStorage (in production: sync to GitHub)
+    localStorage.setItem(this.usersKey, JSON.stringify(this.allUsers));
+
+    // Log to audit
+    auditLogger.log('add', 'user', newUser.id, username, null, { username, role });
+
+    alert(`Gebruiker ${username} aangemaakt!`);
+    document.getElementById('userForm').reset();
+    this.renderUserList();
+  }
+
+  getPermissionsByRole(role) {
+    const perms = {
+      'Bestuur': ['*'],
+      'Activiteiten Commissie': ['view:events', 'edit:events', 'delete:own:events', 'upload:images', 'view:audit'],
+      'Standpunten Commissie': ['view:standpunten', 'edit:standpunten', 'delete:own:standpunten', 'upload:images', 'view:audit']
+    };
+    return perms[role] || [];
+  }
+
+  renderUserList() {
+    const listEl = document.getElementById('usersList');
+    if (!listEl) return;
+
+    if (this.allUsers.length === 0) {
+      listEl.innerHTML = '<p style="color:var(--jl-text-muted);">Geen gebruikers</p>';
+      return;
+    }
+
+    listEl.innerHTML = this.allUsers.map(user => `
+      <div class="user-entry">
+        <div class="user-info">
+          <h4>${user.username}</h4>
+          <p>${user.email}</p>
+          <span class="role-badge">${user.role}</span>
+        </div>
+        <div>${new Date(user.createdAt).toLocaleDateString('nl-NL')}</div>
+        <div>${user.permissions.includes('*') ? 'Alles' : user.permissions.length + ' permissies'}</div>
+        <button class="beheer-btn beheer-btn-delete" onclick="beheer.deleteUser('${user.id}')" style="padding:0.5rem 0.75rem;font-size:0.85rem;">Verwijderen</button>
+      </div>
+    `).join('');
+  }
+
+  deleteUser(userId) {
+    const session = this.getSession();
+    if (session.role !== 'Bestuur') {
+      alert('Alleen Bestuur kan gebruikers verwijderen.');
+      return;
+    }
+
+    const user = this.allUsers.find(u => u.id === userId);
+    if (!user) return;
+
+    if (!confirm(`Weet je zeker dat je ${user.username} wilt verwijderen?`)) return;
+
+    this.allUsers = this.allUsers.filter(u => u.id !== userId);
+    localStorage.setItem(this.usersKey, JSON.stringify(this.allUsers));
+
+    auditLogger.log('delete', 'user', userId, user.username, user, null);
+
+    alert(`Gebruiker ${user.username} verwijderd.`);
+    this.renderUserList();
+    this.loadUserManagement();
   }
 
 }
