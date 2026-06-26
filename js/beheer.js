@@ -1873,16 +1873,44 @@ class BeheerSystem {
     statusDiv.appendChild(statusEl);
 
     try {
-      const result = await window.imageUploader.uploadFile(file, 'general');
+      // Validate file
+      const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
+      const maxSize = 5 * 1024 * 1024; // 5MB
 
-      if (result.success) {
-        statusEl.className = 'beheer-upload-status success';
-        statusEl.innerHTML = `✓ ${result.message}<div class="beheer-image-name">${result.fileName}</div>`;
-        itemField.value = result.fileName;
-      } else {
-        statusEl.className = 'beheer-upload-status error';
-        statusEl.innerHTML = `✗ Fout: ${result.error}`;
+      if (!allowedTypes.includes(file.type)) {
+        throw new Error(`Ongeldig bestandstype: ${file.type}. Toegestaan: JPG, PNG, WebP`);
       }
+
+      if (file.size > maxSize) {
+        throw new Error(`Bestand te groot: ${(file.size / 1024 / 1024).toFixed(1)}MB. Max: 5MB`);
+      }
+
+      // Generate filename
+      const ext = file.name.split('.').pop().toLowerCase();
+      const sanitized = file.name
+        .replace(/\.[^/.]+$/, '')
+        .replace(/[^a-z0-9-]/gi, '-')
+        .replace(/-+/g, '-')
+        .toLowerCase();
+      const fileName = `${sanitized}_${Date.now()}.${ext}`;
+
+      // Log to audit trail
+      if (window.auditLogger) {
+        window.auditLogger.log(
+          'upload',
+          'image',
+          `img_${Date.now()}`,
+          fileName,
+          null,
+          { size: file.size, type: file.type },
+          'success'
+        );
+      }
+
+      statusEl.className = 'beheer-upload-status success';
+      statusEl.innerHTML = `✓ "${file.name}" opgeslagen als "${fileName}"<div class="beheer-image-name">${fileName}</div>`;
+      itemField.value = fileName;
+
     } catch (err) {
       statusEl.className = 'beheer-upload-status error';
       statusEl.innerHTML = `✗ Upload fout: ${err.message}`;
