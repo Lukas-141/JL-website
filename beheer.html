@@ -573,6 +573,29 @@
       }
     }
 
+    /* SYNC TAB BADGE */
+    .sync-badge {
+      display: inline-block;
+      padding: 0.2rem 0.65rem;
+      border-radius: 2rem;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      vertical-align: middle;
+    }
+    .sync-badge--ok   { background: #e8f5e9; color: #2e7d32; }
+    .sync-badge--none { background: #f5f5f5; color: #888; }
+
+    .sync-secondary-btn {
+      background: #f5f5f5;
+      color: var(--jl-black);
+      border: 1px solid #e0e0e0;
+    }
+    .sync-secondary-btn:hover {
+      background: #eaeaea;
+      transform: none;
+    }
+
     /* BACKUP LIST */
     .backup-toolbar {
       display: flex;
@@ -1038,69 +1061,54 @@
       </div>
 
       <!-- TAB: BACK-UPS -->
-      <div id=”tab-sync” class=”beheer-panel” style=”display:none;”>
+      <div id="tab-sync" class="beheer-panel" style="display:none;">
         <h2>💾 Back-ups &amp; Sync</h2>
 
         <!-- GITHUB VERBINDING -->
-        <div class=”beheer-section”>
-          <div style=”display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;”>
-            <h3 style=”margin:0;”>GitHub Verbinding</h3>
-            <span id=”syncTokenBadge” style=”font-size:0.78rem;font-weight:600;padding:0.3rem 0.75rem;border-radius:2rem;background:#f5f5f5;color:var(--jl-text-muted);”>○ Geen token</span>
-          </div>
+        <div class="beheer-section">
+          <h3>GitHub Verbinding <span id="syncTokenBadge" class="sync-badge sync-badge--none">Geen token</span></h3>
 
-          <div id=”syncTokenDisplay” style=”display:flex;align-items:center;gap:0.75rem;padding:0.875rem 1rem;background:#fafafa;border-radius:0.5rem;border:1px solid #ececec;”>
-            <span style=”font-size:0.9rem;flex:1;color:var(--jl-text-muted);” id=”syncTokenMasked”>Geen token ingesteld</span>
-            <button type=”button” onclick=”beheer.toggleTokenEdit()” class=”beheer-btn” style=”padding:0.375rem 0.875rem;font-size:0.8rem;background:#fff;color:var(--jl-black);border:1px solid #ddd;”>✏️ Wijzigen</button>
-            <button type=”button” onclick=”beheer.testGitHubConnection()” id=”syncTestBtn” class=”beheer-btn” style=”padding:0.375rem 0.875rem;font-size:0.8rem;”>🔌 Test</button>
-          </div>
-
-          <div id=”syncTokenEdit” style=”display:none;margin-top:0.75rem;”>
-            <div style=”display:flex;gap:0.5rem;”>
-              <input type=”password” id=”syncTokenInput” placeholder=”ghp_xxxxxxxxxxxx” autocomplete=”off” style=”flex:1;font-family:monospace;font-size:0.875rem;”>
-              <button type=”button” onclick=”beheer.saveTokenFromSync()” class=”beheer-btn”>💾 Opslaan</button>
-              <button type=”button” onclick=”beheer.toggleTokenEdit()” class=”beheer-btn” style=”background:#f5f5f5;color:#666;”>✕</button>
+          <div class="beheer-form-group">
+            <label for="syncTokenInput">Personal Access Token</label>
+            <div style="display:flex;gap:0.5rem;">
+              <input type="password" id="syncTokenInput" placeholder="ghp_xxxxxxxxxxxx" autocomplete="off" style="flex:1;font-family:monospace;">
+              <button type="button" onclick="beheer.saveTokenFromSync()" class="beheer-btn">Opslaan</button>
             </div>
+            <small id="syncTokenHint" style="display:none;margin-top:0.4rem;color:var(--jl-text-muted);font-size:0.8rem;"></small>
           </div>
 
-          <p id=”syncTestStatus” style=”margin:0.75rem 0 0;font-size:0.85rem;font-weight:600;display:none;”></p>
+          <button type="button" onclick="beheer.testGitHubConnection()" id="syncTestBtn" class="beheer-btn sync-secondary-btn">🔌 Verbinding testen</button>
+          <p id="syncTestStatus" style="margin:0.75rem 0 0;font-size:0.85rem;font-weight:600;display:none;"></p>
         </div>
 
         <!-- SYNCHRONISEREN -->
-        <div class=”beheer-section”>
-          <div style=”display:flex;justify-content:space-between;align-items:center;”>
-            <div>
-              <h3 style=”margin:0 0 0.2rem;”>Synchroniseren</h3>
-              <p style=”margin:0;font-size:0.85rem;color:var(--jl-text-muted);” id=”syncLastPushLabel”>Push alle data naar de live website op GitHub.</p>
-            </div>
-            <button type=”button” onclick=”beheer.pushToGitHub()” id=”syncPushBtn” class=”beheer-btn” style=”white-space:nowrap;”>📤 Push naar GitHub</button>
-          </div>
-          <p id=”syncPushStatus” style=”margin:0.75rem 0 0;font-size:0.85rem;font-weight:600;display:none;”></p>
+        <div class="beheer-section">
+          <h3>Synchroniseren</h3>
+          <p id="syncLastPushLabel" style="margin:0 0 1.25rem;color:var(--jl-text-muted);font-size:0.9rem;">Push alle data naar de live website op GitHub.</p>
+          <button type="button" onclick="beheer.pushToGitHub()" id="syncPushBtn" class="beheer-btn">📤 Push naar GitHub</button>
+          <p id="syncPushStatus" style="margin:0.75rem 0 0;font-size:0.85rem;font-weight:600;display:none;"></p>
         </div>
 
         <!-- HERSTELPUNTEN -->
-        <div class=”beheer-section”>
-          <div style=”display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;”>
-            <div>
-              <h3 style=”margin:0 0 0.2rem;”>Herstelpunten <span id=”backupCount” style=”font-size:0.8rem;color:var(--jl-text-muted);font-weight:400;”></span></h3>
-              <p style=”margin:0;font-size:0.85rem;color:var(--jl-text-muted);”>Lokale snapshots van alle data. Max. 50.</p>
-            </div>
+        <div class="beheer-section">
+          <h3>Herstelpunten <span id="backupCount" style="font-size:0.8rem;color:var(--jl-text-muted);font-weight:400;"></span></h3>
+          <p style="margin:0 0 1.25rem;color:var(--jl-text-muted);font-size:0.9rem;">Lokale snapshots van alle data. Max. 50.</p>
+
+          <div class="backup-toolbar">
+            <button type="button" id="backupNowBtn" class="beheer-btn">💾 Nu back-up maken</button>
+            <button type="button" id="exportDataBtn" class="beheer-btn sync-secondary-btn">📤 Exporteren</button>
+            <button type="button" id="importDataBtn" class="beheer-btn sync-secondary-btn">📥 Importeren</button>
+            <input type="file" id="importDataInput" accept=".json,application/json" style="display:none;">
           </div>
 
-          <div class=”backup-toolbar”>
-            <button type=”button” id=”backupNowBtn” class=”beheer-btn”>💾 Nu back-up maken</button>
-            <button type=”button” id=”exportDataBtn” class=”beheer-btn” style=”background:#f5f5f5;color:var(--jl-black);”>📤 Exporteren</button>
-            <button type=”button” id=”importDataBtn” class=”beheer-btn” style=”background:#f5f5f5;color:var(--jl-black);”>📥 Importeren</button>
-            <input type=”file” id=”importDataInput” accept=”.json,application/json” style=”display:none;”>
-          </div>
-
-          <div id=”backupList” class=”backup-list”>
-            <div class=”backup-empty”>
-              <svg width=”32” height=”32” viewBox=”0 0 24 24” fill=”none” stroke=”currentColor” stroke-width=”1.5”><path d=”M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z”/><polyline points=”17 21 17 13 7 13 7 21”/><polyline points=”7 3 7 8 15 8”/></svg>
+          <div id="backupList" class="backup-list">
+            <div class="backup-empty">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
               Nog geen back-ups beschikbaar
             </div>
           </div>
 
-          <select id=”backupRestoreSelect” style=”display:none;”></select>
+          <select id="backupRestoreSelect" style="display:none;"></select>
         </div>
       </div>
     </div>

@@ -767,13 +767,15 @@ class BeheerSystem {
   updateSyncTab() {
     const token = this.getGitHubToken();
     const badge = document.getElementById('syncTokenBadge');
-    const masked = document.getElementById('syncTokenMasked');
+    const hint = document.getElementById('syncTokenHint');
+    const input = document.getElementById('syncTokenInput');
     if (token) {
-      if (masked) masked.textContent = `ghp_••••••••••••${token.slice(-4)}`;
-      if (badge) { badge.textContent = '✓ Token ingesteld'; badge.style.background = '#e8f5e9'; badge.style.color = '#0a7a33'; }
+      if (input && !input.value) input.value = token;
+      if (hint) { hint.textContent = `Huidig opgeslagen token eindigt op ···${token.slice(-4)}`; hint.style.display = 'block'; }
+      if (badge) { badge.textContent = '✓ Ingesteld'; badge.className = 'sync-badge sync-badge--ok'; }
     } else {
-      if (masked) masked.textContent = 'Geen token ingesteld';
-      if (badge) { badge.textContent = '○ Geen token'; badge.style.background = '#f5f5f5'; badge.style.color = 'var(--jl-text-muted)'; }
+      if (hint) hint.style.display = 'none';
+      if (badge) { badge.textContent = 'Geen token'; badge.className = 'sync-badge sync-badge--none'; }
     }
     const testStatus = document.getElementById('syncTestStatus');
     const pushStatus = document.getElementById('syncPushStatus');
@@ -781,22 +783,10 @@ class BeheerSystem {
     if (pushStatus) pushStatus.style.display = 'none';
   }
 
-  toggleTokenEdit() {
-    const edit = document.getElementById('syncTokenEdit');
-    if (!edit) return;
-    const visible = edit.style.display !== 'none';
-    edit.style.display = visible ? 'none' : 'block';
-    if (!visible) {
-      const input = document.getElementById('syncTokenInput');
-      if (input) { input.value = this.getGitHubToken(); input.focus(); }
-    }
-  }
-
   saveTokenFromSync() {
     const token = (document.getElementById('syncTokenInput')?.value || '').trim();
     if (!token) { alert('Voer een token in.'); return; }
     localStorage.setItem(this.githubTokenLocalKey, token);
-    this.toggleTokenEdit();
     this.updateSyncTab();
   }
 
