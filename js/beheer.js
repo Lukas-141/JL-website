@@ -743,6 +743,12 @@ class BeheerSystem {
   }
 
   updateSyncRequirement() {
+    const session = this.getSession();
+    // Non-Bestuur always enabled — they submit via Worker, no token needed
+    if (!session || session.role !== 'Bestuur') {
+      this.setEditingEnabled(true);
+      return;
+    }
     if (!this.requireGitHubSync) {
       this.setEditingEnabled(true);
       return;
@@ -752,16 +758,19 @@ class BeheerSystem {
     const notice = document.getElementById('ghSyncRequiredNotice');
     if (notice) notice.style.display = ready ? 'none' : 'block';
     if (!ready) {
-      this.setGitHubSyncStatus('GitHub sync vereist om wijzigingen op te slaan.', 'error');
+      this.setGitHubSyncStatus('GitHub token vereist om wijzigingen te pushen.', 'error');
     }
   }
 
   ensureGitHubSyncReady() {
+    const session = this.getSession();
+    // Non-Bestuur never need GitHub token — they use the Worker
+    if (!session || session.role !== 'Bestuur') return true;
     if (!this.requireGitHubSync) return true;
     if (this.isGitHubSyncConfigured()) return true;
-    this.setGitHubSyncStatus('GitHub sync vereist om wijzigingen op te slaan.', 'error');
+    this.setGitHubSyncStatus('GitHub token vereist om wijzigingen te pushen.', 'error');
     this.switchTab('sync');
-    alert('Vul GitHub owner/repo/token in om wijzigingen op te slaan.');
+    alert('Vul je GitHub token in via de Back-ups tab om wijzigingen te pushen.');
     return false;
   }
 
