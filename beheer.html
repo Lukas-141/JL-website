@@ -914,34 +914,21 @@
       </div>
 
       <!-- TAB: ACTIVITY LOG (Bestuur only) -->
-      <div id="tab-activity" class="beheer-panel">
-        <h2>👁️ Activity Log</h2>
+      <!-- TAB: SUGGESTIES (Bestuur only) -->
+      <div id="tab-suggestions" class="beheer-panel">
+        <h2>📬 Suggesties</h2>
 
         <div class="beheer-section">
-          <h3>Wijzigingen</h3>
-
-          <div style="margin-bottom: 1.5rem; display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 0.75rem;">
-            <select id="activityFilterAction" class="beheer-form-control">
-              <option value="">Alle acties</option>
-              <option value="add">Toegevoegd</option>
-              <option value="edit">Bewerkt</option>
-              <option value="delete">Verwijderd</option>
-              <option value="publish">Gepubliceerd</option>
-            </select>
-            <select id="activityFilterType" class="beheer-form-control">
-              <option value="">Alle types</option>
-              <option value="event">Evenementen</option>
-              <option value="standpunt">Standpunten</option>
-              <option value="bestuur">Team</option>
-              <option value="user">Gebruikers</option>
-            </select>
-            <select id="activityFilterUser" class="beheer-form-control">
-              <option value="">Alle gebruikers</option>
-            </select>
-            <button class="beheer-btn" onclick="beheer.filterActivityLog()" style="width:100%;">🔍 Filteren</button>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;">
+            <h3 style="margin:0;">Ingediende wijzigingen <span id="suggestionCount" style="font-size:0.8rem;color:var(--jl-text-muted);font-weight:400;"></span></h3>
+            <button class="beheer-btn" style="padding:0.5rem 1rem;font-size:0.85rem;" onclick="beheer.loadSuggestions()">🔄 Vernieuwen</button>
           </div>
-
-          <div id="activityTimeline" class="beheer-list"></div>
+          <div class="info-box" style="margin-bottom:1.5rem;">
+            Commissieleden dienen wijzigingen in als suggestie. Bestuur beoordeelt en keurt goed of af.
+          </div>
+          <div id="suggestionsList" class="beheer-list">
+            <div style="color:var(--jl-text-muted);padding:1rem 0;">Laden...</div>
+          </div>
         </div>
       </div>
 
@@ -993,13 +980,22 @@
         <h2>🔄 Deploy & Back-ups</h2>
 
         <div class=”beheer-section”>
-          <h3>GitHub Sync Status</h3>
+          <h3>GitHub Token (Bestuur)</h3>
           <div class=”info-box”>
-            Wijzigingen worden automatisch naar GitHub gesynchroniseerd.
-            Je hoeft niks in te stellen — alles gebeurt op de achtergrond.
+            Vul hier je GitHub Personal Access Token in. Hiermee kan Bestuur goedgekeurde wijzigingen pushen naar de live website. Token wordt alleen lokaal opgeslagen op dit apparaat.
           </div>
-          <p id=”ghSyncStatus” style=”margin:1rem 0 0;color:var(--jl-text-muted);font-size:0.95rem;font-weight:600;”>
-            ✓ Synchronisatie actief
+          <div class=”beheer-form-row” style=”margin-top:1rem;”>
+            <div class=”beheer-form-group”>
+              <label for=”ghToken”>Personal Access Token</label>
+              <input type=”password” id=”ghToken” placeholder=”ghp_xxxxxxxxxxxx” autocomplete=”off”>
+            </div>
+            <div class=”beheer-form-group” style=”display:flex;align-items:flex-end;gap:0.5rem;”>
+              <button type=”button” id=”ghSaveTokenBtn” class=”beheer-btn” style=”white-space:nowrap;”>💾 Opslaan</button>
+              <button type=”button” id=”ghTestBtn” class=”beheer-btn” style=”background:#f5f5f5;color:var(--jl-black);white-space:nowrap;”>🔌 Testen</button>
+            </div>
+          </div>
+          <p id=”ghSyncStatus” style=”margin:0.75rem 0 0;font-size:0.9rem;font-weight:600;color:var(--jl-text-muted);”>
+            ○ Geen token ingesteld
           </p>
         </div>
 
@@ -1049,7 +1045,6 @@
   </div>
 
   <script src="js/audit-logger.js"></script>
-  <script src="js/image-uploader.js"></script>
   <script src="js/beheer.js"></script>
 </body>
 </html>

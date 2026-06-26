@@ -151,6 +151,15 @@ class BeheerSystem {
       restoreBackupBtn.addEventListener('click', () => this.restoreSelectedBackup());
     }
 
+    const ghSaveTokenBtn = document.getElementById('ghSaveTokenBtn');
+    if (ghSaveTokenBtn) {
+      ghSaveTokenBtn.addEventListener('click', () => this.saveBestuurToken());
+    }
+
+    const ghTestBtn = document.getElementById('ghTestBtn');
+    if (ghTestBtn) {
+      ghTestBtn.addEventListener('click', () => this.testGitHubConnection());
+    }
   }
 
   handleLogin() {
@@ -195,6 +204,7 @@ class BeheerSystem {
       role: user.role,
       email: user.email,
       permissions: user.permissions,
+      suggestionToken: user.suggestionToken || '',
       loginTime: new Date().toISOString()
     };
 
@@ -274,7 +284,7 @@ class BeheerSystem {
         { name: 'evenementen', label: '📅 Evenementen' },
         { name: 'content', label: '📝 Content' },
         { name: 'team', label: '👥 Team' },
-        { name: 'activity', label: '👁️ Activity Log' },
+        { name: 'suggestions', label: '📬 Suggesties' },
         { name: 'users', label: '👤 Gebruikers' },
         { name: 'sync', label: '🔄 Back-ups' }
       ],
@@ -328,14 +338,16 @@ class BeheerSystem {
     this.loadBestuur();
     this.ensureInitialBackup();
     this.renderBackupList();
-
-    // Load Activity Log if user has permission
-    if (this.hasPermission('view:audit')) {
-      this.renderActivityLog();
-      this.loadUserManagement();
-    }
-
+    this.updateSubmitButtonsForRole(session.role);
     this.updateSyncRequirement();
+  }
+
+  updateSubmitButtonsForRole(role) {
+    if (role === 'Bestuur') return;
+    const eventBtn = document.querySelector('#eventForm button[type="submit"]');
+    if (eventBtn) eventBtn.textContent = '📬 Suggestie indienen bij Bestuur';
+    const standpuntBtn = document.querySelector('#standpuntForm button[type="submit"]');
+    if (standpuntBtn) standpuntBtn.textContent = '📬 Suggestie indienen bij Bestuur';
   }
 
   switchTab(tabName) {
@@ -365,14 +377,15 @@ class BeheerSystem {
     if (tabName === 'team') {
       this.loadBestuur();
     }
-    if (tabName === 'activity') {
-      this.renderActivityLog();
+    if (tabName === 'suggestions') {
+      this.loadSuggestions();
     }
     if (tabName === 'users') {
       this.loadUserManagement();
     }
     if (tabName === 'sync') {
       this.renderBackupList();
+      this.loadGitHubTokenToForm();
     }
   }
 
@@ -1114,10 +1127,9 @@ class BeheerSystem {
 
   // EVENTS MANAGEMENT
   async addEvent() {
-    if (!this.ensureGitHubSyncReady()) return;
+    const session = this.getSession();
     const btn = document.querySelector('#eventForm button[type="submit"]');
     const editId = btn.dataset.editId ? parseInt(btn.dataset.editId) : null;
-    const session = this.getSession();
 
     const event = {
       id: editId || Date.now(),
@@ -1135,9 +1147,24 @@ class BeheerSystem {
       lastEditedAt: new Date().toISOString()
     };
 
+    // Non-Bestuur → submit as suggestion
+    if (session.role !== 'Bestuur') {
+      const notes = prompt('Eventuele toelichting voor Bestuur (optioneel):') ?? '';
+      if (notes === null) return;
+      const ok = await this.submitSuggestion('event', editId ? 'edit' : 'add', event, notes);
+      if (ok) {
+        alert('✅ Suggestie ingediend! Bestuur beoordeelt jouw wijziging.');
+        document.getElementById('eventForm').reset();
+        btn.textContent = '➕ Evenement toevoegen';
+        delete btn.dataset.editId;
+      }
+      return;
+    }
+
+    if (!this.ensureGitHubSyncReady()) return;
+
     let events = this.getStoredList(this.eventsKey);
     const previousEvent = editId ? events.find(e => e.id === editId) : null;
-
     this.createBackup(editId ? `Evenement bewerkt (${event.title})` : `Evenement toegevoegd (${event.title})`);
 
     if (editId) {
@@ -1155,16 +1182,7 @@ class BeheerSystem {
 
     if (!saved) return;
 
-    // Log to audit trail
-    auditLogger.log(
-      editId ? 'edit' : 'add',
-      'event',
-      event.id,
-      event.title,
-      previousEvent,
-      event
-    );
-
+    auditLogger.log(editId ? 'edit' : 'add', 'event', event.id, event.title, previousEvent, event);
     document.getElementById('eventForm').reset();
     btn.textContent = '➕ Evenement toevoegen';
     delete btn.dataset.editId;
@@ -1236,7 +1254,6 @@ class BeheerSystem {
 
   // STANDPUNTEN MANAGEMENT
   async addStandpunt() {
-    if (!this.ensureGitHubSyncReady()) return;
     const btn = document.querySelector('#standpuntForm button[type="submit"]');
     const editId = btn.dataset.editId ? parseInt(btn.dataset.editId, 10) : null;
     const session = this.getSession();
@@ -1289,6 +1306,22 @@ class BeheerSystem {
       lastEditedAt: new Date().toISOString()
     };
 
+    // Non-Bestuur → submit as suggestion
+    if (session.role !== 'Bestuur') {
+      const notes = prompt('Eventuele toelichting voor Bestuur (optioneel):') ?? '';
+      if (notes === null) return;
+      const ok = await this.submitSuggestion('standpunt', editId ? 'edit' : 'add', standpunt, notes);
+      if (ok) {
+        alert('✅ Suggestie ingediend! Bestuur beoordeelt jouw wijziging.');
+        document.getElementById('standpuntForm').reset();
+        btn.textContent = '➕ Standpunt toevoegen';
+        delete btn.dataset.editId;
+      }
+      return;
+    }
+
+    if (!this.ensureGitHubSyncReady()) return;
+
     this.createBackup(editId ? `Standpunt bewerkt (${standpunt.title})` : `Standpunt toegevoegd (${standpunt.title})`);
     if (editId) {
       standpunten = standpunten.map((item) => (item.id === editId ? standpunt : item));
@@ -1304,16 +1337,7 @@ class BeheerSystem {
     );
     if (!saved) return;
 
-    // Log to audit
-    auditLogger.log(
-      editId ? 'edit' : 'add',
-      'standpunt',
-      standpunt.id,
-      standpunt.title,
-      previous,
-      standpunt
-    );
-
+    auditLogger.log(editId ? 'edit' : 'add', 'standpunt', standpunt.id, standpunt.title, previous, standpunt);
     document.getElementById('standpuntForm').reset();
     btn.textContent = '➕ Standpunt toevoegen';
     delete btn.dataset.editId;
@@ -1549,77 +1573,262 @@ class BeheerSystem {
   }
 
   // ACTIVITY LOG
-  renderActivityLog() {
-    const filters = {
-      action: document.getElementById('activityFilterAction')?.value || '',
-      type: document.getElementById('activityFilterType')?.value || '',
-      user: document.getElementById('activityFilterUser')?.value || ''
-    };
+  // SUGGESTION SYSTEM
+  getSuggestionToken() {
+    const session = this.getSession();
+    return session?.suggestionToken || '';
+  }
 
-    const filtered = auditLogger.filterAudit(filters);
-    const timeline = document.getElementById('activityTimeline');
-    if (!timeline) return;
+  async loadSuggestions() {
+    const listEl = document.getElementById('suggestionsList');
+    const countEl = document.getElementById('suggestionCount');
+    if (!listEl) return;
 
-    if (filtered.length === 0) {
-      timeline.innerHTML = '<p style="color:var(--jl-text-muted);">Geen wijzigingen</p>';
+    listEl.innerHTML = '<div style="color:var(--jl-text-muted);padding:1rem 0;">⏳ Laden van GitHub...</div>';
+
+    const config = this.getGitHubConfig();
+    const token = this.getGitHubToken();
+
+    if (!token) {
+      listEl.innerHTML = '<div style="color:#c00;padding:1rem 0;">⚠️ Geen GitHub token ingesteld. Ga naar Back-ups tab om token in te vullen.</div>';
       return;
     }
 
-    timeline.innerHTML = filtered.map(entry => {
-      const time = new Date(entry.timestamp).toLocaleString('nl-NL');
-      const actionClass = this.getActionClass(entry.action);
+    try {
+      const url = `https://api.github.com/repos/${config.owner}/${config.repo}/contents/suggestions.json?ref=${config.branch}`;
+      const res = await fetch(url, { headers: { Authorization: `token ${token}`, Accept: 'application/vnd.github.v3+json' } });
 
-      return `
-        <div class="activity-entry">
-          <div class="activity-time">${time}</div>
-          <div class="activity-user">
-            ${entry.user}
-            <div class="activity-role">${entry.role}</div>
+      if (!res.ok) throw new Error(`GitHub API fout: ${res.status}`);
+
+      const file = await res.json();
+      const suggestions = JSON.parse(atob(file.content));
+      const pending = suggestions.filter(s => s.status === 'pending');
+
+      if (countEl) countEl.textContent = pending.length > 0 ? `(${pending.length} openstaand)` : '(geen openstaande)';
+
+      if (pending.length === 0) {
+        listEl.innerHTML = '<div style="color:var(--jl-text-muted);padding:1rem 0;">✓ Geen openstaande suggesties.</div>';
+        return;
+      }
+
+      listEl.innerHTML = pending.map(s => {
+        const date = new Date(s.submittedAt).toLocaleString('nl-NL');
+        const typeLabel = { event: 'Evenement', standpunt: 'Standpunt', bestuur: 'Teamlid' }[s.type] || s.type;
+        const actionLabel = { add: 'Toevoegen', edit: 'Bewerken', delete: 'Verwijderen' }[s.action] || s.action;
+
+        const preview = s.data
+          ? `<div style="margin:0.75rem 0;padding:0.75rem;background:#f9f9f9;border-radius:0.25rem;font-size:0.85rem;">
+              ${s.data.title ? `<strong>${this.escapeHtml(s.data.title)}</strong><br>` : ''}
+              ${s.data.description ? `<span style="color:var(--jl-text-muted);">${this.escapeHtml(s.data.description.substring(0, 120))}${s.data.description.length > 120 ? '...' : ''}</span>` : ''}
+              ${s.data.date ? `<br><small>📅 ${this.escapeHtml(s.data.date)}</small>` : ''}
+              ${s.data.location ? `<small> · 📍 ${this.escapeHtml(s.data.location)}</small>` : ''}
+              ${s.notes ? `<br><em style="color:#555;">Notitie: ${this.escapeHtml(s.notes)}</em>` : ''}
+            </div>`
+          : '';
+
+        return `
+          <div class="backup-card" style="flex-direction:column;align-items:flex-start;">
+            <div style="display:flex;justify-content:space-between;align-items:center;width:100%;">
+              <div>
+                <span class="role-badge" style="background:var(--jl-yellow);color:var(--jl-black);">${actionLabel}</span>
+                <span class="role-badge" style="margin-left:0.25rem;">${typeLabel}</span>
+                <strong style="margin-left:0.5rem;">${this.escapeHtml(s.submittedBy)}</strong>
+                <span style="color:var(--jl-text-muted);font-size:0.8rem;margin-left:0.5rem;">${date}</span>
+              </div>
+              <div style="display:flex;gap:0.5rem;">
+                <button class="backup-restore-btn" onclick="beheer.approveSuggestion('${s.id}')">✅ Goedkeuren</button>
+                <button class="backup-delete-btn" onclick="beheer.rejectSuggestion('${s.id}')">❌ Afwijzen</button>
+              </div>
+            </div>
+            ${preview}
           </div>
-          <div class="activity-action ${actionClass}">${entry.action}</div>
-          <div class="activity-item"><strong>${entry.itemTitle}</strong><br><small>${entry.type}</small></div>
-          <button class="beheer-btn" style="padding:0.5rem 0.75rem;font-size:0.8rem;" onclick="beheer.showActivityDiff('${entry.id}')">📊 Details</button>
-        </div>
-      `;
-    }).join('');
+        `;
+      }).join('');
+    } catch (err) {
+      listEl.innerHTML = `<div style="color:#c00;padding:1rem 0;">✗ Kan suggesties niet laden: ${err.message}</div>`;
+    }
   }
 
-  getActionClass(action) {
-    const classes = {
-      'add': 'add',
-      'edit': 'edit',
-      'delete': 'delete',
-      'publish': 'publish',
-      'login': 'add',
-      'logout': 'edit'
+  async submitSuggestion(type, action, data, notes = '') {
+    const session = this.getSession();
+    const token = session?.suggestionToken;
+
+    if (!token) {
+      alert('Geen suggestie-token beschikbaar. Vraag Bestuur om de token in te stellen in users.json.');
+      return false;
+    }
+
+    const config = this.getGitHubConfig();
+
+    const suggestion = {
+      id: `sug_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+      type,
+      action,
+      data,
+      notes,
+      submittedBy: session.username,
+      submittedAt: new Date().toISOString(),
+      status: 'pending'
     };
-    return classes[action] || '';
+
+    try {
+      // Load current suggestions.json from GitHub
+      const url = `https://api.github.com/repos/${config.owner}/${config.repo}/contents/suggestions.json?ref=${config.branch}`;
+      const getRes = await fetch(url, { headers: { Authorization: `token ${token}`, Accept: 'application/vnd.github.v3+json' } });
+
+      let suggestions = [];
+      let sha = null;
+
+      if (getRes.ok) {
+        const file = await getRes.json();
+        sha = file.sha;
+        suggestions = JSON.parse(atob(file.content));
+      }
+
+      suggestions.push(suggestion);
+
+      const body = { message: `Suggestie: ${action} ${type} door ${session.username}`, content: btoa(unescape(encodeURIComponent(JSON.stringify(suggestions, null, 2)))), branch: config.branch };
+      if (sha) body.sha = sha;
+
+      const putRes = await fetch(url.split('?')[0], {
+        method: 'PUT',
+        headers: { Authorization: `token ${token}`, Accept: 'application/vnd.github.v3+json', 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+      });
+
+      if (!putRes.ok) throw new Error(`Kon suggestie niet opslaan: ${putRes.status}`);
+
+      return true;
+    } catch (err) {
+      alert(`Suggestie kon niet worden ingediend: ${err.message}`);
+      return false;
+    }
   }
 
-  filterActivityLog() {
-    this.renderActivityLog();
+  async approveSuggestion(suggestionId) {
+    const token = this.getGitHubToken();
+    if (!token) { alert('Voer eerst een GitHub token in via de Back-ups tab.'); return; }
+
+    const config = this.getGitHubConfig();
+
+    try {
+      // Load suggestions
+      const url = `https://api.github.com/repos/${config.owner}/${config.repo}/contents/suggestions.json?ref=${config.branch}`;
+      const getRes = await fetch(url, { headers: { Authorization: `token ${token}`, Accept: 'application/vnd.github.v3+json' } });
+      if (!getRes.ok) throw new Error('Kan suggestions.json niet laden');
+
+      const file = await getRes.json();
+      const suggestions = JSON.parse(atob(file.content));
+      const sug = suggestions.find(s => s.id === suggestionId);
+      if (!sug) { alert('Suggestie niet gevonden.'); return; }
+
+      if (!confirm(`Goedkeuren: ${sug.action} ${sug.type} door ${sug.submittedBy}?`)) return;
+
+      // Apply the change locally
+      if (sug.action === 'add' || sug.action === 'edit') {
+        if (sug.type === 'event') {
+          const events = this.getStoredList(this.eventsKey);
+          const idx = events.findIndex(e => e.id === sug.data.id);
+          if (idx >= 0) events[idx] = sug.data; else events.push({ ...sug.data, id: sug.data.id || Date.now() });
+          this.setStoredList(this.eventsKey, events);
+        } else if (sug.type === 'standpunt') {
+          const items = this.getStoredList(this.standpuntenKey);
+          const idx = items.findIndex(i => i.id === sug.data.id);
+          if (idx >= 0) items[idx] = sug.data; else items.push({ ...sug.data, id: sug.data.id || Date.now() });
+          this.setStoredList(this.standpuntenKey, items);
+        } else if (sug.type === 'bestuur') {
+          const items = this.getStoredList(this.bestuurKey);
+          const idx = items.findIndex(i => i.id === sug.data.id);
+          if (idx >= 0) items[idx] = sug.data; else items.push({ ...sug.data, id: sug.data.id || Date.now() });
+          this.setStoredList(this.bestuurKey, items);
+        }
+      } else if (sug.action === 'delete') {
+        const keyMap = { event: this.eventsKey, standpunt: this.standpuntenKey, bestuur: this.bestuurKey };
+        const key = keyMap[sug.type];
+        if (key) {
+          const items = this.getStoredList(key).filter(i => i.id !== sug.data.id);
+          this.setStoredList(key, items);
+        }
+      }
+
+      // Mark suggestion as approved
+      sug.status = 'approved';
+      sug.reviewedBy = this.getSession().username;
+      sug.reviewedAt = new Date().toISOString();
+
+      // Save updated suggestions.json
+      const updatedBody = { message: `Goedgekeurd: ${sug.action} ${sug.type} door ${sug.submittedBy}`, content: btoa(unescape(encodeURIComponent(JSON.stringify(suggestions, null, 2)))), sha: file.sha, branch: config.branch };
+      await fetch(url.split('?')[0], { method: 'PUT', headers: { Authorization: `token ${token}`, Accept: 'application/vnd.github.v3+json', 'Content-Type': 'application/json' }, body: JSON.stringify(updatedBody) });
+
+      // Push the actual data to GitHub
+      await this.syncAllDatasetsToGitHub(`Goedgekeurd: ${sug.action} ${sug.type}`);
+
+      alert(`✅ Goedgekeurd en gepusht naar GitHub!`);
+      this.loadSuggestions();
+    } catch (err) {
+      alert(`Fout bij goedkeuren: ${err.message}`);
+    }
   }
 
-  showActivityDiff(entryId) {
-    const entry = auditLogger.getAuditLog().find(e => e.id === entryId);
-    if (!entry) return;
+  async rejectSuggestion(suggestionId) {
+    const token = this.getGitHubToken();
+    if (!token) { alert('Voer eerst een GitHub token in via de Back-ups tab.'); return; }
 
-    const beforeStr = entry.before ? JSON.stringify(entry.before, null, 2) : '(Nieuw)';
-    const afterStr = entry.after ? JSON.stringify(entry.after, null, 2) : '(Verwijderd)';
+    const config = this.getGitHubConfig();
+    const reason = prompt('Reden voor afwijzing (optioneel):') ?? '';
+    if (reason === null) return;
 
-    alert(`Wijziging op ${new Date(entry.timestamp).toLocaleString('nl-NL')}\n\nVan:\n${beforeStr.substring(0, 200)}...\n\nNaar:\n${afterStr.substring(0, 200)}...`);
+    try {
+      const url = `https://api.github.com/repos/${config.owner}/${config.repo}/contents/suggestions.json?ref=${config.branch}`;
+      const getRes = await fetch(url, { headers: { Authorization: `token ${token}`, Accept: 'application/vnd.github.v3+json' } });
+      if (!getRes.ok) throw new Error('Kan suggestions.json niet laden');
+
+      const file = await getRes.json();
+      const suggestions = JSON.parse(atob(file.content));
+      const sug = suggestions.find(s => s.id === suggestionId);
+      if (!sug) { alert('Suggestie niet gevonden.'); return; }
+
+      sug.status = 'rejected';
+      sug.reviewedBy = this.getSession().username;
+      sug.reviewedAt = new Date().toISOString();
+      sug.rejectionReason = reason;
+
+      const body = { message: `Afgewezen: ${sug.action} ${sug.type} door ${sug.submittedBy}`, content: btoa(unescape(encodeURIComponent(JSON.stringify(suggestions, null, 2)))), sha: file.sha, branch: config.branch };
+      await fetch(url.split('?')[0], { method: 'PUT', headers: { Authorization: `token ${token}`, Accept: 'application/vnd.github.v3+json', 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+
+      alert('❌ Suggestie afgewezen.');
+      this.loadSuggestions();
+    } catch (err) {
+      alert(`Fout bij afwijzen: ${err.message}`);
+    }
+  }
+
+  // BESTUUR TOKEN MANAGEMENT
+  saveBestuurToken() {
+    const tokenEl = document.getElementById('ghToken');
+    if (!tokenEl) return;
+    const token = tokenEl.value.trim();
+    if (!token) { alert('Voer een token in.'); return; }
+
+    localStorage.setItem(this.githubTokenLocalKey, token);
+    this.setGitHubSyncStatus('✓ Token opgeslagen', 'ok');
+    alert('✓ GitHub token opgeslagen op dit apparaat.');
+  }
+
+  loadGitHubTokenToForm() {
+    const token = this.getGitHubToken();
+    const tokenEl = document.getElementById('ghToken');
+    if (tokenEl && token) tokenEl.value = token;
+
+    if (token) {
+      this.setGitHubSyncStatus('✓ Token ingesteld', 'ok');
+    } else {
+      this.setGitHubSyncStatus('○ Geen token ingesteld', 'idle');
+    }
   }
 
   // USER MANAGEMENT
   loadUserManagement() {
-    // Populate filter dropdown
-    const userFilterSelect = document.getElementById('activityFilterUser');
-    if (userFilterSelect && this.allUsers && this.allUsers.length > 0) {
-      userFilterSelect.innerHTML = `<option value="">Alle gebruikers</option>` + this.allUsers.map(u =>
-        `<option value="${u.username}">${u.username}</option>`
-      ).join('');
-    }
-
     // Setup form listener
     const userForm = document.getElementById('userForm');
     if (userForm) {
