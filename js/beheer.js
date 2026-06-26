@@ -1895,8 +1895,7 @@ class BeheerSystem {
     }
   }
 
-  loadImageGallery() {
-    const images = window.imageUploader.getAllImages();
+  async loadImageGallery() {
     const gallery = document.getElementById('imageGallery');
     const searchInput = document.getElementById('imageSearchInput');
     const selectAllCheckbox = document.getElementById('selectAllImages');
@@ -1904,34 +1903,51 @@ class BeheerSystem {
 
     if (!gallery) return;
 
-    // Render gallery
-    this.renderImageGallery(images, gallery);
+    // Show loading
+    gallery.innerHTML = '<div class="beheer-image-empty">⏳ Bezig met laden...</div>';
 
-    // Search functionality
-    if (searchInput) {
-      searchInput.addEventListener('input', (e) => {
-        const query = e.target.value.toLowerCase();
-        const filtered = images.filter(img => img.fileName.toLowerCase().includes(query));
-        this.renderImageGallery(filtered, gallery);
-      });
-    }
+    try {
+      // Load all images from IndexedDB
+      const images = await window.imageUploader.getAllImages();
 
-    // Select all functionality
-    if (selectAllCheckbox) {
-      selectAllCheckbox.addEventListener('change', () => {
-        const checkboxes = gallery.querySelectorAll('input[type="checkbox"][data-image-id]');
-        checkboxes.forEach(cb => cb.checked = selectAllCheckbox.checked);
-        this.updateDeleteButtonState(gallery, deleteBtn);
-      });
-    }
+      // Render gallery
+      await this.renderImageGallery(images, gallery);
 
-    // Delete button listener
-    if (deleteBtn) {
-      deleteBtn.addEventListener('click', () => this.deleteSelectedImages(gallery));
+      // Search functionality
+      if (searchInput) {
+        searchInput.addEventListener('input', async (e) => {
+          const query = e.target.value.toLowerCase();
+          const filtered = images.filter(img => img.fileName.toLowerCase().includes(query));
+          await this.renderImageGallery(filtered, gallery);
+        });
+      }
+
+      // Select all functionality
+      if (selectAllCheckbox) {
+        selectAllCheckbox.addEventListener('change', () => {
+          const checkboxes = gallery.querySelectorAll('input[type="checkbox"][data-image-id]');
+          checkboxes.forEach(cb => cb.checked = selectAllCheckbox.checked);
+          this.updateDeleteButtonState(gallery, deleteBtn);
+        });
+      }
+
+      // Delete button listener
+      if (deleteBtn) {
+        deleteBtn.addEventListener('click', () => this.deleteSelectedImages(gallery));
+      }
+
+      // GitHub sync button
+      const syncBtn = document.getElementById('syncFromGitHubBtn');
+      if (syncBtn) {
+        syncBtn.addEventListener('click', () => this.syncImagesFromGitHub());
+      }
+    } catch (err) {
+      console.error('Failed to load gallery:', err);
+      gallery.innerHTML = '<div class="beheer-image-empty">❌ Fout bij laden: ' + err.message + '</div>';
     }
   }
 
-  renderImageGallery(images, gallery) {
+  async renderImageGallery(images, gallery) {
     if (images.length === 0) {
       gallery.innerHTML = '<div class="beheer-image-empty">📭 Geen afbeeldingen geüpload</div>';
       return;
@@ -1941,10 +1957,22 @@ class BeheerSystem {
       const uploadDate = new Date(img.uploadedAt).toLocaleDateString('nl-NL');
       const fileSize = (img.size / 1024).toFixed(1);
 
+      // Generate blob URL for preview
+      let previewSrc = '📷';
+      if (img.blobData) {
+        try {
+          previewSrc = URL.createObjectURL(img.blobData);
+        } catch (e) {
+          console.warn('Could not create blob URL:', e);
+        }
+      }
+
       return `
         <div class="beheer-image-card" data-image-id="${img.id}">
           <div class="beheer-image-preview">
-            📷
+            ${typeof previewSrc === 'string' && previewSrc.startsWith('blob:')
+              ? `<img src="${previewSrc}" alt="${img.fileName}" style="width:100%;height:100%;object-fit:cover;">`
+              : `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:2rem;">📷</div>`}
             <input type="checkbox" class="beheer-image-checkbox" data-image-id="${img.id}">
           </div>
           <div class="beheer-image-info">
@@ -2025,20 +2053,26 @@ class BeheerSystem {
     });
   }
 
-  deleteSingleImage(imageId) {
+  async deleteSingleImage(imageId) {
     if (!confirm('Weet je zeker dat je deze afbeelding wilt verwijderen?')) return;
 
-    const img = window.imageUploader.getImageMetadata().find(i => i.id === imageId);
-    if (!img) return;
+    try {
+      const allImages = await window.imageUploader.getAllImages();
+      const img = allImages.find(i => i.id === imageId);
+      if (!img) return;
 
-    window.imageUploader.deleteImageMetadata(imageId);
+      await window.imageUploader.deleteImageMetadata(imageId);
 
-    auditLogger.log('delete', 'image', imageId, img.fileName, img, null, 'success', `Deleted by ${this.getSession().username}`);
+      auditLogger.log('delete', 'image', imageId, img.fileName, img, null, 'success', `Deleted by ${this.getSession().username}`);
 
-    this.loadImageGallery();
+      this.loadImageGallery();
+    } catch (err) {
+      console.error('Delete error:', err);
+      alert('Fout bij verwijderen: ' + err.message);
+    }
   }
 
-  deleteSelectedImages(gallery) {
+  async deleteSelectedImages(gallery) {
     const checkboxes = gallery.querySelectorAll('input[type="checkbox"]:checked');
     if (checkboxes.length === 0) {
       alert('Selecteer afbeeldingen om te verwijderen');
@@ -2047,17 +2081,59 @@ class BeheerSystem {
 
     if (!confirm(`Weet je zeker dat je ${checkboxes.length} afbeelding${checkboxes.length !== 1 ? 'en' : ''} wilt verwijderen?`)) return;
 
-    const imageIds = Array.from(checkboxes).map(cb => cb.dataset.imageId);
-    imageIds.forEach(id => {
-      const img = window.imageUploader.getImageMetadata().find(i => i.id === id);
-      if (img) {
-        window.imageUploader.deleteImageMetadata(id);
-        auditLogger.log('delete', 'image', id, img.fileName, img, null, 'success', `Bulk deleted by ${this.getSession().username}`);
-      }
-    });
+    try {
+      const allImages = await window.imageUploader.getAllImages();
+      const imageIds = Array.from(checkboxes).map(cb => cb.dataset.imageId);
 
-    alert(`✓ ${imageIds.length} afbeelding${imageIds.length !== 1 ? 'en' : ''} verwijderd`);
-    this.loadImageGallery();
+      for (const id of imageIds) {
+        const img = allImages.find(i => i.id === id);
+        if (img) {
+          await window.imageUploader.deleteImageMetadata(id);
+          auditLogger.log('delete', 'image', id, img.fileName, img, null, 'success', `Bulk deleted by ${this.getSession().username}`);
+        }
+      }
+
+      alert(`✓ ${imageIds.length} afbeelding${imageIds.length !== 1 ? 'en' : ''} verwijderd`);
+      this.loadImageGallery();
+    } catch (err) {
+      console.error('Bulk delete error:', err);
+      alert('Fout bij verwijderen: ' + err.message);
+    }
+  }
+
+  async syncImagesFromGitHub() {
+    const statusEl = document.getElementById('syncStatus');
+    const syncBtn = document.getElementById('syncFromGitHubBtn');
+
+    if (!statusEl || !syncBtn) return;
+
+    syncBtn.disabled = true;
+    statusEl.style.display = 'block';
+    statusEl.className = 'beheer-upload-status loading';
+    statusEl.innerHTML = '⏳ Bezig met synchroniseren van GitHub...';
+
+    try {
+      const result = await window.imageUploader.syncFromGitHub();
+
+      if (result.error) {
+        statusEl.className = 'beheer-upload-status error';
+        statusEl.innerHTML = `✗ Fout: ${result.error}`;
+      } else {
+        statusEl.className = 'beheer-upload-status success';
+        statusEl.innerHTML = `✓ ${result.synced} afbeelding${result.synced !== 1 ? 'en' : ''} van GitHub gesynchroniseerd`;
+      }
+
+      // Reload gallery
+      setTimeout(() => this.loadImageGallery(), 1000);
+    } catch (err) {
+      statusEl.className = 'beheer-upload-status error';
+      statusEl.innerHTML = `✗ Sync fout: ${err.message}`;
+    } finally {
+      syncBtn.disabled = false;
+      setTimeout(() => {
+        statusEl.style.display = 'none';
+      }, 3000);
+    }
   }
 
 }
