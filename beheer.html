@@ -75,24 +75,39 @@
     .beheer-form-group input {
       width: 100%;
       padding: 0.85rem;
-      border: 2px solid #333;
-      border-radius: 0.35rem;
+      border: 1px solid #ddd;
+      border-radius: 0.25rem;
       font-size: 1rem;
       font-family: var(--jl-font);
       box-sizing: border-box;
-      background: #1a1a1a;
-      color: var(--jl-white);
+      background: white;
+      color: var(--jl-black);
     }
 
     .beheer-form-group input:focus {
       outline: none;
       border-color: var(--jl-yellow);
-      background: #222;
+      background: rgba(245, 230, 0, 0.05);
     }
 
     .beheer-form-group input::placeholder {
+      color: #999;
+    }
+
+    /* LOGIN SCREEN ONLY */
+    #loginScreen .beheer-form-group input {
+      background: #1a1a1a;
       color: var(--jl-white);
-      opacity: 0.7;
+      border-color: #333;
+    }
+
+    #loginScreen .beheer-form-group input::placeholder {
+      color: #666;
+    }
+
+    #loginScreen .beheer-form-group input:focus {
+      background: #222;
+      border-color: var(--jl-yellow);
     }
 
     .beheer-error {
