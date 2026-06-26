@@ -16,8 +16,7 @@
     "role": "Activiteiten Commissie",
     "email": "activiteiten@jongelibertariers.nl",
     "permissions": ["view:events", "edit:events", "delete:own:events", "upload:images", "view:audit"],
-    "createdAt": "2026-06-26T00:00:00Z",
-    "suggestionToken": ""
+    "createdAt": "2026-06-26T00:00:00Z"
   },
   {
     "id": "user_standpunten_1",
@@ -26,7 +25,6 @@
     "role": "Standpunten Commissie",
     "email": "standpunten@jongelibertariers.nl",
     "permissions": ["view:standpunten", "edit:standpunten", "delete:own:standpunten", "upload:images", "view:audit"],
-    "createdAt": "2026-06-26T00:00:00Z",
-    "suggestionToken": ""
+    "createdAt": "2026-06-26T00:00:00Z"
   }
 ]

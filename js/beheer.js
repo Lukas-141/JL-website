@@ -204,7 +204,6 @@ class BeheerSystem {
       role: user.role,
       email: user.email,
       permissions: user.permissions,
-      suggestionToken: user.suggestionToken || '',
       loginTime: new Date().toISOString()
     };
 
@@ -1572,12 +1571,9 @@ class BeheerSystem {
     auditLogger.log('delete', 'bestuur', id, deletedLid?.name || 'Unknown', deletedLid, null);
   }
 
-  // ACTIVITY LOG
   // SUGGESTION SYSTEM
-  getSuggestionToken() {
-    const session = this.getSession();
-    return session?.suggestionToken || '';
-  }
+  static get WORKER_URL() { return 'https://jl-suggestions.l-v-brokke.workers.dev'; }
+  static get WORKER_SECRET() { return 'jl-commissie-2026'; }
 
   async loadSuggestions() {
     const listEl = document.getElementById('suggestionsList');
@@ -1651,14 +1647,6 @@ class BeheerSystem {
 
   async submitSuggestion(type, action, data, notes = '') {
     const session = this.getSession();
-    const token = session?.suggestionToken;
-
-    if (!token) {
-      alert('Geen suggestie-token beschikbaar. Vraag Bestuur om de token in te stellen in users.json.');
-      return false;
-    }
-
-    const config = this.getGitHubConfig();
 
     const suggestion = {
       id: `sug_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
@@ -1672,31 +1660,19 @@ class BeheerSystem {
     };
 
     try {
-      // Load current suggestions.json from GitHub
-      const url = `https://api.github.com/repos/${config.owner}/${config.repo}/contents/suggestions.json?ref=${config.branch}`;
-      const getRes = await fetch(url, { headers: { Authorization: `token ${token}`, Accept: 'application/vnd.github.v3+json' } });
-
-      let suggestions = [];
-      let sha = null;
-
-      if (getRes.ok) {
-        const file = await getRes.json();
-        sha = file.sha;
-        suggestions = JSON.parse(atob(file.content));
-      }
-
-      suggestions.push(suggestion);
-
-      const body = { message: `Suggestie: ${action} ${type} door ${session.username}`, content: btoa(unescape(encodeURIComponent(JSON.stringify(suggestions, null, 2)))), branch: config.branch };
-      if (sha) body.sha = sha;
-
-      const putRes = await fetch(url.split('?')[0], {
-        method: 'PUT',
-        headers: { Authorization: `token ${token}`, Accept: 'application/vnd.github.v3+json', 'Content-Type': 'application/json' },
-        body: JSON.stringify(body)
+      const res = await fetch(BeheerSystem.WORKER_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Worker-Secret': BeheerSystem.WORKER_SECRET
+        },
+        body: JSON.stringify({ suggestion })
       });
 
-      if (!putRes.ok) throw new Error(`Kon suggestie niet opslaan: ${putRes.status}`);
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({ error: res.status }));
+        throw new Error(err.error || res.status);
+      }
 
       return true;
     } catch (err) {
