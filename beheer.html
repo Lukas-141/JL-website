@@ -8,11 +8,11 @@
   <link rel="stylesheet" href="css/styles.css">
   <style>
     body {
-      background: var(--jl-black);
+      background: var(--jl-white);
     }
 
     #loginScreen {
-      background: var(--jl-black);
+      background: var(--jl-white);
     }
 
     .beheer-login {
@@ -24,10 +24,10 @@
     }
 
     .beheer-login-box {
-      background: var(--jl-white);
+      background: var(--jl-black);
       border-radius: 0.75rem;
       padding: 3rem;
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
       max-width: 420px;
       width: 100%;
       text-align: center;
@@ -41,12 +41,12 @@
     .beheer-login-box h1 {
       margin: 0 0 0.5rem;
       font-size: 1.75rem;
-      color: var(--jl-black);
+      color: var(--jl-white);
     }
 
     .beheer-login-box p {
       margin: 0 0 2rem;
-      color: var(--jl-text-muted);
+      color: #ccc;
     }
 
     .beheer-form-group {
@@ -58,23 +58,29 @@
       display: block;
       margin-bottom: 0.5rem;
       font-weight: 600;
-      color: var(--jl-black);
+      color: var(--jl-white);
     }
 
     .beheer-form-group input {
       width: 100%;
       padding: 0.85rem;
-      border: 2px solid #ddd;
+      border: 2px solid #333;
       border-radius: 0.35rem;
       font-size: 1rem;
       font-family: var(--jl-font);
       box-sizing: border-box;
+      background: #1a1a1a;
+      color: var(--jl-white);
     }
 
     .beheer-form-group input:focus {
       outline: none;
       border-color: var(--jl-yellow);
-      background: rgba(245, 230, 0, 0.05);
+      background: #222;
+    }
+
+    .beheer-form-group input::placeholder {
+      color: #666;
     }
 
     .beheer-error {
@@ -107,9 +113,9 @@
     }
 
     .beheer-btn-login::before {
-      content: '→';
+      content: '←';
       position: absolute;
-      left: -1.5rem;
+      right: -1.5rem;
       width: 1.2rem;
       height: 1.2rem;
       opacity: 0;
@@ -122,11 +128,11 @@
       background: var(--jl-white);
       color: var(--jl-black);
       border: 2px solid var(--jl-black);
-      padding-left: 2.5rem;
+      padding-right: 2.5rem;
     }
 
     .beheer-btn-login:hover::before {
-      left: 0.75rem;
+      right: 0.75rem;
       opacity: 1;
     }
 
