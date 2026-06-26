@@ -386,6 +386,7 @@ class BeheerSystem {
       this.loadUserManagement();
     }
     if (tabName === 'sync') {
+      this.loadGitHubSettingsToForm();
       this.renderBackupList();
     }
   }
@@ -534,18 +535,82 @@ class BeheerSystem {
   }
 
   renderBackupList() {
+    // Keep hidden select in sync (used by restoreSelectedBackup)
     const select = document.getElementById('backupRestoreSelect');
-    if (!select) return;
+    const listEl = document.getElementById('backupList');
+    const countEl = document.getElementById('backupCount');
     const backups = this.getBackups();
+
+    if (select) {
+      select.innerHTML = backups.length === 0
+        ? '<option value="">Geen back-ups beschikbaar</option>'
+        : backups.map((b) => `<option value="${b.id}">${new Date(b.createdAt).toLocaleString('nl-NL')} — ${b.reason}</option>`).join('');
+    }
+
+    if (countEl) {
+      countEl.textContent = backups.length > 0 ? `(${backups.length}/50)` : '';
+    }
+
+    if (!listEl) return;
+
     if (backups.length === 0) {
-      select.innerHTML = '<option value="">Geen back-ups beschikbaar</option>';
+      listEl.innerHTML = '<div style="color:var(--jl-text-muted);font-size:0.9rem;padding:1rem 0;">Nog geen back-ups beschikbaar.</div>';
       return;
     }
 
-    select.innerHTML = backups.map((backup) => {
-      const label = `${new Date(backup.createdAt).toLocaleString('nl-NL')} — ${backup.reason}`;
-      return `<option value="${backup.id}">${this.escapeHtml(label)}</option>`;
+    listEl.innerHTML = backups.map((backup) => {
+      const date = new Date(backup.createdAt).toLocaleString('nl-NL');
+      const data = backup.data || {};
+      const counts = [
+        data.events ? `${data.events.length} evenementen` : null,
+        data.standpunten ? `${data.standpunten.length} standpunten` : null,
+        data.bestuur ? `${data.bestuur.length} teamleden` : null
+      ].filter(Boolean).join(' · ');
+
+      return `
+        <div class="backup-card">
+          <div class="backup-card-info">
+            <div class="backup-card-title">💾 ${this.escapeHtml(backup.reason)}</div>
+            <div class="backup-card-meta">${date}${counts ? ' &nbsp;·&nbsp; ' + counts : ''}</div>
+          </div>
+          <div class="backup-card-actions">
+            <button class="backup-restore-btn" onclick="beheer.restoreBackupById(${backup.id})">↩️ Herstel</button>
+            <button class="backup-delete-btn" onclick="beheer.deleteBackup(${backup.id})">🗑️</button>
+          </div>
+        </div>
+      `;
     }).join('');
+  }
+
+  async restoreBackupById(backupId) {
+    const backup = this.getBackups().find((b) => b.id === backupId);
+    if (!backup) { alert('Back-up niet gevonden.'); return; }
+    if (!confirm(`Back-up "${backup.reason}" herstellen?\n${new Date(backup.createdAt).toLocaleString('nl-NL')}`)) return;
+
+    this.createBackup('Voor herstel');
+    const applied = this.applyAllData(backup.data || backup);
+    if (!applied) { alert('Back-up kon niet worden hersteld (mogelijk opslaglimiet).'); return; }
+
+    this.loadEvents();
+    this.loadStandpunten();
+    this.loadBestuur();
+    this.renderBackupList();
+
+    const results = await this.syncAllDatasetsToGitHub('Back-up herstel');
+    const synced = results.filter((r) => r && r.ok).length;
+    const failed = results.filter((r) => r && !r.ok && !r.skipped).length;
+    this.setPreferLocalData(!(synced === 3 && failed === 0));
+
+    if (failed > 0) alert('Back-up hersteld, maar GitHub sync is (deels) mislukt.');
+    else if (synced === 3) alert('✓ Back-up hersteld en naar GitHub gesynchroniseerd.');
+    else alert('Back-up hersteld (lokaal). Configureer GitHub token om live te zetten.');
+  }
+
+  deleteBackup(backupId) {
+    if (!confirm('Deze back-up verwijderen?')) return;
+    const backups = this.getBackups().filter((b) => b.id !== backupId);
+    this.setBackups(backups);
+    this.renderBackupList();
   }
 
   exportData() {
@@ -705,11 +770,17 @@ class BeheerSystem {
 
   setGitHubSyncStatus(message, status) {
     const el = document.getElementById('ghSyncStatus');
+    const bar = document.getElementById('ghSyncStatusBar');
     if (!el) return;
-    el.textContent = message;
-    if (status === 'ok') el.style.color = '#0a7a33';
-    else if (status === 'error') el.style.color = '#c00';
-    else el.style.color = 'var(--jl-text-muted)';
+
+    const icons = { ok: '✓', error: '✗', idle: '⏳' };
+    el.textContent = `${icons[status] || '⏳'} ${message}`;
+
+    if (bar) {
+      bar.classList.remove('status-ok', 'status-error');
+      if (status === 'ok') bar.classList.add('status-ok');
+      else if (status === 'error') bar.classList.add('status-error');
+    }
   }
 
   loadGitHubSettingsToForm() {
