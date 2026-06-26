@@ -212,9 +212,13 @@ class BeheerSystem {
     this.setSession(session);
     console.log('Session saved:', session);
 
-    // Log to audit (only if auditLogger exists)
-    if (typeof auditLogger !== 'undefined') {
-      auditLogger.log('login', 'user', user.id, user.username, null, { username: user.username, role: user.role });
+    // Log to audit (only if auditLogger exists and is ready)
+    try {
+      if (window.auditLogger && typeof window.auditLogger.log === 'function') {
+        window.auditLogger.log('login', 'user', user.id, user.username, null, { username: user.username, role: user.role });
+      }
+    } catch (e) {
+      console.warn('Audit logging error (non-critical):', e.message);
     }
 
     // Show dashboard
@@ -224,12 +228,17 @@ class BeheerSystem {
   logout() {
     console.log('Logout called');
 
-    const session = this.getSession();
-    if (session) {
-      console.log('Logging logout event for:', session.username);
-      if (typeof auditLogger !== 'undefined') {
-        auditLogger.log('logout', 'user', session.userId, session.username, null, null);
+    try {
+      const session = this.getSession();
+      if (session) {
+        console.log('Logging logout event for:', session.username);
+        // Check if auditLogger exists in window scope
+        if (window.auditLogger && typeof window.auditLogger.log === 'function') {
+          window.auditLogger.log('logout', 'user', session.userId, session.username, null, null);
+        }
       }
+    } catch (e) {
+      console.warn('Audit logging error (non-critical):', e.message);
     }
 
     // Clear session
@@ -241,8 +250,14 @@ class BeheerSystem {
     console.log('Login screen shown');
 
     // Clear forms
-    document.getElementById('loginForm').reset();
-    document.getElementById('loginError').style.display = 'none';
+    const loginForm = document.getElementById('loginForm');
+    if (loginForm) {
+      loginForm.reset();
+    }
+    const loginError = document.getElementById('loginError');
+    if (loginError) {
+      loginError.style.display = 'none';
+    }
   }
 
   renderSidebar() {

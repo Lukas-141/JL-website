@@ -130,3 +130,5 @@ class AuditLogger {
 
 // Initialize globally
 const auditLogger = new AuditLogger();
+window.auditLogger = auditLogger;
+console.log('AuditLogger initialized and available globally');
