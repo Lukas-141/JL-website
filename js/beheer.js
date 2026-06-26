@@ -285,18 +285,15 @@ class BeheerSystem {
         { name: 'evenementen', label: '📅 Evenementen' },
         { name: 'content', label: '📝 Content' },
         { name: 'team', label: '👥 Team' },
-        { name: 'images', label: '🖼️ Afbeeldingen' },
         { name: 'activity', label: '👁️ Activity Log' },
         { name: 'users', label: '👤 Gebruikers' },
         { name: 'sync', label: '🔄 Back-ups' }
       ],
       'Activiteiten Commissie': [
-        { name: 'evenementen', label: '📅 Evenementen' },
-        { name: 'images', label: '🖼️ Afbeeldingen' }
+        { name: 'evenementen', label: '📅 Evenementen' }
       ],
       'Standpunten Commissie': [
-        { name: 'content', label: '📝 Content' },
-        { name: 'images', label: '🖼️ Afbeeldingen' }
+        { name: 'content', label: '📝 Content' }
       ]
     };
 
@@ -372,12 +369,15 @@ class BeheerSystem {
     // Load data based on tab
     if (tabName === 'evenementen') {
       this.loadEvents();
+      this.setupUploadZone('eventUploadZone', 'eventImageUpload', 'eventUploadStatus', 'eventImage');
     }
     if (tabName === 'content') {
       this.loadStandpunten();
+      this.setupUploadZone('standpuntUploadZone', 'standpuntImageUpload', 'standpuntUploadStatus', 'standpuntImage');
     }
     if (tabName === 'team') {
       this.loadBestuur();
+      this.setupUploadZone('bestuurUploadZone', 'bestuurImageUpload', 'bestuurUploadStatus', 'bestuurImage');
     }
     if (tabName === 'activity') {
       this.renderActivityLog();
@@ -1820,6 +1820,73 @@ class BeheerSystem {
     alert(`Gebruiker ${user.username} verwijderd.`);
     this.renderUserList();
     this.loadUserManagement();
+  }
+
+  setupUploadZone(zoneId, inputId, statusId, itemFieldId) {
+    const zone = document.getElementById(zoneId);
+    const input = document.getElementById(inputId);
+    const statusDiv = document.getElementById(statusId);
+    const itemField = document.getElementById(itemFieldId);
+
+    if (!zone || !input) return;
+
+    const button = zone.querySelector('.beheer-upload-button');
+    if (button) {
+      button.addEventListener('click', (e) => {
+        e.preventDefault();
+        input.click();
+      });
+    }
+
+    zone.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      zone.classList.add('dragover');
+    });
+
+    zone.addEventListener('dragleave', () => {
+      zone.classList.remove('dragover');
+    });
+
+    zone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      zone.classList.remove('dragover');
+      const files = e.dataTransfer.files;
+      if (files.length > 0) {
+        this.handleImageUpload(files[0], statusDiv, itemField);
+      }
+    });
+
+    input.addEventListener('change', (e) => {
+      if (e.target.files.length > 0) {
+        this.handleImageUpload(e.target.files[0], statusDiv, itemField);
+      }
+    });
+  }
+
+  async handleImageUpload(file, statusDiv, itemField) {
+    if (!statusDiv || !itemField) return;
+
+    const statusEl = document.createElement('div');
+    statusEl.className = 'beheer-upload-status loading';
+    statusEl.innerHTML = '⏳ Bezig met uploaden...';
+    statusDiv.innerHTML = '';
+    statusDiv.appendChild(statusEl);
+
+    try {
+      const result = await window.imageUploader.uploadFile(file, 'general');
+
+      if (result.success) {
+        statusEl.className = 'beheer-upload-status success';
+        statusEl.innerHTML = `✓ ${result.message}<div class="beheer-image-name">${result.fileName}</div>`;
+        itemField.value = result.fileName;
+      } else {
+        statusEl.className = 'beheer-upload-status error';
+        statusEl.innerHTML = `✗ Fout: ${result.error}`;
+      }
+    } catch (err) {
+      statusEl.className = 'beheer-upload-status error';
+      statusEl.innerHTML = `✗ Upload fout: ${err.message}`;
+    }
   }
 
 }
