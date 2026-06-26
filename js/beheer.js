@@ -315,6 +315,12 @@ class BeheerSystem {
     // Render sidebar based on role
     this.renderSidebar();
 
+    // Load the first allowed tab for this role
+    const tabs = this.getTabsByRole(session.role);
+    if (tabs.length > 0) {
+      this.switchTab(tabs[0].name);
+    }
+
     const syncReady = this.isGitHubSyncConfigured();
     let loadedFromGitHub = false;
     if (syncReady) {
