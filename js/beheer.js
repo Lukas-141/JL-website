@@ -285,15 +285,18 @@ class BeheerSystem {
         { name: 'evenementen', label: '📅 Evenementen' },
         { name: 'content', label: '📝 Content' },
         { name: 'team', label: '👥 Team' },
+        { name: 'images', label: '🖼️ Afbeeldingen' },
         { name: 'activity', label: '👁️ Activity Log' },
         { name: 'users', label: '👤 Gebruikers' },
         { name: 'sync', label: '🔄 Back-ups' }
       ],
       'Activiteiten Commissie': [
-        { name: 'evenementen', label: '📅 Evenementen' }
+        { name: 'evenementen', label: '📅 Evenementen' },
+        { name: 'images', label: '🖼️ Afbeeldingen' }
       ],
       'Standpunten Commissie': [
-        { name: 'content', label: '📝 Content' }
+        { name: 'content', label: '📝 Content' },
+        { name: 'images', label: '🖼️ Afbeeldingen' }
       ]
     };
 
@@ -378,6 +381,9 @@ class BeheerSystem {
     if (tabName === 'team') {
       this.loadBestuur();
       this.setupUploadZone('bestuurUploadZone', 'bestuurImageUpload', 'bestuurUploadStatus', 'bestuurImage');
+    }
+    if (tabName === 'images') {
+      this.loadImageGallery();
     }
     if (tabName === 'activity') {
       this.renderActivityLog();
@@ -1887,6 +1893,171 @@ class BeheerSystem {
       statusEl.className = 'beheer-upload-status error';
       statusEl.innerHTML = `✗ Upload fout: ${err.message}`;
     }
+  }
+
+  loadImageGallery() {
+    const images = window.imageUploader.getAllImages();
+    const gallery = document.getElementById('imageGallery');
+    const searchInput = document.getElementById('imageSearchInput');
+    const selectAllCheckbox = document.getElementById('selectAllImages');
+    const deleteBtn = document.getElementById('deleteSelectedImagesBtn');
+
+    if (!gallery) return;
+
+    // Render gallery
+    this.renderImageGallery(images, gallery);
+
+    // Search functionality
+    if (searchInput) {
+      searchInput.addEventListener('input', (e) => {
+        const query = e.target.value.toLowerCase();
+        const filtered = images.filter(img => img.fileName.toLowerCase().includes(query));
+        this.renderImageGallery(filtered, gallery);
+      });
+    }
+
+    // Select all functionality
+    if (selectAllCheckbox) {
+      selectAllCheckbox.addEventListener('change', () => {
+        const checkboxes = gallery.querySelectorAll('input[type="checkbox"][data-image-id]');
+        checkboxes.forEach(cb => cb.checked = selectAllCheckbox.checked);
+        this.updateDeleteButtonState(gallery, deleteBtn);
+      });
+    }
+
+    // Delete button listener
+    if (deleteBtn) {
+      deleteBtn.addEventListener('click', () => this.deleteSelectedImages(gallery));
+    }
+  }
+
+  renderImageGallery(images, gallery) {
+    if (images.length === 0) {
+      gallery.innerHTML = '<div class="beheer-image-empty">📭 Geen afbeeldingen geüpload</div>';
+      return;
+    }
+
+    gallery.innerHTML = images.map(img => {
+      const uploadDate = new Date(img.uploadedAt).toLocaleDateString('nl-NL');
+      const fileSize = (img.size / 1024).toFixed(1);
+
+      return `
+        <div class="beheer-image-card" data-image-id="${img.id}">
+          <div class="beheer-image-preview">
+            📷
+            <input type="checkbox" class="beheer-image-checkbox" data-image-id="${img.id}">
+          </div>
+          <div class="beheer-image-info">
+            <div class="beheer-image-filename">${img.fileName}</div>
+            <div class="beheer-image-meta">Uploader: ${img.uploadedBy}</div>
+            <div class="beheer-image-meta">${uploadDate}</div>
+            <div class="beheer-image-meta">${fileSize} KB</div>
+            <div class="beheer-image-actions">
+              <button class="beheer-image-copy" onclick="beheer.copyImageName('${img.fileName}')">📋 Kopieer</button>
+              <button class="beheer-image-delete" onclick="beheer.deleteSingleImage('${img.id}')">🗑️</button>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    // Add checkbox listeners for select all state
+    const checkboxes = gallery.querySelectorAll('input[type="checkbox"][data-image-id]');
+    const selectAllCheckbox = document.getElementById('selectAllImages');
+    const deleteBtn = document.getElementById('deleteSelectedImagesBtn');
+
+    checkboxes.forEach(checkbox => {
+      checkbox.addEventListener('change', () => {
+        this.updateDeleteButtonState(gallery, deleteBtn);
+        if (selectAllCheckbox) {
+          selectAllCheckbox.checked = Array.from(checkboxes).every(cb => cb.checked);
+        }
+      });
+
+      checkbox.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const card = checkbox.closest('.beheer-image-card');
+        if (checkbox.checked) {
+          card.classList.add('selected');
+        } else {
+          card.classList.remove('selected');
+        }
+      });
+    });
+
+    // Card click to select
+    gallery.querySelectorAll('.beheer-image-card').forEach(card => {
+      card.addEventListener('click', (e) => {
+        if (e.target.type === 'checkbox' || e.target.closest('.beheer-image-actions')) return;
+        const checkbox = card.querySelector('input[type="checkbox"]');
+        checkbox.checked = !checkbox.checked;
+        checkbox.dispatchEvent(new Event('change'));
+        if (checkbox.checked) {
+          card.classList.add('selected');
+        } else {
+          card.classList.remove('selected');
+        }
+      });
+    });
+  }
+
+  updateDeleteButtonState(gallery, deleteBtn) {
+    if (!deleteBtn) return;
+    const checkedCount = gallery.querySelectorAll('input[type="checkbox"]:checked').length;
+    if (checkedCount > 0) {
+      deleteBtn.disabled = false;
+      deleteBtn.style.opacity = '1';
+      deleteBtn.style.cursor = 'pointer';
+      deleteBtn.textContent = `🗑️ Verwijder ${checkedCount} afbeelding${checkedCount !== 1 ? 'en' : ''}`;
+    } else {
+      deleteBtn.disabled = true;
+      deleteBtn.style.opacity = '0.5';
+      deleteBtn.style.cursor = 'not-allowed';
+      deleteBtn.textContent = '🗑️ Verwijder geselecteerde';
+    }
+  }
+
+  copyImageName(fileName) {
+    navigator.clipboard.writeText(fileName).then(() => {
+      alert(`✓ "${fileName}" gekopieerd naar klembord`);
+    }).catch(() => {
+      alert('Kopieën mislukt');
+    });
+  }
+
+  deleteSingleImage(imageId) {
+    if (!confirm('Weet je zeker dat je deze afbeelding wilt verwijderen?')) return;
+
+    const img = window.imageUploader.getImageMetadata().find(i => i.id === imageId);
+    if (!img) return;
+
+    window.imageUploader.deleteImageMetadata(imageId);
+
+    auditLogger.log('delete', 'image', imageId, img.fileName, img, null, 'success', `Deleted by ${this.getSession().username}`);
+
+    this.loadImageGallery();
+  }
+
+  deleteSelectedImages(gallery) {
+    const checkboxes = gallery.querySelectorAll('input[type="checkbox"]:checked');
+    if (checkboxes.length === 0) {
+      alert('Selecteer afbeeldingen om te verwijderen');
+      return;
+    }
+
+    if (!confirm(`Weet je zeker dat je ${checkboxes.length} afbeelding${checkboxes.length !== 1 ? 'en' : ''} wilt verwijderen?`)) return;
+
+    const imageIds = Array.from(checkboxes).map(cb => cb.dataset.imageId);
+    imageIds.forEach(id => {
+      const img = window.imageUploader.getImageMetadata().find(i => i.id === id);
+      if (img) {
+        window.imageUploader.deleteImageMetadata(id);
+        auditLogger.log('delete', 'image', id, img.fileName, img, null, 'success', `Bulk deleted by ${this.getSession().username}`);
+      }
+    });
+
+    alert(`✓ ${imageIds.length} afbeelding${imageIds.length !== 1 ? 'en' : ''} verwijderd`);
+    this.loadImageGallery();
   }
 
 }

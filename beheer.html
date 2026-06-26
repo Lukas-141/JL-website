@@ -671,6 +671,120 @@
       margin-top: 0.5rem;
       word-break: break-all;
     }
+
+    .beheer-image-gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .beheer-image-card {
+      background: white;
+      border: 1px solid #eee;
+      border-radius: 0.5rem;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .beheer-image-card:hover {
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      border-color: var(--jl-yellow);
+    }
+
+    .beheer-image-card.selected {
+      border-color: var(--jl-yellow);
+      background: rgba(245, 230, 0, 0.05);
+    }
+
+    .beheer-image-preview {
+      width: 100%;
+      height: 160px;
+      background: #f5f5f5;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--jl-text-muted);
+      font-size: 2rem;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .beheer-image-preview img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .beheer-image-info {
+      padding: 1rem;
+    }
+
+    .beheer-image-filename {
+      font-weight: 600;
+      font-size: 0.9rem;
+      margin: 0 0 0.5rem;
+      word-break: break-word;
+      color: var(--jl-black);
+    }
+
+    .beheer-image-meta {
+      font-size: 0.75rem;
+      color: var(--jl-text-muted);
+      margin: 0.25rem 0;
+    }
+
+    .beheer-image-actions {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 0.75rem;
+      padding-top: 0.75rem;
+      border-top: 1px solid #eee;
+    }
+
+    .beheer-image-actions button {
+      flex: 1;
+      padding: 0.5rem;
+      font-size: 0.75rem;
+      border: none;
+      border-radius: 0.25rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .beheer-image-delete {
+      background: #f44;
+      color: white;
+    }
+
+    .beheer-image-delete:hover {
+      background: #c00;
+    }
+
+    .beheer-image-copy {
+      background: var(--jl-yellow);
+      color: var(--jl-black);
+    }
+
+    .beheer-image-copy:hover {
+      opacity: 0.9;
+    }
+
+    .beheer-image-checkbox {
+      position: absolute;
+      top: 0.5rem;
+      right: 0.5rem;
+      width: 20px;
+      height: 20px;
+      cursor: pointer;
+    }
+
+    .beheer-image-empty {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 3rem 1rem;
+      color: var(--jl-text-muted);
+    }
   </style>
 </head>
 <body>
@@ -1040,6 +1154,33 @@
         <div class="beheer-section">
           <h3>Alle gebruikers</h3>
           <div id="usersList" class="beheer-list"></div>
+        </div>
+      </div>
+
+      <!-- TAB: IMAGES GALLERY -->
+      <div id="tab-images" class="beheer-panel">
+        <h2>🖼️ Afbeeldingen</h2>
+
+        <div class="beheer-section">
+          <h3>Geüploade afbeeldingen</h3>
+
+          <div style="margin-bottom: 1.5rem;">
+            <input type="text" id="imageSearchInput" placeholder="Zoeken op bestandsnaam..." style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 0.25rem;">
+          </div>
+
+          <div id="imageGallery" class="beheer-image-gallery">
+            <!-- Dynamisch gevuld met afbeeldingen -->
+          </div>
+        </div>
+
+        <div class="beheer-section">
+          <h3>Bulkacties</h3>
+          <p style="color: var(--jl-text-muted); margin: 0 0 1rem; font-size: 0.9rem;">
+            <input type="checkbox" id="selectAllImages"> Selecteer alles
+          </p>
+          <button type="button" id="deleteSelectedImagesBtn" class="beheer-btn beheer-btn-delete" style="opacity: 0.5; cursor: not-allowed;" disabled>
+            🗑️ Verwijder geselecteerde
+          </button>
         </div>
       </div>
 
