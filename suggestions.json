@@ -10,5 +10,29 @@
     },
     "notes": "dit is een test",
     "status": "pending"
+  },
+  {
+    "id": "sug_1782508055829_ujykuy0iy",
+    "type": "event",
+    "action": "add",
+    "data": {
+      "id": 1782508040407,
+      "title": "testevent",
+      "date": "2026-02-26",
+      "time": "01:11",
+      "endTime": "",
+      "location": "Leiden",
+      "organizer": "",
+      "description": "",
+      "image": "",
+      "createdBy": "activiteiten",
+      "createdAt": "2026-06-26T21:07:20.407Z",
+      "lastEditedBy": "activiteiten",
+      "lastEditedAt": "2026-06-26T21:07:20.407Z"
+    },
+    "notes": "hey push effe",
+    "submittedBy": "activiteiten",
+    "submittedAt": "2026-06-26T21:07:35.829Z",
+    "status": "pending"
   }
 ]
