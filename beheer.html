@@ -573,105 +573,6 @@
       }
     }
 
-    /* IMAGE UPLOAD STYLING */
-    .beheer-upload-section {
-      margin-top: 2rem;
-      padding-top: 2rem;
-      border-top: 2px solid #eee;
-    }
-
-    .beheer-upload-section h4 {
-      margin-top: 0;
-      color: var(--jl-black);
-      font-size: 1rem;
-    }
-
-    .beheer-upload-zone {
-      border: 2px dashed #ddd;
-      border-radius: 0.5rem;
-      padding: 2rem;
-      text-align: center;
-      background: rgba(245, 230, 0, 0.05);
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-
-    .beheer-upload-zone:hover {
-      border-color: var(--jl-yellow);
-      background: rgba(245, 230, 0, 0.1);
-    }
-
-    .beheer-upload-zone.dragover {
-      border-color: var(--jl-yellow);
-      background: rgba(245, 230, 0, 0.15);
-      box-shadow: 0 0 10px rgba(245, 230, 0, 0.2);
-    }
-
-    .beheer-upload-zone p {
-      margin: 0 0 0.5rem;
-      color: var(--jl-text-muted);
-      font-size: 0.9rem;
-    }
-
-    .beheer-upload-zone input[type="file"] {
-      display: none;
-    }
-
-    .beheer-upload-button {
-      display: inline-block;
-      padding: 0.6rem 1.2rem;
-      background: var(--jl-yellow);
-      color: var(--jl-black);
-      border: none;
-      border-radius: 0.25rem;
-      cursor: pointer;
-      font-weight: 600;
-      font-size: 0.9rem;
-    }
-
-    .beheer-upload-button:hover {
-      opacity: 0.9;
-    }
-
-    .beheer-upload-status {
-      margin-top: 1rem;
-      padding: 1rem;
-      border-radius: 0.25rem;
-      font-size: 0.9rem;
-    }
-
-    .beheer-upload-status.success {
-      background: rgba(76, 175, 80, 0.1);
-      border-left: 4px solid #4caf50;
-      color: #2e7d32;
-    }
-
-    .beheer-upload-status.error {
-      background: rgba(244, 67, 54, 0.1);
-      border-left: 4px solid #f44;
-      color: #c62828;
-    }
-
-    .beheer-upload-status.loading {
-      background: rgba(33, 150, 243, 0.1);
-      border-left: 4px solid #2196f3;
-      color: #1565c0;
-    }
-
-    .beheer-image-preview {
-      margin-top: 1rem;
-      font-size: 0.9rem;
-      color: var(--jl-text-muted);
-    }
-
-    .beheer-image-name {
-      background: #f5f5f5;
-      padding: 0.5rem 0.75rem;
-      border-radius: 0.25rem;
-      margin-top: 0.5rem;
-      word-break: break-all;
-    }
-
     /* BACKUP LIST */
     .backup-list {
       display: flex;
@@ -745,134 +646,6 @@
       background: #c00;
     }
 
-    #ghSyncStatusBar {
-      background: rgba(245,230,0,0.08);
-      border-left: 4px solid var(--jl-yellow);
-    }
-
-    #ghSyncStatusBar.status-ok {
-      background: rgba(76,175,80,0.08);
-      border-left-color: #4caf50;
-    }
-
-    #ghSyncStatusBar.status-error {
-      background: rgba(244,67,54,0.08);
-      border-left-color: #f44;
-    }
-
-    .beheer-image-gallery {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      gap: 1.5rem;
-      margin-bottom: 2rem;
-    }
-
-    .beheer-image-card {
-      background: white;
-      border: 1px solid #eee;
-      border-radius: 0.5rem;
-      overflow: hidden;
-      transition: all 0.3s ease;
-    }
-
-    .beheer-image-card:hover {
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-      border-color: var(--jl-yellow);
-    }
-
-    .beheer-image-card.selected {
-      border-color: var(--jl-yellow);
-      background: rgba(245, 230, 0, 0.05);
-    }
-
-    .beheer-image-preview {
-      width: 100%;
-      height: 160px;
-      background: #f5f5f5;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--jl-text-muted);
-      font-size: 2rem;
-      overflow: hidden;
-      position: relative;
-    }
-
-    .beheer-image-preview img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .beheer-image-info {
-      padding: 1rem;
-    }
-
-    .beheer-image-filename {
-      font-weight: 600;
-      font-size: 0.9rem;
-      margin: 0 0 0.5rem;
-      word-break: break-word;
-      color: var(--jl-black);
-    }
-
-    .beheer-image-meta {
-      font-size: 0.75rem;
-      color: var(--jl-text-muted);
-      margin: 0.25rem 0;
-    }
-
-    .beheer-image-actions {
-      display: flex;
-      gap: 0.5rem;
-      margin-top: 0.75rem;
-      padding-top: 0.75rem;
-      border-top: 1px solid #eee;
-    }
-
-    .beheer-image-actions button {
-      flex: 1;
-      padding: 0.5rem;
-      font-size: 0.75rem;
-      border: none;
-      border-radius: 0.25rem;
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-
-    .beheer-image-delete {
-      background: #f44;
-      color: white;
-    }
-
-    .beheer-image-delete:hover {
-      background: #c00;
-    }
-
-    .beheer-image-copy {
-      background: var(--jl-yellow);
-      color: var(--jl-black);
-    }
-
-    .beheer-image-copy:hover {
-      opacity: 0.9;
-    }
-
-    .beheer-image-checkbox {
-      position: absolute;
-      top: 0.5rem;
-      right: 0.5rem;
-      width: 20px;
-      height: 20px;
-      cursor: pointer;
-    }
-
-    .beheer-image-empty {
-      grid-column: 1 / -1;
-      text-align: center;
-      padding: 3rem 1rem;
-      color: var(--jl-text-muted);
-    }
   </style>
 </head>
 <body>
@@ -976,16 +749,6 @@
               <small style="color:var(--jl-text-muted);display:block;margin-top:0.35rem;">Bestandsnaam van afbeelding in assets/images/</small>
             </div>
 
-            <div class="beheer-upload-section">
-              <h4>📤 Of upload een afbeelding</h4>
-              <div class="beheer-upload-zone" id="eventUploadZone">
-                <p>Sleep afbeelding hier naartoe of klik om te selecteren</p>
-                <button type="button" class="beheer-upload-button">Selecteer bestand</button>
-                <input type="file" id="eventImageUpload" accept="image/*">
-              </div>
-              <div id="eventUploadStatus"></div>
-            </div>
-
             <button type="submit" class="beheer-btn">➕ Evenement toevoegen</button>
           </form>
         </div>
@@ -1087,16 +850,6 @@
               </label>
             </div>
 
-            <div class="beheer-upload-section">
-              <h4>📤 Of upload een afbeelding</h4>
-              <div class="beheer-upload-zone" id="standpuntUploadZone">
-                <p>Sleep afbeelding hier naartoe of klik om te selecteren</p>
-                <button type="button" class="beheer-upload-button">Selecteer bestand</button>
-                <input type="file" id="standpuntImageUpload" accept="image/*">
-              </div>
-              <div id="standpuntUploadStatus"></div>
-            </div>
-
             <button type="submit" class="beheer-btn">➕ Standpunt toevoegen</button>
           </form>
         </div>
@@ -1148,16 +901,6 @@
             <div class="beheer-form-group">
               <label for="bestuurImage">Afbeelding</label>
               <input type="text" id="bestuurImage" placeholder="bijv. JL-Lukas-rond.png">
-            </div>
-
-            <div class="beheer-upload-section">
-              <h4>📤 Of upload een afbeelding</h4>
-              <div class="beheer-upload-zone" id="bestuurUploadZone">
-                <p>Sleep afbeelding hier naartoe of klik om te selecteren</p>
-                <button type="button" class="beheer-upload-button">Selecteer bestand</button>
-                <input type="file" id="bestuurImageUpload" accept="image/*">
-              </div>
-              <div id="bestuurUploadStatus"></div>
             </div>
 
             <button type="submit" class="beheer-btn">➕ Bestuurslid toevoegen</button>
@@ -1249,71 +992,44 @@
       <div id=”tab-sync” class=”beheer-panel”>
         <h2>🔄 Deploy & Back-ups</h2>
 
-        <!-- GITHUB SYNC CONFIG -->
         <div class=”beheer-section”>
-          <h3>GitHub Sync</h3>
+          <h3>GitHub Sync Status</h3>
           <div class=”info-box”>
-            Vul je GitHub token in. Wijzigingen worden daarna automatisch gesynchroniseerd naar de repository.
+            Wijzigingen worden automatisch naar GitHub gesynchroniseerd.
+            Je hoeft niks in te stellen — alles gebeurt op de achtergrond.
           </div>
-
-          <div id=”ghSyncStatusBar” style=”margin:1rem 0;padding:0.75rem 1rem;border-radius:0.25rem;font-weight:600;font-size:0.9rem;”>
-            <p id=”ghSyncStatus” style=”margin:0;”>⏳ Laden...</p>
-          </div>
-
-          <div class=”beheer-form-row”>
-            <div class=”beheer-form-group”>
-              <label for=”ghOwner”>GitHub Owner</label>
-              <input type=”text” id=”ghOwner” placeholder=”bijv. Lukas-141” value=”Lukas-141”>
-            </div>
-            <div class=”beheer-form-group”>
-              <label for=”ghRepo”>Repository</label>
-              <input type=”text” id=”ghRepo” placeholder=”bijv. JL-website” value=”JL-website”>
-            </div>
-          </div>
-
-          <div class=”beheer-form-row”>
-            <div class=”beheer-form-group”>
-              <label for=”ghBranch”>Branch</label>
-              <input type=”text” id=”ghBranch” placeholder=”main” value=”main”>
-            </div>
-            <div class=”beheer-form-group”>
-              <label for=”ghToken”>Personal Access Token</label>
-              <input type=”password” id=”ghToken” placeholder=”ghp_xxxxxxxxxxxx”>
-            </div>
-          </div>
-
-          <div style=”margin-bottom:1rem;”>
-            <label style=”display:flex;align-items:center;gap:0.5rem;cursor:pointer;font-size:0.9rem;”>
-              <input type=”checkbox” id=”ghRememberToken”> Token onthouden (lokaal opgeslagen)
-            </label>
-          </div>
-
-          <div style=”display:flex;gap:0.75rem;flex-wrap:wrap;”>
-            <button type=”button” id=”ghSaveConfigBtn” class=”beheer-btn”>💾 Opslaan & Verbinden</button>
-            <button type=”button” id=”ghTestBtn” class=”beheer-btn” style=”background:#f5f5f5;color:var(--jl-black);”>🔌 Test Verbinding</button>
-          </div>
+          <p id=”ghSyncStatus” style=”margin:1rem 0 0;color:var(--jl-text-muted);font-size:0.95rem;font-weight:600;”>
+            ✓ Synchronisatie actief
+          </p>
         </div>
 
-        <!-- BACKUP & RESTORE -->
         <div class=”beheer-section”>
-          <h3>Back-ups & Herstel</h3>
+          <h3>Back-up & Herstel</h3>
           <div class=”info-box”>
             Back-ups worden lokaal opgeslagen (tot 50 snapshots). Exporteer als JSON voor externe opslag.
           </div>
 
-          <div style=”display:flex;gap:0.75rem;flex-wrap:wrap;margin-bottom:1.5rem;”>
-            <button type=”button” id=”backupNowBtn” class=”beheer-btn”>💾 Nu back-up maken</button>
-            <button type=”button” id=”exportDataBtn” class=”beheer-btn” style=”background:#f5f5f5;color:var(--jl-black);”>📤 Exporteer als JSON</button>
-            <button type=”button” id=”importDataBtn” class=”beheer-btn” style=”background:#f5f5f5;color:var(--jl-black);”>📥 Importeer JSON</button>
-            <input type=”file” id=”importDataInput” accept=”.json,application/json” style=”display:none;”>
+          <div class=”beheer-form-row”>
+            <div class=”beheer-form-group”>
+              <button type=”button” id=”backupNowBtn” class=”beheer-btn”>💾 Nu back-up maken</button>
+            </div>
+            <div class=”beheer-form-group”>
+              <button type=”button” id=”exportDataBtn” class=”beheer-btn”>📤 Exporteer data (.json)</button>
+            </div>
           </div>
 
-          <h4 style=”margin:0 0 1rem;color:var(--jl-black);”>Herstelpunten <span id=”backupCount” style=”font-size:0.8rem;color:var(--jl-text-muted);font-weight:400;”></span></h4>
+          <div class=”beheer-form-row”>
+            <div class=”beheer-form-group”>
+              <button type=”button” id=”importDataBtn” class=”beheer-btn”>📥 Importeer back-up</button>
+              <input type=”file” id=”importDataInput” accept=”.json,application/json” style=”display:none;”>
+            </div>
+          </div>
+
+          <h4 style=”margin:1.5rem 0 0.75rem;color:var(--jl-black);”>Herstelpunten <span id=”backupCount” style=”font-size:0.8rem;color:var(--jl-text-muted);font-weight:400;”></span></h4>
           <div id=”backupList” class=”backup-list”>
             <div style=”color:var(--jl-text-muted);font-size:0.9rem;padding:1rem 0;”>Nog geen back-ups beschikbaar.</div>
           </div>
 
-          <!-- Hidden select still needed for restoreSelectedBackup() -->
           <select id=”backupRestoreSelect” style=”display:none;”></select>
         </div>
       </div>
