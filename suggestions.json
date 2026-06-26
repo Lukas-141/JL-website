@@ -37,5 +37,29 @@
     "submittedBy": "activiteiten",
     "submittedAt": "2026-06-26T21:07:35.829Z",
     "status": "pending"
+  },
+  {
+    "id": "sug_1782510887763_lykab6by2",
+    "type": "event",
+    "action": "add",
+    "data": {
+      "id": 1782510880609,
+      "title": "JL Borrel mei 2026",
+      "date": "2026-06-26",
+      "time": "23:57",
+      "endTime": "",
+      "location": "Utrecht",
+      "organizer": "",
+      "description": "",
+      "image": "",
+      "createdBy": "activiteiten",
+      "createdAt": "2026-06-26T21:54:40.609Z",
+      "lastEditedBy": "activiteiten",
+      "lastEditedAt": "2026-06-26T21:54:40.609Z"
+    },
+    "notes": "wow wat een idee",
+    "submittedBy": "activiteiten",
+    "submittedAt": "2026-06-26T21:54:47.763Z",
+    "status": "pending"
   }
 ]
