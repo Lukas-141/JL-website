@@ -8,7 +8,11 @@
   <link rel="stylesheet" href="css/styles.css">
   <style>
     body {
-      background: #f5f5f5;
+      background: var(--jl-black);
+    }
+
+    #loginScreen {
+      background: var(--jl-black);
     }
 
     .beheer-login {
@@ -86,10 +90,10 @@
 
     .beheer-btn-login {
       width: 100%;
-      padding: 0.9rem;
+      padding: 0.9rem 0.9rem 0.9rem 0.9rem;
       background: var(--jl-yellow);
       color: var(--jl-black);
-      border: none;
+      border: 2px solid var(--jl-yellow);
       border-radius: 0.35rem;
       font-weight: 700;
       font-size: 1rem;
@@ -97,13 +101,33 @@
       text-transform: uppercase;
       letter-spacing: 0.05em;
       cursor: pointer;
-      transition: all 0.2s;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .beheer-btn-login::before {
+      content: '→';
+      position: absolute;
+      left: -1.5rem;
+      width: 1.2rem;
+      height: 1.2rem;
+      opacity: 0;
+      transition: all 0.3s ease;
+      font-size: 1.5rem;
+      line-height: 1;
     }
 
     .beheer-btn-login:hover {
-      background: var(--jl-yellow-hot);
-      transform: translateY(-2px);
-      box-shadow: 0 8px 24px rgba(245, 230, 0, 0.3);
+      background: var(--jl-white);
+      color: var(--jl-black);
+      border: 2px solid var(--jl-black);
+      padding-left: 2.5rem;
+    }
+
+    .beheer-btn-login:hover::before {
+      left: 0.75rem;
+      opacity: 1;
     }
 
     /* DASHBOARD */
