@@ -573,218 +573,6 @@
       }
     }
 
-    /* IMAGE UPLOAD STYLING */
-    .beheer-upload-section {
-      margin-top: 2rem;
-      padding-top: 2rem;
-      border-top: 2px solid #eee;
-    }
-
-    .beheer-upload-section h4 {
-      margin-top: 0;
-      color: var(--jl-black);
-      font-size: 1rem;
-    }
-
-    .beheer-upload-zone {
-      border: 2px dashed #ddd;
-      border-radius: 0.5rem;
-      padding: 2rem;
-      text-align: center;
-      background: rgba(245, 230, 0, 0.05);
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-
-    .beheer-upload-zone:hover {
-      border-color: var(--jl-yellow);
-      background: rgba(245, 230, 0, 0.1);
-    }
-
-    .beheer-upload-zone.dragover {
-      border-color: var(--jl-yellow);
-      background: rgba(245, 230, 0, 0.15);
-      box-shadow: 0 0 10px rgba(245, 230, 0, 0.2);
-    }
-
-    .beheer-upload-zone p {
-      margin: 0 0 0.5rem;
-      color: var(--jl-text-muted);
-      font-size: 0.9rem;
-    }
-
-    .beheer-upload-zone input[type="file"] {
-      display: none;
-    }
-
-    .beheer-upload-button {
-      display: inline-block;
-      padding: 0.6rem 1.2rem;
-      background: var(--jl-yellow);
-      color: var(--jl-black);
-      border: none;
-      border-radius: 0.25rem;
-      cursor: pointer;
-      font-weight: 600;
-      font-size: 0.9rem;
-    }
-
-    .beheer-upload-button:hover {
-      opacity: 0.9;
-    }
-
-    .beheer-upload-status {
-      margin-top: 1rem;
-      padding: 1rem;
-      border-radius: 0.25rem;
-      font-size: 0.9rem;
-    }
-
-    .beheer-upload-status.success {
-      background: rgba(76, 175, 80, 0.1);
-      border-left: 4px solid #4caf50;
-      color: #2e7d32;
-    }
-
-    .beheer-upload-status.error {
-      background: rgba(244, 67, 54, 0.1);
-      border-left: 4px solid #f44;
-      color: #c62828;
-    }
-
-    .beheer-upload-status.loading {
-      background: rgba(33, 150, 243, 0.1);
-      border-left: 4px solid #2196f3;
-      color: #1565c0;
-    }
-
-    .beheer-image-preview {
-      margin-top: 1rem;
-      font-size: 0.9rem;
-      color: var(--jl-text-muted);
-    }
-
-    .beheer-image-name {
-      background: #f5f5f5;
-      padding: 0.5rem 0.75rem;
-      border-radius: 0.25rem;
-      margin-top: 0.5rem;
-      word-break: break-all;
-    }
-
-    .beheer-image-gallery {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      gap: 1.5rem;
-      margin-bottom: 2rem;
-    }
-
-    .beheer-image-card {
-      background: white;
-      border: 1px solid #eee;
-      border-radius: 0.5rem;
-      overflow: hidden;
-      transition: all 0.3s ease;
-    }
-
-    .beheer-image-card:hover {
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-      border-color: var(--jl-yellow);
-    }
-
-    .beheer-image-card.selected {
-      border-color: var(--jl-yellow);
-      background: rgba(245, 230, 0, 0.05);
-    }
-
-    .beheer-image-preview {
-      width: 100%;
-      height: 160px;
-      background: #f5f5f5;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--jl-text-muted);
-      font-size: 2rem;
-      overflow: hidden;
-      position: relative;
-    }
-
-    .beheer-image-preview img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .beheer-image-info {
-      padding: 1rem;
-    }
-
-    .beheer-image-filename {
-      font-weight: 600;
-      font-size: 0.9rem;
-      margin: 0 0 0.5rem;
-      word-break: break-word;
-      color: var(--jl-black);
-    }
-
-    .beheer-image-meta {
-      font-size: 0.75rem;
-      color: var(--jl-text-muted);
-      margin: 0.25rem 0;
-    }
-
-    .beheer-image-actions {
-      display: flex;
-      gap: 0.5rem;
-      margin-top: 0.75rem;
-      padding-top: 0.75rem;
-      border-top: 1px solid #eee;
-    }
-
-    .beheer-image-actions button {
-      flex: 1;
-      padding: 0.5rem;
-      font-size: 0.75rem;
-      border: none;
-      border-radius: 0.25rem;
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-
-    .beheer-image-delete {
-      background: #f44;
-      color: white;
-    }
-
-    .beheer-image-delete:hover {
-      background: #c00;
-    }
-
-    .beheer-image-copy {
-      background: var(--jl-yellow);
-      color: var(--jl-black);
-    }
-
-    .beheer-image-copy:hover {
-      opacity: 0.9;
-    }
-
-    .beheer-image-checkbox {
-      position: absolute;
-      top: 0.5rem;
-      right: 0.5rem;
-      width: 20px;
-      height: 20px;
-      cursor: pointer;
-    }
-
-    .beheer-image-empty {
-      grid-column: 1 / -1;
-      text-align: center;
-      padding: 3rem 1rem;
-      color: var(--jl-text-muted);
-    }
   </style>
 </head>
 <body>
@@ -888,16 +676,6 @@
               <small style="color:var(--jl-text-muted);display:block;margin-top:0.35rem;">Bestandsnaam van afbeelding in assets/images/</small>
             </div>
 
-            <div class="beheer-upload-section">
-              <h4>📤 Of upload een afbeelding</h4>
-              <div class="beheer-upload-zone" id="eventUploadZone">
-                <p>Sleep afbeelding hier naartoe of klik om te selecteren</p>
-                <button type="button" class="beheer-upload-button">Selecteer bestand</button>
-                <input type="file" id="eventImageUpload" accept="image/*">
-              </div>
-              <div id="eventUploadStatus"></div>
-            </div>
-
             <button type="submit" class="beheer-btn">➕ Evenement toevoegen</button>
           </form>
         </div>
@@ -999,16 +777,6 @@
               </label>
             </div>
 
-            <div class="beheer-upload-section">
-              <h4>📤 Of upload een afbeelding</h4>
-              <div class="beheer-upload-zone" id="standpuntUploadZone">
-                <p>Sleep afbeelding hier naartoe of klik om te selecteren</p>
-                <button type="button" class="beheer-upload-button">Selecteer bestand</button>
-                <input type="file" id="standpuntImageUpload" accept="image/*">
-              </div>
-              <div id="standpuntUploadStatus"></div>
-            </div>
-
             <button type="submit" class="beheer-btn">➕ Standpunt toevoegen</button>
           </form>
         </div>
@@ -1060,16 +828,6 @@
             <div class="beheer-form-group">
               <label for="bestuurImage">Afbeelding</label>
               <input type="text" id="bestuurImage" placeholder="bijv. JL-Lukas-rond.png">
-            </div>
-
-            <div class="beheer-upload-section">
-              <h4>📤 Of upload een afbeelding</h4>
-              <div class="beheer-upload-zone" id="bestuurUploadZone">
-                <p>Sleep afbeelding hier naartoe of klik om te selecteren</p>
-                <button type="button" class="beheer-upload-button">Selecteer bestand</button>
-                <input type="file" id="bestuurImageUpload" accept="image/*">
-              </div>
-              <div id="bestuurUploadStatus"></div>
             </div>
 
             <button type="submit" class="beheer-btn">➕ Bestuurslid toevoegen</button>
@@ -1154,42 +912,6 @@
         <div class="beheer-section">
           <h3>Alle gebruikers</h3>
           <div id="usersList" class="beheer-list"></div>
-        </div>
-      </div>
-
-      <!-- TAB: IMAGES GALLERY -->
-      <div id="tab-images" class="beheer-panel">
-        <h2>🖼️ Afbeeldingen</h2>
-
-        <div class="beheer-section">
-          <h3>Geüploade afbeeldingen</h3>
-
-          <div style="margin-bottom: 1.5rem;">
-            <input type="text" id="imageSearchInput" placeholder="Zoeken op bestandsnaam..." style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 0.25rem;">
-          </div>
-
-          <div id="imageGallery" class="beheer-image-gallery">
-            <!-- Dynamisch gevuld met afbeeldingen -->
-          </div>
-        </div>
-
-        <div class="beheer-section">
-          <h3>Bulkacties</h3>
-          <p style="color: var(--jl-text-muted); margin: 0 0 1rem; font-size: 0.9rem;">
-            <input type="checkbox" id="selectAllImages"> Selecteer alles
-          </p>
-          <button type="button" id="deleteSelectedImagesBtn" class="beheer-btn beheer-btn-delete" style="opacity: 0.5; cursor: not-allowed;" disabled>
-            🗑️ Verwijder geselecteerde
-          </button>
-        </div>
-
-        <div class="beheer-section">
-          <h3>GitHub Sync</h3>
-          <div class="info-box">
-            Synchroniseer afbeeldingen bidirectioneel met GitHub `/assets/images/` folder.
-          </div>
-          <button type="button" id="syncFromGitHubBtn" class="beheer-btn">📥 Laad afbeeldingen van GitHub</button>
-          <div id="syncStatus" style="margin-top: 1rem; display: none;"></div>
         </div>
       </div>
 
