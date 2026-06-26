@@ -57,8 +57,9 @@
     .beheer-form-group label {
       display: block;
       margin-bottom: 0.5rem;
-      font-weight: 600;
-      color: var(--jl-white);
+      font-weight: 700;
+      color: #ffffff;
+      font-size: 1rem;
     }
 
     .beheer-form-group input {
@@ -80,7 +81,8 @@
     }
 
     .beheer-form-group input::placeholder {
-      color: #666;
+      color: var(--jl-white);
+      opacity: 0.7;
     }
 
     .beheer-error {
@@ -115,7 +117,7 @@
     .beheer-btn-login::before {
       content: '';
       position: absolute;
-      right: -1.5rem;
+      left: -1.5rem;
       width: 1.5rem;
       height: 1.5rem;
       opacity: 0;
@@ -130,11 +132,11 @@
       background: var(--jl-white);
       color: var(--jl-black);
       border: 2px solid var(--jl-black);
-      padding-right: 2.5rem;
+      padding-left: 2.5rem;
     }
 
     .beheer-btn-login:hover::before {
-      right: 0.75rem;
+      left: 0.75rem;
       opacity: 1;
     }
 
