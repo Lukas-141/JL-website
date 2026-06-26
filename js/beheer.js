@@ -74,9 +74,13 @@ class BeheerSystem {
     });
 
     // Logout
-    document.getElementById('logoutBtn').addEventListener('click', () => {
-      this.logout();
-    });
+    const logoutBtn = document.getElementById('logoutBtn');
+    if (logoutBtn) {
+      logoutBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        this.logout();
+      });
+    }
 
     // Navigation tabs
     document.querySelectorAll('.nav-link').forEach(link => {
@@ -290,20 +294,38 @@ class BeheerSystem {
   switchTab(tabName) {
     // Hide all panels
     document.querySelectorAll('.beheer-panel').forEach(p => p.classList.remove('active'));
+
     // Show selected
-    document.getElementById(`tab-${tabName}`).classList.add('active');
+    const tabEl = document.getElementById(`tab-${tabName}`);
+    if (tabEl) {
+      tabEl.classList.add('active');
+    }
 
     // Update nav
     document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
-    document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
+    const navLink = document.querySelector(`[data-tab="${tabName}"]`);
+    if (navLink) {
+      navLink.classList.add('active');
+    }
 
+    // Load data based on tab
+    if (tabName === 'evenementen') {
+      this.loadEvents();
+    }
     if (tabName === 'content') {
       this.loadStandpunten();
     }
-    if (tabName === 'team') this.loadBestuur();
+    if (tabName === 'team') {
+      this.loadBestuur();
+    }
+    if (tabName === 'activity') {
+      this.renderActivityLog();
+    }
+    if (tabName === 'users') {
+      this.loadUserManagement();
+    }
     if (tabName === 'sync') {
       this.renderBackupList();
-      this.loadGitHubSettingsToForm();
     }
   }
 
@@ -1479,21 +1501,28 @@ class BeheerSystem {
 
   // USER MANAGEMENT
   loadUserManagement() {
+    // Populate filter dropdown
     const userFilterSelect = document.getElementById('activityFilterUser');
-    if (userFilterSelect && this.allUsers) {
+    if (userFilterSelect && this.allUsers && this.allUsers.length > 0) {
       userFilterSelect.innerHTML = `<option value="">Alle gebruikers</option>` + this.allUsers.map(u =>
         `<option value="${u.username}">${u.username}</option>`
       ).join('');
     }
 
+    // Setup form listener
     const userForm = document.getElementById('userForm');
     if (userForm) {
-      userForm.addEventListener('submit', async (e) => {
+      // Remove old listeners by cloning
+      const newForm = userForm.cloneNode(true);
+      userForm.parentNode.replaceChild(newForm, userForm);
+
+      newForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         await this.handleAddUser();
       });
     }
 
+    // Render user list
     this.renderUserList();
   }
 
@@ -1562,23 +1591,31 @@ class BeheerSystem {
     const listEl = document.getElementById('usersList');
     if (!listEl) return;
 
-    if (this.allUsers.length === 0) {
+    if (!this.allUsers || this.allUsers.length === 0) {
       listEl.innerHTML = '<p style="color:var(--jl-text-muted);">Geen gebruikers</p>';
       return;
     }
 
-    listEl.innerHTML = this.allUsers.map(user => `
-      <div class="user-entry">
-        <div class="user-info">
-          <h4>${user.username}</h4>
-          <p>${user.email}</p>
-          <span class="role-badge">${user.role}</span>
+    listEl.innerHTML = this.allUsers.map(user => {
+      const permissionsText = user.permissions.includes('*')
+        ? 'Alle permissies (Bestuur)'
+        : user.permissions.length + ' permissies';
+
+      return `
+        <div class="beheer-item">
+          <div class="beheer-item-info">
+            <h4>${user.username}</h4>
+            <p><strong>${user.role}</strong></p>
+            <p>${user.email}</p>
+            <small style="color:var(--jl-text-muted);">Aangemaakt: ${new Date(user.createdAt).toLocaleDateString('nl-NL')}</small>
+          </div>
+          <div class="beheer-item-actions">
+            <button class="beheer-btn" style="background:#ddd;color:#111;padding:0.5rem 0.75rem;font-size:0.85rem;">📋 ${permissionsText}</button>
+            <button class="beheer-btn beheer-btn-delete" onclick="beheer.deleteUser('${user.id}')" style="padding:0.5rem 0.75rem;font-size:0.85rem;">🗑️ Verwijderen</button>
+          </div>
         </div>
-        <div>${new Date(user.createdAt).toLocaleDateString('nl-NL')}</div>
-        <div>${user.permissions.includes('*') ? 'Alles' : user.permissions.length + ' permissies'}</div>
-        <button class="beheer-btn beheer-btn-delete" onclick="beheer.deleteUser('${user.id}')" style="padding:0.5rem 0.75rem;font-size:0.85rem;">Verwijderen</button>
-      </div>
-    `).join('');
+      `;
+    }).join('');
   }
 
   deleteUser(userId) {

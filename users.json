@@ -2,7 +2,7 @@
   {
     "id": "user_bestuur_1",
     "username": "bestuur",
-    "passwordHash": "$2a$10$N9qo8uLOickgx2ZMRZoMye6pLMJf3d...",
+    "passwordHash": "Vrijheid2026!",
     "role": "Bestuur",
     "email": "bestuur@jongelibertariers.nl",
     "permissions": ["*"],
@@ -10,19 +10,19 @@
   },
   {
     "id": "user_activiteiten_1",
-    "username": "anna",
-    "passwordHash": "$2a$10$N9qo8uLOickgx2ZMRZoMye6pLMJf3d...",
+    "username": "activiteiten",
+    "passwordHash": "Events2026@",
     "role": "Activiteiten Commissie",
-    "email": "anna@jongelibertariers.nl",
+    "email": "activiteiten@jongelibertariers.nl",
     "permissions": ["view:events", "edit:events", "delete:own:events", "upload:images", "view:audit"],
     "createdAt": "2026-06-26T00:00:00Z"
   },
   {
     "id": "user_standpunten_1",
-    "username": "marcus",
-    "passwordHash": "$2a$10$N9qo8uLOickgx2ZMRZoMye6pLMJf3d...",
+    "username": "standpunten",
+    "passwordHash": "Principes2026!",
     "role": "Standpunten Commissie",
-    "email": "marcus@jongelibertariers.nl",
+    "email": "standpunten@jongelibertariers.nl",
     "permissions": ["view:standpunten", "edit:standpunten", "delete:own:standpunten", "upload:images", "view:audit"],
     "createdAt": "2026-06-26T00:00:00Z"
   }
