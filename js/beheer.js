@@ -18,22 +18,30 @@ class BeheerSystem {
   }
 
   init() {
-    this.loadUsersFromFile();
+    // Load users synchronously via XMLHttpRequest (blocking but necessary for init)
+    this.loadUsersSync();
+    console.log('Users initialized:', this.allUsers.length, 'users');
+
     this.checkSession();
     this.setupEventListeners();
   }
 
-  loadUsersFromFile() {
-    fetch('users.json')
-      .then(response => response.json())
-      .then(data => {
-        this.allUsers = data || [];
-        console.log('Users loaded:', this.allUsers.length);
-      })
-      .catch(error => {
-        console.error('Failed to load users.json:', error);
+  loadUsersSync() {
+    try {
+      const xhr = new XMLHttpRequest();
+      xhr.open('GET', 'users.json', false); // false = synchronous
+      xhr.send();
+
+      if (xhr.status === 200) {
+        this.allUsers = JSON.parse(xhr.responseText) || [];
+      } else {
+        console.error('Failed to load users.json - status:', xhr.status);
         this.allUsers = [];
-      });
+      }
+    } catch (error) {
+      console.error('Error loading users.json:', error);
+      this.allUsers = [];
+    }
   }
 
   getSession() {
@@ -157,11 +165,21 @@ class BeheerSystem {
   }
 
   handleLogin() {
-    const username = document.getElementById('username').value;
+    const username = document.getElementById('username').value.trim();
     const password = document.getElementById('password').value;
     const errorEl = document.getElementById('loginError');
 
+    console.log('Login attempt:', username, 'Available users:', this.allUsers.length);
+
+    if (!username || !password) {
+      errorEl.textContent = 'Vul gebruikersnaam en wachtwoord in';
+      errorEl.style.display = 'block';
+      return;
+    }
+
+    // Find user
     const user = this.allUsers.find(u => u.username === username);
+    console.log('User found:', !!user);
 
     if (!user) {
       errorEl.textContent = 'Gebruikersnaam of wachtwoord onjuist';
@@ -170,8 +188,9 @@ class BeheerSystem {
       return;
     }
 
-    // Simplified: direct compare password (in production: use bcrypt)
-    if (user.passwordHash && user.passwordHash !== password && !this.verifyPassword(password, user.passwordHash)) {
+    // Verify password (simple comparison for now)
+    if (user.passwordHash !== password) {
+      console.log('Password mismatch. Expected:', user.passwordHash, 'Got:', password);
       errorEl.textContent = 'Gebruikersnaam of wachtwoord onjuist';
       errorEl.style.display = 'block';
       document.getElementById('password').value = '';
@@ -179,6 +198,8 @@ class BeheerSystem {
     }
 
     // Login successful
+    console.log('Login successful for:', user.username);
+
     const session = {
       username: user.username,
       userId: user.id,
@@ -189,26 +210,39 @@ class BeheerSystem {
     };
 
     this.setSession(session);
+    console.log('Session saved:', session);
 
-    // Log to audit
-    auditLogger.log('login', 'user', user.id, user.username, null, { username: user.username, role: user.role });
+    // Log to audit (only if auditLogger exists)
+    if (typeof auditLogger !== 'undefined') {
+      auditLogger.log('login', 'user', user.id, user.username, null, { username: user.username, role: user.role });
+    }
 
+    // Show dashboard
     this.showDashboard(user.username);
   }
 
-  verifyPassword(password, hash) {
-    // Simple comparison for demo
-    // In production: use bcrypt.compare()
-    return password === hash;
-  }
-
   logout() {
+    console.log('Logout called');
+
     const session = this.getSession();
     if (session) {
-      auditLogger.log('logout', 'user', session.userId, session.username, null, null);
+      console.log('Logging logout event for:', session.username);
+      if (typeof auditLogger !== 'undefined') {
+        auditLogger.log('logout', 'user', session.userId, session.username, null, null);
+      }
     }
+
+    // Clear session
     localStorage.removeItem(this.storageKey);
+    console.log('Session cleared');
+
+    // Show login screen
     this.showLogin();
+    console.log('Login screen shown');
+
+    // Clear forms
+    document.getElementById('loginForm').reset();
+    document.getElementById('loginError').style.display = 'none';
   }
 
   renderSidebar() {
