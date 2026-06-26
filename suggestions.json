@@ -9,7 +9,10 @@
       "title": "Test evenement"
     },
     "notes": "dit is een test",
-    "status": "pending"
+    "status": "rejected",
+    "reviewedBy": "bestuur",
+    "reviewedAt": "2026-06-26T21:52:01.826Z",
+    "rejectionReason": "kut idee"
   },
   {
     "id": "sug_1782508055829_ujykuy0iy",
