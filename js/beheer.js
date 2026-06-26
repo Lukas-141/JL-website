@@ -341,13 +341,17 @@ class BeheerSystem {
   }
 
   switchTab(tabName) {
-    // Hide all panels
-    document.querySelectorAll('.beheer-panel').forEach(p => p.classList.remove('active'));
+    // Explicitly hide all panels with inline style (overrides any CSS issues)
+    document.querySelectorAll('.beheer-panel').forEach(p => {
+      p.classList.remove('active');
+      p.style.display = 'none';
+    });
 
-    // Show selected
+    // Show only the selected panel
     const tabEl = document.getElementById(`tab-${tabName}`);
     if (tabEl) {
       tabEl.classList.add('active');
+      tabEl.style.display = 'block';
     }
 
     // Update nav
