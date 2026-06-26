@@ -1873,7 +1873,7 @@ class BeheerSystem {
     statusDiv.appendChild(statusEl);
 
     try {
-      // Validate file
+      // Validate file client-side
       const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
       const maxSize = 5 * 1024 * 1024; // 5MB
 
@@ -1885,31 +1885,38 @@ class BeheerSystem {
         throw new Error(`Bestand te groot: ${(file.size / 1024 / 1024).toFixed(1)}MB. Max: 5MB`);
       }
 
-      // Generate filename
-      const ext = file.name.split('.').pop().toLowerCase();
-      const sanitized = file.name
-        .replace(/\.[^/.]+$/, '')
-        .replace(/[^a-z0-9-]/gi, '-')
-        .replace(/-+/g, '-')
-        .toLowerCase();
-      const fileName = `${sanitized}_${Date.now()}.${ext}`;
+      // Upload to server
+      const formData = new FormData();
+      formData.append('file', file);
 
-      // Log to audit trail
-      if (window.auditLogger) {
-        window.auditLogger.log(
-          'upload',
-          'image',
-          `img_${Date.now()}`,
-          fileName,
-          null,
-          { size: file.size, type: file.type },
-          'success'
-        );
+      const response = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        statusEl.className = 'beheer-upload-status success';
+        statusEl.innerHTML = `✓ ${result.message}<div class="beheer-image-name">${result.fileName}</div>`;
+        itemField.value = result.fileName;
+
+        // Log to audit trail
+        if (window.auditLogger) {
+          const session = this.getSession();
+          window.auditLogger.log(
+            'upload',
+            'image',
+            `img_${Date.now()}`,
+            result.fileName,
+            null,
+            { size: file.size, type: file.type, uploadedBy: session?.username },
+            'success'
+          );
+        }
+      } else {
+        throw new Error(result.error || 'Upload failed');
       }
-
-      statusEl.className = 'beheer-upload-status success';
-      statusEl.innerHTML = `✓ "${file.name}" opgeslagen als "${fileName}"<div class="beheer-image-name">${fileName}</div>`;
-      itemField.value = fileName;
 
     } catch (err) {
       statusEl.className = 'beheer-upload-status error';
