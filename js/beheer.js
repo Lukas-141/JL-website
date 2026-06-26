@@ -17,20 +17,23 @@ class BeheerSystem {
     this.init();
   }
 
-  async init() {
-    await this.loadUsersFromFile();
+  init() {
+    this.loadUsersFromFile();
     this.checkSession();
     this.setupEventListeners();
   }
 
-  async loadUsersFromFile() {
-    try {
-      const response = await fetch('users.json');
-      this.allUsers = await response.json();
-    } catch (error) {
-      console.error('Failed to load users.json:', error);
-      this.allUsers = [];
-    }
+  loadUsersFromFile() {
+    fetch('users.json')
+      .then(response => response.json())
+      .then(data => {
+        this.allUsers = data || [];
+        console.log('Users loaded:', this.allUsers.length);
+      })
+      .catch(error => {
+        console.error('Failed to load users.json:', error);
+        this.allUsers = [];
+      });
   }
 
   getSession() {

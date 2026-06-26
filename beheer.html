@@ -108,8 +108,7 @@
 
     /* DASHBOARD */
     .beheer-dashboard {
-      display: grid;
-      grid-template-columns: 260px 1fr;
+      display: flex;
       min-height: 100vh;
     }
 
@@ -117,10 +116,20 @@
       background: var(--jl-black);
       padding: 1.5rem 0;
       border-right: 3px solid var(--jl-yellow);
-      position: sticky;
+      position: fixed;
       top: 0;
+      left: 0;
+      width: 260px;
       height: 100vh;
       overflow-y: auto;
+      z-index: 100;
+    }
+
+    .beheer-main {
+      margin-left: 260px;
+      padding: 2rem;
+      overflow-y: auto;
+      min-height: 100vh;
     }
 
     .beheer-sidebar-logo {
@@ -190,10 +199,6 @@
       background: #c00;
     }
 
-    .beheer-main {
-      padding: 2rem;
-      overflow-y: auto;
-    }
 
     .beheer-header {
       background: var(--jl-white);
@@ -481,7 +486,7 @@
 
     @media (max-width: 768px) {
       .beheer-dashboard {
-        grid-template-columns: 1fr;
+        flex-direction: column;
       }
 
       .beheer-sidebar {
@@ -489,9 +494,12 @@
         border-bottom: 3px solid var(--jl-yellow);
         height: auto;
         position: relative;
+        width: 100%;
+        z-index: 99;
       }
 
       .beheer-main {
+        margin-left: 0;
         padding: 1.25rem;
       }
 
