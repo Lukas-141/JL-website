@@ -998,6 +998,40 @@
         </div>
       </div>
 
+      <!-- TAB: JAARVERSLAGEN -->
+      <div id="tab-jaarverslagen" class="beheer-panel" style="display:none;">
+        <h2>📋 Jaarverslagen (ANBI)</h2>
+        <div class="info-box">
+          Voeg hier jaarverslagen toe die op de transparantiepagina als downloadknop verschijnen. Zet de PDF eerst in de map <strong>assets/</strong> van de website.
+        </div>
+
+        <div class="beheer-section">
+          <h3>Jaarverslag toevoegen</h3>
+          <form id="jaarverslagForm">
+            <div class="beheer-form-row">
+              <div class="beheer-form-group">
+                <label for="jvJaar">Jaar *</label>
+                <input type="number" id="jvJaar" min="2020" max="2099" placeholder="bijv. 2026" required>
+              </div>
+              <div class="beheer-form-group">
+                <label for="jvBestand">Bestandsnaam PDF *</label>
+                <input type="text" id="jvBestand" placeholder="bijv. Jaarverslag-2026.pdf" required>
+              </div>
+            </div>
+            <div class="beheer-form-group">
+              <label for="jvBeschrijving">Beschrijving</label>
+              <input type="text" id="jvBeschrijving" placeholder="bijv. Bestuursverslag en financieel jaarverslag boekjaar 2026.">
+            </div>
+            <button type="submit" class="beheer-btn">➕ Toevoegen</button>
+          </form>
+        </div>
+
+        <div class="beheer-section">
+          <h3>Alle jaarverslagen</h3>
+          <div id="jaarverslagenList" class="beheer-list"></div>
+        </div>
+      </div>
+
       <!-- TAB: ACTIVITY LOG (Bestuur only) -->
       <!-- TAB: SUGGESTIES (Bestuur only) -->
       <div id="tab-suggestions" class="beheer-panel" style="display:none;">

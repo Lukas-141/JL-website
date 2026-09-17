@@ -7,6 +7,7 @@ class BeheerSystem {
     this.eventsKey = 'jl-events';
     this.standpuntenKey = 'jl-standpunten';
     this.bestuurKey = 'jl-bestuur';
+    this.jaarverslagenKey = 'jl-jaarverslagen';
     this.backupsKey = 'jl-beheer-backups';
     this.preferLocalDataKey = 'jl-prefer-local-data';
     this.githubConfigKey = 'jl-github-config';
@@ -122,6 +123,15 @@ class BeheerSystem {
       bestuurForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         await this.addBestuurslid();
+      });
+    }
+
+    // Jaarverslagen form
+    const jaarverslagForm = document.getElementById('jaarverslagForm');
+    if (jaarverslagForm) {
+      jaarverslagForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        await this.addJaarverslag();
       });
     }
 
@@ -306,6 +316,7 @@ class BeheerSystem {
         { name: 'evenementen', label: '📅 Evenementen' },
         { name: 'content', label: '📝 Content' },
         { name: 'team', label: '👥 Team' },
+        { name: 'jaarverslagen', label: '📋 Jaarverslagen' },
         { name: 'suggestions', label: '📬 Suggesties' },
         { name: 'users', label: '👤 Gebruikers' },
         { name: 'sync', label: '💾 Back-ups' }
@@ -351,13 +362,15 @@ class BeheerSystem {
       await Promise.all([
         this.seedStorageFromFile(this.eventsKey, 'events.json'),
         this.seedStorageFromFile(this.standpuntenKey, 'standpunten.json'),
-        this.seedStorageFromFile(this.bestuurKey, 'bestuur.json')
+        this.seedStorageFromFile(this.bestuurKey, 'bestuur.json'),
+        this.seedStorageFromFile(this.jaarverslagenKey, 'jaarverslagen.json')
       ]);
     }
 
     this.loadEvents();
     this.loadStandpunten();
     this.loadBestuur();
+    this.loadJaarverslagen();
     this.ensureInitialBackup();
     this.renderBackupList();
     this.updateSubmitButtonsForRole(session.role);
@@ -917,15 +930,17 @@ class BeheerSystem {
 
   async loadAllDataFromGitHub() {
     try {
-      const [events, standpunten, bestuur] = await Promise.all([
+      const [events, standpunten, bestuur, jaarverslagen] = await Promise.all([
         this.fetchDatasetFromGitHub('events.json'),
         this.fetchDatasetFromGitHub('standpunten.json'),
-        this.fetchDatasetFromGitHub('bestuur.json')
+        this.fetchDatasetFromGitHub('bestuur.json'),
+        this.fetchDatasetFromGitHub('jaarverslagen.json')
       ]);
       if (!events || !standpunten || !bestuur) return false;
       this.setStoredList(this.eventsKey, events);
       this.setStoredList(this.standpuntenKey, standpunten);
       this.setStoredList(this.bestuurKey, bestuur);
+      if (jaarverslagen) this.setStoredList(this.jaarverslagenKey, jaarverslagen);
       this.setPreferLocalData(false);
       return true;
     } catch (_) {
@@ -952,6 +967,7 @@ class BeheerSystem {
     if (key === this.eventsKey) return 'events.json';
     if (key === this.standpuntenKey) return 'standpunten.json';
     if (key === this.bestuurKey) return 'bestuur.json';
+    if (key === this.jaarverslagenKey) return 'jaarverslagen.json';
     return '';
   }
 
@@ -959,6 +975,7 @@ class BeheerSystem {
     if (key === this.eventsKey) this.loadEvents();
     if (key === this.standpuntenKey) this.loadStandpunten();
     if (key === this.bestuurKey) this.loadBestuur();
+    if (key === this.jaarverslagenKey) this.loadJaarverslagen();
   }
 
   async commitDatasetChange(key, nextItems, reason, successMessage) {
@@ -1059,7 +1076,58 @@ class BeheerSystem {
     results.push(await this.syncDatasetToGitHub(this.eventsKey, reason));
     results.push(await this.syncDatasetToGitHub(this.standpuntenKey, reason));
     results.push(await this.syncDatasetToGitHub(this.bestuurKey, reason));
+    results.push(await this.syncDatasetToGitHub(this.jaarverslagenKey, reason));
     return results;
+  }
+
+  // JAARVERSLAGEN MANAGEMENT
+  async addJaarverslag() {
+    if (!this.ensureGitHubSyncReady()) return;
+    const jaar = parseInt(document.getElementById('jvJaar').value, 10);
+    const bestand = document.getElementById('jvBestand').value.trim();
+    const beschrijving = document.getElementById('jvBeschrijving').value.trim();
+
+    if (!jaar || !bestand) { alert('Vul het jaar en de bestandsnaam in.'); return; }
+
+    let items = this.getStoredList(this.jaarverslagenKey);
+    if (items.some(v => v.jaar === jaar)) { alert(`Er bestaat al een jaarverslag voor ${jaar}.`); return; }
+
+    const nieuw = { id: jaar, jaar, bestand, beschrijving: beschrijving || `Bestuursverslag en financieel jaarverslag boekjaar ${jaar}.` };
+    this.createBackup(`Jaarverslag ${jaar} toegevoegd`);
+    items = [...items, nieuw];
+    await this.commitDatasetChange(this.jaarverslagenKey, items, `Jaarverslag ${jaar} toegevoegd`, `Jaarverslag ${jaar} toegevoegd.`);
+    document.getElementById('jaarverslagForm').reset();
+  }
+
+  async deleteJaarverslag(jaar) {
+    if (!this.ensureGitHubSyncReady()) return;
+    if (!confirm(`Jaarverslag ${jaar} verwijderen?`)) return;
+    this.createBackup(`Jaarverslag ${jaar} verwijderd`);
+    let items = this.getStoredList(this.jaarverslagenKey).filter(v => v.jaar !== jaar);
+    await this.commitDatasetChange(this.jaarverslagenKey, items, `Jaarverslag ${jaar} verwijderd`, `Jaarverslag ${jaar} verwijderd.`);
+  }
+
+  loadJaarverslagen() {
+    const items = this.getStoredList(this.jaarverslagenKey);
+    const listEl = document.getElementById('jaarverslagenList');
+    if (!listEl) return;
+    if (items.length === 0) {
+      listEl.innerHTML = '<p style="color:var(--jl-text-muted);">Geen jaarverslagen</p>';
+      return;
+    }
+    const sorted = [...items].sort((a, b) => b.jaar - a.jaar);
+    listEl.innerHTML = sorted.map(v => `
+      <div class="beheer-item">
+        <div class="beheer-item-info">
+          <h4>Jaarverslag ${v.jaar}</h4>
+          <p>${v.beschrijving || ''}</p>
+          <p style="font-size:0.82rem;color:var(--jl-text-muted);">📁 assets/${v.bestand}</p>
+        </div>
+        <div class="beheer-item-actions">
+          <button class="beheer-btn beheer-btn-delete" onclick="beheer.deleteJaarverslag(${v.jaar})">🗑️ Verwijderen</button>
+        </div>
+      </div>
+    `).join('');
   }
 
   escapeHtml(value) {
